@@ -7,8 +7,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require("body-parser");
 
-const Config = require('./../shared/config/Config');
-const Logger = require('./../shared/config/Logger');
+const Config = require('./config/Config');
+const Logger = require('./config/Logger');
 const Routes = require('./routes');
 
 const app = express();
