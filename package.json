@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "mailgun.js": "^2.0.1",
     "mongoose": "^5.7.8",
+    "morgan": "^1.9.1",
     "shortid": "^2.2.15",
     "winston": "^3.2.1"
   },
