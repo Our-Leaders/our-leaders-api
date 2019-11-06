@@ -1,0 +1,8 @@
+{
+  "name": "our-leaders-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Our-Leaders/our-leaders-api.git",
+  "author": "Winner-Timothy Bolorunduro <ogatimo@gmail.com>",
+  "license": "MIT"
+}
