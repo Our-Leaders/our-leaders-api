@@ -73,6 +73,9 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
       type: Boolean,
       default: false
     },
+    state: {
+      type: String
+    },
     startDate: {
       type: Date
     },
