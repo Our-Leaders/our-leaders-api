@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
 const PoliticalParty = require('./PoliticalParty');
+const Politician = require('./Politician');
 const User = require('./User');
 
 // import models here
@@ -17,6 +18,7 @@ mongoose.connect(Config.database, {
 
 // inject models into return object here
 db.PoliticalParty = PoliticalParty;
+db.Politician = Politician;
 db.User = User;
 
 module.exports = db;
