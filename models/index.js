@@ -5,6 +5,7 @@
 const mongoose = require('mongoose');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
+const User = require('./User');
 
 // import models here
 
@@ -14,5 +15,6 @@ mongoose.connect(Config.database, {
 }).then(() => Logger.log('Database set up successfully.'));
 
 // inject models into return object here
+db.User = User;
 
 module.exports = db;
