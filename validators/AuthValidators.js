@@ -8,10 +8,8 @@ class AuthValidators {
     let message = '';
 
     // check for an email address
-    if (body.email) {
-      if (!body.password) {
-        message = 'A password is required for email sign up.';
-      }
+    if (body.email && !body.password) {
+      message = 'A password is required for email sign up.';
     }
     // check for google or facebook id
     else {
