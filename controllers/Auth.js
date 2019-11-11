@@ -30,7 +30,8 @@ class Auth {
         const response = await GoogleUtil.verifyToken(body.googleId);
         user = new db.User({
           googleId: response.sub,
-          email: response.email
+          email: response.email,
+          isEmailVerified: true
         });
 
         // split the name provided by Google into first and last name
@@ -49,7 +50,8 @@ class Auth {
           email: response.email,
           firstName: response.first_name,
           lastName: response.last_name,
-          gender: response.gender
+          gender: response.gender,
+          isEmailVerified: true
         });
       }
 
