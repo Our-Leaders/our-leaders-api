@@ -3,6 +3,9 @@
  */
 
 module.exports = (router) => {
-  // place routes here
+  router.get('/', function (req, res) {
+    res.send('Home page works');
+  });
+
   return router;
 };
