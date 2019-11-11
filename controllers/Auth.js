@@ -3,6 +3,7 @@
  */
 
 const db = require('./../models');
+const GoogleUtil = require('./../utils/GoogleUtil');
 const Logger = require('./../config/Logger');
 
 class Auth {
@@ -20,6 +21,8 @@ class Auth {
           email: body.email,
           password: body.password
         });
+      } else if (body.googleId) {
+        const response = await GoogleUtil.verifyToken(body.googleId);
       }
     } catch (err) {
       Logger.error(err);
