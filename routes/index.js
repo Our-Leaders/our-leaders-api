@@ -5,7 +5,7 @@
 const AuthRoutes = require('./AuthRoutes');
 
 module.exports = (router) => {
-  AuthRoutes.route(router);
+  AuthRoutes(router);
 
   return router;
 };
