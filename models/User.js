@@ -24,8 +24,7 @@ const UserModel = mongoose.model('User', new Schema({
     unique: true
   },
   phoneNumber: {
-    type: String,
-    unique: true
+    type: String
   },
   password: {
     type: String,

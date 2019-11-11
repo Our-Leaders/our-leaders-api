@@ -23,6 +23,22 @@ class Auth {
         });
       } else if (body.googleId) {
         const response = await GoogleUtil.verifyToken(body.googleId);
+        user = new db.User({
+          googleId: response.sub,
+          email: response.email
+        });
+
+        // split the name provided by Google into first and last name
+        const nameParts = response.name.split(' ', 2);
+        if (nameParts.length > 0) {
+          user.firstName = nameParts[0];
+        }
+
+        if (nameParts.length > 1) {
+          user.lastName = nameParts[1];
+        }
+      } else if (body.facebookId) {
+
       }
     } catch (err) {
       Logger.error(err);
