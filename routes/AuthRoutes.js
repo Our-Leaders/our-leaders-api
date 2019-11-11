@@ -7,7 +7,7 @@ const AuthValidators = require('../validators/AuthValidators');
 
 class AuthRoutes {
   static route(router) {
-    router.route('/v1/auth/register')
+    router.route('/auth/signup')
       .post(AuthValidators.validateSignUp, AuthCtrl.signUp);
   }
 }
