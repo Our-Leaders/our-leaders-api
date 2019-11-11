@@ -22,9 +22,5 @@ module.exports = {
   },
   google: {
     clientId: process.env.GOOGLE_CLIENT_ID
-  },
-  facebook: {
-    clientId: process.env.FACEBOOK_CLIENT_ID,
-    secret: process.env.FACEBOOK_CLIENT_SECRET
   }
 };
