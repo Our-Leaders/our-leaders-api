@@ -58,8 +58,10 @@ const UserModel = mongoose.model('User', new Schema({
     default: false
   },
   role: {
-    type: Boolean,
-    enum: ['admin', 'superadmin']
+    type: String,
+    required: true,
+    enum: ['user', 'admin', 'superadmin'],
+    default: 'user'
   },
 }, {
   timestamps: true
