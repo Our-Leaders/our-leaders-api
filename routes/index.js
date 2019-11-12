@@ -2,7 +2,10 @@
  * Created by bolorundurowb on 06/11/2019
  */
 
+const AuthRoutes = require('./AuthRoutes');
+
 module.exports = (router) => {
-  // place routes here
+  AuthRoutes(router);
+
   return router;
 };

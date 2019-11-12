@@ -19,5 +19,8 @@ module.exports = {
   mailGun: {
     apiKey: process.env.MAILGUN_API_KEY,
     domain: process.env.MAILGUN_DOMAIN
+  },
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID
   }
 };
