@@ -8,4 +8,7 @@ const AuthValidators = require('../validators/AuthValidators');
 module.exports = (router) => {
   router.route('/auth/signup')
     .post(AuthValidators.validateSignUp, AuthCtrl.signUp);
+  
+  router.route('/auth/login')
+    .post(AuthCtrl.login);
 };
