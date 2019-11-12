@@ -3,6 +3,7 @@
  */
 
 const jwt = require('jsonwebtoken');
+const bcryptJs = require('bcryptjs');
 
 const db = require('./../models');
 const Config = require('./../config/Config');
@@ -88,6 +89,77 @@ class Auth {
     }
   }
 
+  static async login(req, res) {
+    const { body } = req;
+    const { email, password, googleId, facebookId } = body;
+    let user;
+
+    try {
+      if (email) {
+        // check for an existing user
+        user = await db.User.findOne({
+          email,
+        });
+  
+        if (!user) {
+          return res.status(400).send({
+            message: 'Wrong email or password',
+          });
+        }
+  
+        if (!bcryptJs.compareSync(password, user.password)) {
+          return res.status(400).send({
+            message: 'Wrong email or password',
+          });
+        }
+      } else if (googleId) {
+        const { sub, email } = await GoogleUtil.verifyToken(googleId);
+
+        // check for an existing user
+        user = await db.User.findOne({
+          email,
+          googleId: sub,
+        });
+
+        if (!user) {
+          return res.status(400).send({
+            message: 'There is no user associated with this account',
+          });
+        }
+      } else if (facebookId) {
+        const { id, email } = await FacebookUtil.verifyToken(facebookId);
+
+        // check for an existing user
+        // using id here instead of email because
+        // user email can change on facebook but id doesn't
+        user = await db.User.findOne({
+          facebookId: id,
+        });
+
+        if (!user) {
+          return res.status(400).send({
+            message: 'There is no user associated with this account',
+          });
+        }
+
+        // update email if the email is different
+        if (user.email.toLowerCase() !== email.toLowerCase()) {
+          user.email = email;
+          await user.save();
+        }
+      }
+
+      res.status(200).send({
+        user: OutputFormatters.formatUser(user),
+        token: Auth.tokenify(user)
+      });
+    } catch (err) {
+      Logger.error(err);
+      res.status(500).send({
+        message: 'An error occurred.'
+      });
+    }
+  }
 
   static tokenify(user) {
     return jwt.sign({
