@@ -115,7 +115,19 @@ class Auth {
           });
         }
       } else if (googleId) {
+        const { sub, email } = await GoogleUtil.verifyToken(googleId);
 
+        // check for an existing user
+        user = await db.User.findOne({
+          email,
+          googleId: sub,
+        });
+
+        if (!user) {
+          return res.status(400).send({
+            message: 'There is no account ',
+          });
+        }
       } else if (facebookId) {
   
       }
