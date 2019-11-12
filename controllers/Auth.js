@@ -97,7 +97,7 @@ class Auth {
     try {
       if (email) {
         // check for an existing user
-        const user = await db.User.findOne({
+        user = await db.User.findOne({
           email,
         });
   
