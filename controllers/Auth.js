@@ -3,6 +3,7 @@
  */
 
 const jwt = require('jsonwebtoken');
+const bcryptJs = require('bcryptjs');
 
 const db = require('./../models');
 const Config = require('./../config/Config');
@@ -88,6 +89,48 @@ class Auth {
     }
   }
 
+  static async login(req, res) {
+    const { body } = req;
+    const { email, password, googleId, facebookId } = body;
+    let user;
+
+    try {
+      if (email) {
+        // check for an existing user
+        const user = await db.User.findOne({
+          email,
+        });
+  
+        if (!user) {
+          return res.status(400).send({
+            message: 'Wrong email or password',
+          });
+        }
+  
+        const passwordCompare = await bcryptJs.compare(password, user.password);
+  
+        if (!passwordCompare) {
+          return res.status(400).send({
+            message: 'Wrong email or password',
+          });
+        }
+      } else if (googleId) {
+
+      } else if (facebookId) {
+  
+      }
+
+      res.status(200).send({
+        user: OutputFormatters.formatUser(user),
+        token: Auth.tokenify(user)
+      });
+    } catch (err) {
+      Logger.error(err);
+      res.status(500).send({
+        message: 'An error occurred.'
+      });
+    }
+  }
 
   static tokenify(user) {
     return jwt.sign({
