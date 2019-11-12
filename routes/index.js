@@ -9,7 +9,7 @@ module.exports = (router) => {
     res.send('Home page works');
   });
 
-  router.use('/politicians', politicians)
+  router.use('/politicians', politicians);
 
   return router;
 };
