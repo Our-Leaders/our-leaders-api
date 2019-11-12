@@ -107,9 +107,7 @@ class Auth {
           });
         }
   
-        const passwordCompare = await bcryptJs.compare(password, user.password);
-  
-        if (!passwordCompare) {
+        if (!bcryptJs.compareSync(password, user.password)) {
           return res.status(400).send({
             message: 'Wrong email or password',
           });
@@ -125,11 +123,30 @@ class Auth {
 
         if (!user) {
           return res.status(400).send({
-            message: 'There is no account ',
+            message: 'There is no user associated with this account',
           });
         }
       } else if (facebookId) {
-  
+        const { id, email } = await FacebookUtil.verifyToken(facebookId);
+
+        // check for an existing user
+        // using id here instead of email because
+        // user email can change on facebook but id doesn't
+        user = await db.User.findOne({
+          facebookId: id,
+        });
+
+        if (!user) {
+          return res.status(400).send({
+            message: 'There is no user associated with this account',
+          });
+        }
+
+        // update email if the email is different
+        if (user.email.toLowerCase() !== email.toLowerCase()) {
+          user.email = email;
+          await user.save();
+        }
       }
 
       res.status(200).send({
