@@ -10,5 +10,5 @@ module.exports = (router) => {
     .post(AuthValidators.validateSignUp, AuthCtrl.signUp);
   
   router.route('/auth/login')
-    .post(AuthCtrl.login);
+    .post(AuthValidators.validateSignUp, AuthCtrl.login);
 };
