@@ -12,6 +12,9 @@ const PoliticalPartyModel = mongoose.model('PoliticalParty', new Schema({
     type: String,
     default: shortId.generate
   },
+  name: {
+    type: String
+  },
   logo: {
     publicId: {
       type: String
