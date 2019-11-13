@@ -33,10 +33,16 @@ class OutputFormatters {
       name: politician.name,
       dob: politician.dob,
       religious: politician.religious,
+      manifesto: politician.manifesto,
       stateOfOrigin: politician.stateOfOrigin,
+      politicalParty: politician.politicalParty,
+      profileImage: politician.profileImage,
+      status: politician.status,
+      vote: politician.vote,
       educationalBackground: politician.educationalBackground,
       politicalBackground: politician.politicalBackground,
       professionalBackground: politician.professionalBackground,
+      socials: politician.socials,
       accomplishments: politician.accomplishments,
     };
   }
