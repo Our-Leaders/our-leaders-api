@@ -32,6 +32,26 @@ class AuthenticationMiddleware {
       });
     }
   }
+
+  static async isAdmin(req, res, next) {
+    if (req.user.role === 'super' || req.user.role === 'admin') {
+      next();
+    } else {
+      res.status(403).send({
+        message: 'You lack necessary permissions to carry out this action.'
+      });
+    }
+  }
+
+  static async isSuperAdmin(req, res, next) {
+    if (req.user.role === 'super') {
+      next();
+    } else {
+      res.status(403).send({
+        message: 'You lack necessary permissions to carry out this action.'
+      });
+    }
+  }
 }
 
 module.exports = AuthenticationMiddleware;
