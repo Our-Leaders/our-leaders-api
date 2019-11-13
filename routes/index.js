@@ -3,9 +3,11 @@
  */
 
 const AuthRoutes = require('./AuthRoutes');
+const politicianRoutes = require('./politicianRoutes');
 
 module.exports = (router) => {
   AuthRoutes(router);
+  politicianRoutes(router);
 
   return router;
 };

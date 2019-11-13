@@ -23,6 +23,30 @@ class OutputFormatters {
     };
   }
 
+  static formatPolitician(politician) {
+    if (!politician) {
+      return {};
+    }
+
+    return {
+      id: politician._id,
+      name: politician.name,
+      dob: politician.dob,
+      religious: politician.religious,
+      manifesto: politician.manifesto,
+      stateOfOrigin: politician.stateOfOrigin,
+      politicalParty: politician.politicalParty,
+      profileImage: politician.profileImage,
+      status: politician.status,
+      vote: politician.vote,
+      educationalBackground: politician.educationalBackground,
+      politicalBackground: politician.politicalBackground,
+      professionalBackground: politician.professionalBackground,
+      socials: politician.socials,
+      accomplishments: politician.accomplishments
+    };
+  }
+
   static formatPoliticalParty(party) {
     if (!party) {
       return {};
