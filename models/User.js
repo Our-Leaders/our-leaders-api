@@ -24,8 +24,7 @@ const UserModel = mongoose.model('User', new Schema({
     unique: true
   },
   phoneNumber: {
-    type: String,
-    unique: true
+    type: String
   },
   password: {
     type: String,
@@ -58,8 +57,10 @@ const UserModel = mongoose.model('User', new Schema({
     default: false
   },
   role: {
-    type: Boolean,
-    enum: ['admin', 'superadmin']
+    type: String,
+    required: true,
+    enum: ['user', 'admin', 'superadmin'],
+    default: 'user'
   },
 }, {
   timestamps: true
