@@ -43,7 +43,7 @@ class OutputFormatters {
       politicalBackground: politician.politicalBackground,
       professionalBackground: politician.professionalBackground,
       socials: politician.socials,
-      accomplishments: politician.accomplishments,
+      accomplishments: politician.accomplishments
     };
   }
 }
