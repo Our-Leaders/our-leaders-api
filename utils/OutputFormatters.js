@@ -46,6 +46,23 @@ class OutputFormatters {
       accomplishments: politician.accomplishments
     };
   }
+
+  static formatPoliticalParty(party) {
+    if (!party) {
+      return {};
+    }
+
+    return {
+      id: party._id,
+      name: party.name,
+      logo: party.logo.url,
+      yearEstablished: party.yearEstablished,
+      partyLeader: party.partyLeader,
+      ideology: party.ideology,
+      numOfPartyMembers: party.numOfPartyMembers,
+      joinedAt: party.createdAt
+    };
+  }
 }
 
 module.exports = OutputFormatters;
