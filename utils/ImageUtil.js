@@ -14,7 +14,7 @@ cloudinary.config({
 
 
 class ImageUtil {
-  static async uploadFiles(files) {
+  static async uploadFiles(files, sizeParams) {
     const uploadInfo = [];
 
     if (!files || files.length === 0) {
@@ -23,7 +23,7 @@ class ImageUtil {
 
     try {
       for (let i = 0; i < files.length; i++) {
-        uploadInfo.push(await ImageUtil.uploadFile(files[i]));
+        uploadInfo.push(await ImageUtil.uploadFile(files[i], sizeParams));
       }
     } catch (err) {
       Logger.error(err);
@@ -31,7 +31,7 @@ class ImageUtil {
     }
   }
 
-  static async uploadFile(file) {
+  static async uploadFile(file, sizeParams) {
     if (!file) {
       return {};
     }
@@ -39,8 +39,8 @@ class ImageUtil {
     const options = {
       folder: Config.isProduction ? 'production' : 'development',
       eager_options: {
-        width: 300,
-        height: 300,
+        width: sizeParams.width,
+        height: sizeParams.height,
         crop: 'scale',
         format: 'jpg'
       }
