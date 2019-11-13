@@ -17,5 +17,6 @@ module.exports = (router) => {
       Upload.single('file'),
       ImageMiddleware.uploadLogo,
       PoliticalPartyCtrl.create
-    );
+    )
+    .get(PoliticalPartyCtrl.find);
 };
