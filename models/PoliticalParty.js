@@ -30,7 +30,8 @@ const PoliticalPartyModel = mongoose.model('PoliticalParty', new Schema({
     type: String
   },
   numOfPartyMembers: {
-    type: Number
+    type: Number,
+    default: 0
   }
 }, {
   timestamps: true
