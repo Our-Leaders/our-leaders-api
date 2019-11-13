@@ -1,4 +1,4 @@
-const Logger = require('./../config/Logger');
+const Logger = require('../config/Logger');
 
 class ErrorHandler extends Error {
   constructor(statusCode, message) {
