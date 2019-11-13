@@ -22,6 +22,24 @@ class OutputFormatters {
       joinedAt: user.createdAt
     };
   }
+
+  static formatPolitician(politician) {
+    if (!politician) {
+      return {};
+    }
+
+    return {
+      id: politician._id,
+      name: politician.name,
+      dob: politician.dob,
+      religious: politician.religious,
+      stateOfOrigin: politician.stateOfOrigin,
+      educationalBackground: politician.educationalBackground,
+      politicalBackground: politician.politicalBackground,
+      professionalBackground: politician.professionalBackground,
+      accomplishments: politician.accomplishments,
+    };
+  }
 }
 
 module.exports = OutputFormatters;
