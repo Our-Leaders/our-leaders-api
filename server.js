@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const Config = require('./config/Config');
 const Logger = require('./config/Logger');
 const Routes = require('./routes');
+const { handleError } = require('./utils/errorUtil');
 
 const app = express();
 const router = express.Router();
@@ -22,4 +23,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use('/api/', Routes(router));
+app.use((err, req, res, next) => {
+  handleError(err, res);
+});
 app.listen(Config.port, () => Logger.log(`Server started on ${Config.port}`));
