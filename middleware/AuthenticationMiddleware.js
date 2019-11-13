@@ -3,6 +3,8 @@
  */
 
 const jwt = require('jsonwebtoken');
+const Config = require('./../config/Config');
+const Logger = require('./../config/Logger');
 
 class AuthenticationMiddleware {
   static async authenticate(req, res, next) {
@@ -14,7 +16,22 @@ class AuthenticationMiddleware {
     }
 
     try {
-
+      const decoded = await jwt.verify(token, Config.secret);
+      if (!decoded) {
+        return res.status(401).send({
+          message: 'The token provided was invalid or expired. Please login again.'
+        });
+      } else {
+        req.user = decoded;
+        next();
+      }
+    } catch (err) {
+      Logger.error(err);
+      res.status(500).send({
+        message: err.message || JSON.stringify(err)
+      });
     }
   }
 }
+
+module.exports = AuthenticationMiddleware;
