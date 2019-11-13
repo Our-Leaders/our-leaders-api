@@ -20,8 +20,8 @@ class Politician {
       orQuery.push({ state: { $regex: query.state, $options: 'i' } });
     }
 
-    if (query.politicalParty) {
-      orQuery.push({ politicalParty: { $regex: query.politicalParty, $options: 'i' } });
+    if (query.politicalPartyId) {
+      orQuery.push({ politicalParty: { $regex: query.politicalPartyId, $options: 'i' } });
     }
 
     if (query.politicalPosition) {
