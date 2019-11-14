@@ -13,6 +13,7 @@ module.exports = (router) => {
   router.route('/politicians')
     .post(
       AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
       PoliticianValidators.validateCreation,
       PoliticianCtrl.create
     );
