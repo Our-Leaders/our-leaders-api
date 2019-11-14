@@ -3,6 +3,45 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 const { ErrorHandler } = require('./../utils/errorUtil');
 
 class Politician {
+  static async addAccomplishment(req, res, next) {
+    const { body, params } = req;
+    const { id } = params;
+    let image = { publicId: null, url: null };
+
+    try {
+      const politician = await db.Politician.findById(id);
+
+      if (!politician) {
+        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+      }
+
+      if (!politician.accomplishments) {
+        politician.accomplishments = [];
+      }
+
+      if (body.image) {
+        image = body.image;
+      }
+
+      politician.accomplishments.push({
+        title: body.title,
+        description: body.description,
+        year: body.year,
+        quarter: body.quarter,
+        image: image,
+        tags: body.tags
+      });
+
+      await politician.save();
+
+      res.status(200).send({
+        politician: OutputFormatters.formatPolitician(politician)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async create(req, res, next) {
     try {
       const politician = new db.Politician(req.body);
