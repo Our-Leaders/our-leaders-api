@@ -5,6 +5,19 @@
 const ImageUtil = require('./../utils/ImageUtil');
 
 class ImageMiddleware {
+  static async uploadImage(req, res, next) {
+    const file = req.file;
+    if (file) {
+      req.body.image = await ImageUtil.uploadFile(file, {
+        width: req.body.width,
+        height: req.body.height
+      });
+      next();
+    } else {
+      next();
+    }
+  }
+
   static async uploadLogo(req, res, next) {
     const file = req.file;
     req.body.logo = await ImageUtil.uploadFile(file, {
