@@ -43,7 +43,7 @@ class Politician {
       const politicians = await db.Politician.find(findByQuery);
       const serializedPolitician = politicians.map(politician => {
         return OutputFormatters.formatPolitician(politician);
-      })
+      });
       res.status(200).send({
         politicians: serializedPolitician
       });

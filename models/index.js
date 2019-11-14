@@ -9,6 +9,7 @@ const PoliticalParty = require('./PoliticalParty');
 const Politician = require('./Politician');
 const Tag = require('./Tag');
 const User = require('./User');
+const Subscription = require('./Subscription');
 
 // import models here
 
@@ -22,5 +23,6 @@ db.PoliticalParty = PoliticalParty;
 db.Politician = Politician;
 db.Tag = Tag;
 db.User = User;
+db.Subscription = Subscription;
 
 module.exports = db;
