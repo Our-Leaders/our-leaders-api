@@ -11,9 +11,10 @@ const FacebookUtil = require('./../utils/FacebookUtil');
 const GoogleUtil = require('./../utils/GoogleUtil');
 const Logger = require('./../config/Logger');
 const OutputFormatters = require('./../utils/OutputFormatters');
+const { ErrorHandler } = require('./../utils/errorUtil');
 
 class Auth {
-  static async signUp(req, res) {
+  static async signUp(req, res, next) {
     const body = req.body;
 
     try {
@@ -68,7 +69,7 @@ class Auth {
 
       if (existingUser) {
         return res.status(409).send({
-          message: 'A user with the provided user already exists.'
+          message: 'A user with the provided user profile already exists.'
         });
       }
 
@@ -82,14 +83,11 @@ class Auth {
         token: Auth.tokenify(user)
       });
     } catch (err) {
-      Logger.error(err);
-      res.status(500).send({
-        message: 'An error occurred.'
-      });
+      next(new ErrorHandler(500, 'An error occurred.'));
     }
   }
 
-  static async login(req, res) {
+  static async login(req, res, next) {
     const { body } = req;
     const { email, password, googleId, facebookId } = body;
     let user;
@@ -154,10 +152,7 @@ class Auth {
         token: Auth.tokenify(user)
       });
     } catch (err) {
-      Logger.error(err);
-      res.status(500).send({
-        message: 'An error occurred.'
-      });
+      next(new ErrorHandler(500, 'An error occurred.'));
     }
   }
 
