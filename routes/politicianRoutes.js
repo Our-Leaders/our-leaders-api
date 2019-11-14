@@ -5,10 +5,10 @@ const PoliticianValidators = require('./../validators/PoliticianValidators');
 
 module.exports = (router) => {
   router.route('/politicians')
-    .get(AuthMiddleware.authenticate, PoliticianCtrl.find);
+    .get(PoliticianCtrl.find);
 
   router.route('/politicians/:id')
-    .get(AuthMiddleware.authenticate, PoliticianCtrl.get);
+    .get(PoliticianCtrl.get);
 
   router.route('/politicians')
     .post(
