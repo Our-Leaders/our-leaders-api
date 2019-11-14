@@ -3,7 +3,7 @@
  */
 
 class SubscriptionValidators {
-  validateCreation(req, res, next) {
+  static validateCreation(req, res, next) {
     const body = req.body;
     let message = '';
 
