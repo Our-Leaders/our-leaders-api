@@ -1,9 +1,19 @@
+
+const AuthMiddleware = require('./../middleware/AuthenticationMiddleware');
 const PoliticianCtrl = require('./../controllers/Politician');
+const PoliticianValidators = require('./../validators/PoliticianValidators');
 
 module.exports = (router) => {
-  router.route('/politicians').get(PoliticianCtrl.find);
+  router.route('/politicians')
+    .get(AuthMiddleware.authenticate, PoliticianCtrl.find);
 
-  router.route('/politicians/:id').get(PoliticianCtrl.get)
+  router.route('/politicians/:id')
+    .get(AuthMiddleware.authenticate, PoliticianCtrl.get);
 
-  router.route('/politicians').post(PoliticianCtrl.create)
+  router.route('/politicians')
+    .post(
+      AuthMiddleware.authenticate,
+      PoliticianValidators.validateCreation,
+      PoliticianCtrl.create
+    );
 };
