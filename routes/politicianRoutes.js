@@ -26,6 +26,14 @@ module.exports = (router) => {
       PoliticianCtrl.addAccomplishment
     );
 
+  router.route('/politicians/:id/educational-background')
+    .post(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      PoliticianValidators.validateEducationalBackgroundCreation,
+      PoliticianCtrl.addEducationalBackground
+    );
+
   router.route('/politicians/:id/political-background')
     .post(
       AuthMiddleware.authenticate,

@@ -48,6 +48,25 @@ class PoliticianValidators {
     }
   }
 
+  static validateEducationalBackgroundCreation(req, res, next) {
+    const body = req.body;
+    let message = '';
+
+    if (!body.degree) {
+      message = 'The degree for the educational background is required.'
+    } else if (!body.institution) {
+      message = 'The institution for the educational background is required.';
+    } else if (!body.startDate) {
+      message = 'The start date for the educational background is required.';
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
+    }
+  }
+
   static validatePoliticalBackgroundCreation(req, res, next) {
     const body = req.body;
     let message = '';
