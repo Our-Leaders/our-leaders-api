@@ -7,7 +7,7 @@ class PoliticianValidators {
     let message = '';
 
     if (!body.name) {
-      message = 'The political party name is required.'
+      message = 'The political party name is required.';
     } else if (!body.dob) {
       message = 'The politician date of birth is required.';
     } else if (!body.religious) {
@@ -28,7 +28,7 @@ class PoliticianValidators {
     let message = '';
 
     if (!body.title) {
-      message = 'The title of the accomplishment is required.'
+      message = 'The title of the accomplishment is required.';
     } else if (!body.description) {
       message = 'The description of the accomplishment is required.';
     } else if (!body.year) {
@@ -53,11 +53,26 @@ class PoliticianValidators {
     let message = '';
 
     if (!body.degree) {
-      message = 'The degree for the educational background is required.'
+      message = 'The degree for the educational background is required.';
     } else if (!body.institution) {
       message = 'The institution for the educational background is required.';
     } else if (!body.startDate) {
       message = 'The start date for the educational background is required.';
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
+    }
+  }
+
+  static validateVotes(req, res, next) {
+    const body = req.body;
+    let message = '';
+
+    if (TypeUtil.isBoolean(body.isUpVote)) {
+      message = 'A vote is required.';
     }
 
     if (message) {
