@@ -25,4 +25,12 @@ module.exports = (router) => {
       ImageMiddleware.uploadImage,
       PoliticianCtrl.addAccomplishment
     );
+
+  router.route('/politicians/:id/educational-background')
+    .post(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      PoliticianValidators.validateEducationalBackgroundCreation,
+      PoliticianCtrl.addEducationalBackground
+    );
 };
