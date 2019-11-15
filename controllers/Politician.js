@@ -73,6 +73,55 @@ class Politician {
     }
   }
 
+  static async addVote(req, res, next) {
+    const { body, params } = req;
+    const { id } = params;
+
+    try {
+      const politician = await db.Politician.findById(id);
+
+      if (!politician) {
+        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+      }
+
+      if (!politician.voters) {
+        politician.voters = [];
+      }
+
+      const index = politician.voters.findIndex(x => x.id === req.user.id);
+
+      if (index > -1) {
+        if (politician.voters[index].isUpvote && !body.isUpvote) {
+          politician.vote.up--;
+          politician.vote.down++;
+        }
+        
+        if (!politician.voters[index].isUpvote && body.isUpvote) {
+          politician.vote.down--;
+          politician.vote.up++;
+        }
+      } else {
+        politician.voters.push({
+          id: req.user.id,
+          isUpvote: body.isUpvote
+        });
+        if (isUpvote) {
+          politician.vote.up++;
+        } else {
+          politician.vote.down++;
+        }
+      }
+
+      await politician.save();
+
+      res.status(200).send({
+        politician: OutputFormatters.formatPolitician(politician)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async create(req, res, next) {
     try {
       const politician = new db.Politician(req.body);
