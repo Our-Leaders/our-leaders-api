@@ -33,4 +33,11 @@ module.exports = (router) => {
       PoliticianValidators.validateEducationalBackgroundCreation,
       PoliticianCtrl.addEducationalBackground
     );
+
+  router.route('/politicians/:id/vote')
+    .post(
+      AuthMiddleware.authenticate,
+      PoliticianValidators.validateVotes,
+      PoliticianCtrl.addVote
+    );
 };
