@@ -40,4 +40,12 @@ module.exports = (router) => {
       PoliticianValidators.validateVotes,
       PoliticianCtrl.addVote
     );
+
+  router.route('/politicians/:id/political-background')
+    .post(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      PoliticianValidators.validatePoliticalBackgroundCreation,
+      PoliticianCtrl.addPoliticalBackground
+    );
 };
