@@ -42,6 +42,37 @@ class Politician {
     }
   }
 
+  static async addEducationalBackground(req, res, next) {
+    const { body, params } = req;
+    const { id } = params;
+
+    try {
+      const politician = await db.Politician.findById(id);
+
+      if (!politician) {
+        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+      }
+
+      if (!politician.educationalBackground) {
+        politician.educationalBackground = [];
+      }
+
+      politician.educationalBackground.push({
+        degree: body.degree,
+        institution: body.institution,
+        startDate: body.startDate,
+      });
+
+      await politician.save();
+
+      res.status(200).send({
+        politician: OutputFormatters.formatPolitician(politician)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async create(req, res, next) {
     try {
       const politician = new db.Politician(req.body);
