@@ -47,6 +47,33 @@ class PoliticianValidators {
       next();
     }
   }
+
+  static validatePoliticalBackgroundCreation(req, res, next) {
+    const body = req.body;
+    let message = '';
+
+    if (!body.position) {
+      message = 'The position for the political background is required.'
+    } else if (!body.description) {
+      message = 'The description for the political background is required.';
+    } else if (!body.state) {
+      message = 'The state for the political background is required.';
+    } else if (!body.inOffice) {
+      message = 'The office current status for the political background is required.';
+    } else if (!body.startDate) {
+      message = 'The start date for the political background is required.';
+    } else if (!body.endDate) {
+      message = 'The end date for the political background is required.';
+    } else if (new Date(body.startDate) >= new Date(body.endDate)) {
+      message = 'Start date must be less than end date.';
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
+    }
+  }
 }
 
 module.exports = PoliticianValidators;
