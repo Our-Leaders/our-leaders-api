@@ -51,6 +51,15 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
       type: Number
     }
   },
+  voters: [{
+    id: {
+      type: String,
+      ref: 'User'
+    },
+    isUpvote: {
+      type: Boolean
+    }
+  }],
   educationalBackground: [{
     degree: {
       type: String
