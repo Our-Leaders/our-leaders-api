@@ -248,15 +248,14 @@ class Politician {
         next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
 
-      if (!politician.politicalBackground) {
-        politician.politicalBackground = [];
+      // initialize the professional background if none exists
+      if (!politician.professionalBackground) {
+        politician.professionalBackground = [];
       }
 
-      politician.politicalBackground.push({
-        position: body.position,
+      politician.professionalBackground.push({
+        title: body.title,
         description: body.description,
-        inOffice: body.inOffice,
-        state: body.state,
         startDate: body.startDate,
         endDate: body.endDate
       });
