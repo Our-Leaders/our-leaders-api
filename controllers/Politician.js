@@ -236,6 +236,39 @@ class Politician {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async addProfessionalBackground(req, res, next) {
+    const { body, params } = req;
+    const { id } = params;
+
+    try {
+      const politician = await db.Politician.findById(id);
+
+      if (!politician) {
+        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+      }
+
+      // initialize the professional background if none exists
+      if (!politician.professionalBackground) {
+        politician.professionalBackground = [];
+      }
+
+      politician.professionalBackground.push({
+        title: body.title,
+        description: body.description,
+        startDate: body.startDate,
+        endDate: body.endDate
+      });
+
+      await politician.save();
+
+      res.status(200).send({
+        politician: OutputFormatters.formatPolitician(politician)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Politician;

@@ -1,4 +1,3 @@
-
 const AuthMiddleware = require('./../middleware/AuthenticationMiddleware');
 const ImageMiddleware = require('./../middleware/ImageMiddleware');
 const PoliticianCtrl = require('./../controllers/Politician');
@@ -47,5 +46,13 @@ module.exports = (router) => {
       AuthMiddleware.isAdmin,
       PoliticianValidators.validatePoliticalBackgroundCreation,
       PoliticianCtrl.addPoliticalBackground
+    );
+
+  router.route('/politicians/:id/professional-background')
+    .post(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      PoliticianValidators.validateProfessionalBackgroundCreation,
+      PoliticianCtrl.addProfessionalBackground
     );
 };

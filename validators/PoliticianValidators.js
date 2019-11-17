@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../utils/errorUtil');
-const { TypeUtil } = require('../utils/TypeUtil');
+const {ErrorHandler} = require('../utils/errorUtil');
+const {TypeUtil} = require('../utils/TypeUtil');
 
 class PoliticianValidators {
   static validateCreation(req, res, next) {
@@ -100,6 +100,29 @@ class PoliticianValidators {
       message = 'The end date for the political background is required.';
     } else if (new Date(body.startDate) >= new Date(body.endDate)) {
       message = 'Start date must be less than end date.';
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
+    }
+  }
+
+  static validateProfessionalBackgroundCreation(req, res, next) {
+    const body = req.body;
+    let message = '';
+
+    if (!body.title) {
+      message = 'The title for the professional background is required.'
+    } else if (!body.description) {
+      message = 'The description for the professional background is required.';
+    } else if (!body.startDate) {
+      message = 'The start date for the professional background is required.';
+    } else if (!body.endDate) {
+      message = 'The end date for the professional background is required.';
+    } else if (new Date(body.startDate) >= new Date(body.endDate)) {
+      message = 'The start date must come before the end date.';
     }
 
     if (message) {
