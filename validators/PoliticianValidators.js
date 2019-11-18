@@ -11,8 +11,8 @@ class PoliticianValidators {
       message = 'The political party name is required.';
     } else if (!body.dob) {
       message = 'The politician date of birth is required.';
-    } else if (!body.religious) {
-      message = 'The politician religious status is required.';
+    } else if (!body.religion) {
+      message = 'The politician\'s religion is required.';
     } else if (!body.stateOfOrigin) {
       message = 'The politician state of origin is required.';
     }
@@ -141,7 +141,7 @@ class PoliticianValidators {
       message = 'Please enter a valid name for the politician';
     } else if (body.dob !== undefined && isNaN(new Date(body.dob).getTime())) {
       message = 'Please enter a valid date of birth for the politician';
-    } else if (body.religious !== undefined && body.religious.trim().length < 1) {
+    } else if (body.religion !== undefined && body.religion.trim().length < 1) {
       message = 'Please enter a valid religion for the politician';
     } else if (body.manifesto !== undefined && body.manifesto.trim().length < 1) {
       message = 'Please enter a valid manifesto for the politician';

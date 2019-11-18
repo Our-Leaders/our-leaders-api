@@ -284,7 +284,7 @@ class Politician {
         return;
       }
 
-      ['name', 'dob', 'religious', 'manifesto', 'stateOfOrigin', 'politicalParty', 'status'].forEach((property) => {
+      ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin', 'politicalParty', 'status'].forEach((property) => {
         if (body[property]) {
           politician[property] = body[property];
         }
