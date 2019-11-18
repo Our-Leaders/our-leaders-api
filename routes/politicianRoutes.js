@@ -14,7 +14,14 @@ module.exports = (router) => {
     );
 
   router.route('/politicians/:id')
-    .get(PoliticianCtrl.get);
+    .get(PoliticianCtrl.get)
+    .put(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      ImageMiddleware.uploadImage,
+      PoliticianValidators.validatePoliticianUpdate,
+      PoliticianCtrl.edit
+    );
 
   router.route('/politicians/:id/accomplishments')
     .post(

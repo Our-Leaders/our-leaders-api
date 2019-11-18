@@ -1,5 +1,6 @@
-const {ErrorHandler} = require('../utils/errorUtil');
-const {TypeUtil} = require('../utils/TypeUtil');
+const { ErrorHandler } = require('../utils/errorUtil');
+const { TypeUtil } = require('../utils/TypeUtil');
+const { PoliticalParty } = require('./../models')
 
 class PoliticianValidators {
   static validateCreation(req, res, next) {
@@ -10,8 +11,8 @@ class PoliticianValidators {
       message = 'The political party name is required.';
     } else if (!body.dob) {
       message = 'The politician date of birth is required.';
-    } else if (!body.religious) {
-      message = 'The politician religious status is required.';
+    } else if (!body.religion) {
+      message = 'The politician\'s religion is required.';
     } else if (!body.stateOfOrigin) {
       message = 'The politician state of origin is required.';
     }
@@ -129,6 +130,44 @@ class PoliticianValidators {
       next(new ErrorHandler(400, message));
     } else {
       next();
+    }
+  }
+
+  static async validatePoliticianUpdate(req, res, next) {
+    const { body } = req;
+    let message = '';
+
+    if (body.name !== undefined && body.name.trim().length < 1) {
+      message = 'Please enter a valid name for the politician';
+    } else if (body.dob !== undefined && isNaN(new Date(body.dob).getTime())) {
+      message = 'Please enter a valid date of birth for the politician';
+    } else if (body.religion !== undefined && body.religion.trim().length < 1) {
+      message = 'Please enter a valid religion for the politician';
+    } else if (body.manifesto !== undefined && body.manifesto.trim().length < 1) {
+      message = 'Please enter a valid manifesto for the politician';
+    } else if (body.stateOfOrigin !== undefined && body.stateOfOrigin.trim().length < 1) {
+      message = 'Please enter a valid state of origin for the politician';
+    } else if (body.status !== undefined && body.status.trim().length < 1) {
+      message = 'Please enter a valid status for the politician';
+    }
+
+    if (body.politicalParty !== undefined) {
+      if (body.politicalParty.trim().length < 1) {
+        message = 'Please enter a valid value for the political party';
+      } else {
+        // guessing the politicalParty value will the ID for party
+        const politicalParty = await PoliticalParty.findById(body.politicalParty);
+
+        if (!politicalParty) {
+          message = 'Political party doesn\'t exist, please enter an existing party';
+        }
+      }
+    }
+
+    if (!message) {
+      next();
+    } else {
+      next(new ErrorHandler(400, message));
     }
   }
 }

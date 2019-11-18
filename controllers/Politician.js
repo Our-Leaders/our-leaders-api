@@ -269,6 +269,42 @@ class Politician {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async edit(req, res, next) {
+    const { body, params } = req;
+    const { id } = params;
+
+    const updatedPolitician = {};
+
+    try {
+      const politician = await db.Politician.findById(id);
+
+      if (!politician) {
+        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+        return;
+      }
+
+      ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin', 'politicalParty', 'status'].forEach((property) => {
+        if (body[property]) {
+          politician[property] = body[property];
+        }
+      });
+  
+      if (body.image) {
+        politician.profileImage = body.image;
+      }
+
+      ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
+        if (body[socialUrl]) {
+          politician.socials[socialUrl] = body.socialUrl;
+        }
+      });
+
+
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Politician;

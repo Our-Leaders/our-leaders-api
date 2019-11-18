@@ -32,7 +32,7 @@ class OutputFormatters {
       id: politician._id,
       name: politician.name,
       dob: politician.dob,
-      religious: politician.religious,
+      religion: politician.religion,
       manifesto: politician.manifesto,
       stateOfOrigin: politician.stateOfOrigin,
       politicalParty: politician.politicalParty,
