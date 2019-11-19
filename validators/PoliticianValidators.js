@@ -8,13 +8,13 @@ class PoliticianValidators {
     let message = '';
 
     if (!body.name) {
-      message = 'The political party name is required.';
+      message = 'The politican\'s name is required.';
     } else if (!body.dob) {
-      message = 'The politician date of birth is required.';
+      message = 'The politician\'s date of birth is required.';
     } else if (!body.religion) {
       message = 'The politician\'s religion is required.';
     } else if (!body.stateOfOrigin) {
-      message = 'The politician state of origin is required.';
+      message = 'The politician\'s state of origin is required.';
     }
 
     if (message) {

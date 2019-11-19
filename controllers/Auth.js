@@ -159,7 +159,8 @@ class Auth {
   static tokenify(user) {
     return jwt.sign({
       id: user._id,
-      role: user.role
+      role: user.role,
+      permissions: user.permissions || {},
     }, Config.secret, {
       expiresIn: '24h'
     });
