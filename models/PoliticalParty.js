@@ -35,9 +35,22 @@ const PoliticalPartyModel = mongoose.model('PoliticalParty', new Schema({
   ideology: {
     type: String
   },
-  numOfPartyMembers: {
-    type: Number,
-    default: 0
+  socials: {
+    facebook: {
+      type: String
+    },
+    instagram: {
+      type: String
+    },
+    twitter: {
+      type: String
+    },
+    linkedIn: {
+      type: String
+    }
+  },
+  partyBackground: {
+    type: String
   }
 }, {
   timestamps: true
