@@ -55,12 +55,13 @@ class OutputFormatters {
     return {
       id: party._id,
       name: party.name,
+      acronym: party.acronym,
       logo: party.logo.url,
-      yearEstablished: party.yearEstablished,
-      partyLeader: party.partyLeader,
       ideology: party.ideology,
-      numOfPartyMembers: party.numOfPartyMembers,
-      joinedAt: party.createdAt
+      socials: party.socials,
+      partyBackground: party.partyBackground,
+      partyDescription: party.partyDescription,
+      createdAt: party.createdAt
     };
   }
 }
