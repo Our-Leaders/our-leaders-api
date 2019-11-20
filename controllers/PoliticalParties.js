@@ -5,6 +5,7 @@
 const db = require('./../models');
 const Logger = require('./../config/Logger');
 const OutputFormatters = require('./../utils/OutputFormatters');
+const {ErrorHandler} = require('../utils/errorUtil');
 
 class PoliticalParties {
   static async create(req, res) {
@@ -43,7 +44,7 @@ class PoliticalParties {
     }
   }
 
-  static async find(req, res) {
+  static async find(req, res, next) {
     const {query} = req;
     let findByQuery = {};
     let orQuery = [];
@@ -52,12 +53,16 @@ class PoliticalParties {
       orQuery.push({name: {$regex: query.name, $options: 'i'}});
     }
 
-    if (query.partyLeader) {
-      orQuery.push({partyLeader: {$regex: query.partyLeader, $options: 'i'}});
-    }
-
     if (query.acronym) {
       orQuery.push({acronym: {$regex: query.acronym, $options: 'i'}});
+    }
+
+    if (query.partyBackground) {
+      orQuery.push({partyBackground: {$regex: query.partyBackground, $options: 'i'}});
+    }
+
+    if (query.partyDescription) {
+      orQuery.push({partyDescription: {$regex: query.partyDescription, $options: 'i'}});
     }
 
     if (orQuery.length) {
@@ -68,7 +73,8 @@ class PoliticalParties {
       const politicalParties = await db.PoliticalParty.find(findByQuery);
       const serializedPoliticalParties = politicalParties.map(party => {
         return OutputFormatters.formatPoliticalParty(party);
-      })
+      });
+
       res.status(200).send({
         politicalParties: serializedPoliticalParties
       });
