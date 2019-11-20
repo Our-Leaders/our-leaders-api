@@ -29,9 +29,6 @@ const PoliticalPartyModel = mongoose.model('PoliticalParty', new Schema({
   yearEstablished: {
     type: Number
   },
-  partyLeader: {
-    type: String
-  },
   ideology: {
     type: String
   },
@@ -51,6 +48,14 @@ const PoliticalPartyModel = mongoose.model('PoliticalParty', new Schema({
   },
   partyBackground: {
     type: String
+  },
+  partyDescription: {
+    founded: {
+      type: Number
+    },
+    partyChairman: {
+      type: String
+    }
   }
 }, {
   timestamps: true
