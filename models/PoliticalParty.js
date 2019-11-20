@@ -26,9 +26,6 @@ const PoliticalPartyModel = mongoose.model('PoliticalParty', new Schema({
       type: String
     }
   },
-  yearEstablished: {
-    type: Number
-  },
   ideology: {
     type: String
   },

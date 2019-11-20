@@ -23,11 +23,12 @@ class PoliticalParties {
 
       party = new db.PoliticalParty({
         name: body.name,
+        acronym: body.acronym,
         logo: body.logo,
-        yearEstablished: body.yearEstablished,
-        partyLeader: body.partyLeader,
         ideology: body.ideology,
-        numOfPartyMembers: body.numOfPartyMembers
+        socials: body.socials,
+        partyBackground: body.partyBackground,
+        partyDescription: body.partyDescription
       });
       await party.save();
 
@@ -43,24 +44,24 @@ class PoliticalParties {
   }
 
   static async find(req, res) {
-    const { query } = req;
+    const {query} = req;
     let findByQuery = {};
     let orQuery = [];
 
     if (query.name) {
-      orQuery.push({ name: { $regex: query.name, $options: 'i' } });
+      orQuery.push({name: {$regex: query.name, $options: 'i'}});
     }
 
     if (query.partyLeader) {
-      orQuery.push({ partyLeader: { $regex: query.partyLeader, $options: 'i' } });
+      orQuery.push({partyLeader: {$regex: query.partyLeader, $options: 'i'}});
     }
 
     if (query.acronym) {
-      orQuery.push({ acronym: { $regex: query.acronym, $options: 'i' } });
+      orQuery.push({acronym: {$regex: query.acronym, $options: 'i'}});
     }
 
     if (orQuery.length) {
-      findByQuery = { $or: orQuery };
+      findByQuery = {$or: orQuery};
     }
 
     try {
