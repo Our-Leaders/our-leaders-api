@@ -5,6 +5,7 @@
 const db = require('./../models');
 const Logger = require('./../config/Logger');
 const OutputFormatters = require('./../utils/OutputFormatters');
+const {ErrorHandler} = require('../utils/errorUtil');
 
 class PoliticalParties {
   static async create(req, res) {
@@ -23,11 +24,12 @@ class PoliticalParties {
 
       party = new db.PoliticalParty({
         name: body.name,
+        acronym: body.acronym,
         logo: body.logo,
-        yearEstablished: body.yearEstablished,
-        partyLeader: body.partyLeader,
         ideology: body.ideology,
-        numOfPartyMembers: body.numOfPartyMembers
+        socials: body.socials,
+        partyBackground: body.partyBackground,
+        partyDescription: body.partyDescription
       });
       await party.save();
 
@@ -42,32 +44,37 @@ class PoliticalParties {
     }
   }
 
-  static async find(req, res) {
-    const { query } = req;
+  static async find(req, res, next) {
+    const {query} = req;
     let findByQuery = {};
     let orQuery = [];
 
     if (query.name) {
-      orQuery.push({ name: { $regex: query.name, $options: 'i' } });
-    }
-
-    if (query.partyLeader) {
-      orQuery.push({ partyLeader: { $regex: query.partyLeader, $options: 'i' } });
+      orQuery.push({name: {$regex: query.name, $options: 'i'}});
     }
 
     if (query.acronym) {
-      orQuery.push({ acronym: { $regex: query.acronym, $options: 'i' } });
+      orQuery.push({acronym: {$regex: query.acronym, $options: 'i'}});
+    }
+
+    if (query.partyBackground) {
+      orQuery.push({partyBackground: {$regex: query.partyBackground, $options: 'i'}});
+    }
+
+    if (query.partyDescription) {
+      orQuery.push({partyDescription: {$regex: query.partyDescription, $options: 'i'}});
     }
 
     if (orQuery.length) {
-      findByQuery = { $or: orQuery };
+      findByQuery = {$or: orQuery};
     }
 
     try {
       const politicalParties = await db.PoliticalParty.find(findByQuery);
       const serializedPoliticalParties = politicalParties.map(party => {
         return OutputFormatters.formatPoliticalParty(party);
-      })
+      });
+
       res.status(200).send({
         politicalParties: serializedPoliticalParties
       });
