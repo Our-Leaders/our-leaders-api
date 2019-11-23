@@ -9,6 +9,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({ property: 'politician', action: 'create' }),
       PoliticianValidators.validateCreation,
       PoliticianCtrl.create
     );
@@ -18,6 +19,7 @@ module.exports = (router) => {
     .put(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({ property: 'politician', action: 'update' }),
       ImageMiddleware.uploadImage,
       PoliticianValidators.validatePoliticianUpdate,
       PoliticianCtrl.edit
@@ -27,6 +29,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({ property: 'accomplishments', action: 'create' }),
       PoliticianValidators.validateAccomplishmentsCreation,
       ImageMiddleware.uploadImage,
       PoliticianCtrl.addAccomplishment
@@ -36,6 +39,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({ property: 'educationalBackground', action: 'create' }),
       PoliticianValidators.validateEducationalBackgroundCreation,
       PoliticianCtrl.addEducationalBackground
     );
@@ -51,6 +55,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({ property: 'politicalBackground', action: 'create' }),
       PoliticianValidators.validatePoliticalBackgroundCreation,
       PoliticianCtrl.addPoliticalBackground
     );
@@ -59,6 +64,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({ property: 'professionalBackground', action: 'create' }),
       PoliticianValidators.validateProfessionalBackgroundCreation,
       PoliticianCtrl.addProfessionalBackground
     );

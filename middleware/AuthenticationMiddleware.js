@@ -5,10 +5,12 @@
 const jwt = require('jsonwebtoken');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
+const { ErrorHandler } = require('./../utils/errorUtil');
+const { User } = require('./../models');
 
 class AuthenticationMiddleware {
   static async authenticate(req, res, next) {
-    const token = req.headers['x-access-token'] || req.headers['Authorization'];
+    const token = req.headers['x-access-token'] || req.headers['authorization'];
     if (!token) {
       return res.status(401).send({
         message: 'An authentication token in the header is required.'
@@ -34,7 +36,7 @@ class AuthenticationMiddleware {
   }
 
   static async isAdmin(req, res, next) {
-    if (req.user.role === 'super' || req.user.role === 'admin') {
+    if (req.user.role === 'superadmin' || req.user.role === 'admin') {
       next();
     } else {
       res.status(403).send({
@@ -44,13 +46,28 @@ class AuthenticationMiddleware {
   }
 
   static async isSuperAdmin(req, res, next) {
-    if (req.user.role === 'super') {
+    if (req.user.role === 'superadmin') {
       next();
     } else {
       res.status(403).send({
         message: 'You lack necessary permissions to carry out this action.'
       });
     }
+  }
+
+  // I feel we should have a more robust check for permissions for this
+  static hasPermission({ property, action }) {
+    return async function (req, res, next) {
+      const { user } = req;
+      const { permissions = {}, id } = user;
+      const propertyPermissionObject = permissions[property];
+
+      if (propertyPermissionObject[action]) {
+        next();
+      } else {
+        next(new ErrorHandler(403, 'You do not have sufficient priviledges to carry out this action.'));
+      }
+    };
   }
 }
 
