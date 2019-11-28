@@ -8,7 +8,8 @@ const Logger = require('./../config/Logger');
 
 class CronScheduler {
   static startJobs() {
-    nodeCron.schedule('0 */2 * * *', FeedsJob.run);
+    // nodeCron.schedule('0 */2 * * *', FeedsJob.run);
+    nodeCron.schedule('* * * * *', FeedsJob.run);
 
     Logger.log('Cron jobs started successfully.');
   }
