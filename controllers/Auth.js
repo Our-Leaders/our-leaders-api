@@ -12,7 +12,7 @@ const FacebookUtil = require('./../utils/FacebookUtil');
 const GoogleUtil = require('./../utils/GoogleUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const Sms = require('./../communications/Sms');
-const { ErrorHandler } = require('../utils/ErrorUtil');
+const { ErrorHandler } = require('../utils/errorUtil');
 
 class Auth {
   static async signUp(req, res, next) {
@@ -213,6 +213,7 @@ class Auth {
         });
       }
 
+      user.verificationCode = null;
       user.isPhoneVerified = true;
 
       await user.save();
