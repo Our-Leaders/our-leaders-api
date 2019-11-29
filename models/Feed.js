@@ -18,6 +18,9 @@ const FeedModel = mongoose.model('Feed', new Schema({
   summary: {
     type: String
   },
+  feedUrl: {
+    type: String
+  },
   publishedAt: {
     type: Date
   }
