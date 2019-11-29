@@ -5,7 +5,7 @@
 const db = require('./../models');
 const Logger = require('./../config/Logger');
 const OutputFormatters = require('./../utils/OutputFormatters');
-const {ErrorHandler} = require('../utils/errorUtil');
+const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class PoliticalParties {
   static async create(req, res) {
