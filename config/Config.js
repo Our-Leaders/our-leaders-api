@@ -27,5 +27,6 @@ module.exports = {
     apiKey: process.env.CLOUDINARY_API_KEY,
     cloudName: process.env.CLOUDINARY_CLOUD_NAME,
     secret: process.env.CLOUDINARY_API_SECRET
-  }
+  },
+  feedUrl: 'https://www.tostvnetwork.com/category/news/'
 };
