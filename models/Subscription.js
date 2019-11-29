@@ -20,6 +20,11 @@ const SubscriptionModel = mongoose.model('Subscription', new Schema({
   email: {
     type: String,
     required: true
+  },
+  frequency: {
+    type: String,
+    enum: ['daily', 'weekly', 'monthly'],
+    default: 'monthly'
   }
 }));
 
