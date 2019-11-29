@@ -5,7 +5,7 @@
 const jwt = require('jsonwebtoken');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
-const { ErrorHandler } = require('./../utils/errorUtil');
+const { ErrorHandler } = require('../utils/ErrorUtil');
 const { User } = require('./../models');
 
 class AuthenticationMiddleware {

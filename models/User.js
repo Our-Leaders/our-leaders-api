@@ -56,6 +56,9 @@ const UserModel = mongoose.model('User', new Schema({
     type: Boolean,
     default: false
   },
+  verificationCode: {
+    type: String
+  },
   role: {
     type: String,
     required: true,
