@@ -19,7 +19,8 @@ class Subscriptions {
       if (!subscription) {
         subscription = new db.Subscription({
           politician: body.politicianId,
-          email: body.email
+          email: body.email,
+          frequency: body.frequency || 'daily'
         });
         await subscription.save();
       }

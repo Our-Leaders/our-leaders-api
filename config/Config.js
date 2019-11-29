@@ -32,5 +32,6 @@ module.exports = {
     baseUrl: process.env.SMS_BASE_URL,
     bsApiKey: process.env.BS_API_KEY,
     bsSenderId: process.env.BS_SENDER_ID
-  }
+  },
+  feedUrl: 'https://www.tostvnetwork.com/category/news/'
 };
