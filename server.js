@@ -10,7 +10,7 @@ const bodyParser = require("body-parser");
 const Config = require('./config/Config');
 const Logger = require('./config/Logger');
 const Routes = require('./routes');
-const { handleError } = require('./utils/errorUtil');
+const { handleError } = require('./utils/ErrorUtil');
 
 const app = express();
 const router = express.Router();
