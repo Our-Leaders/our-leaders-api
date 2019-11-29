@@ -3,7 +3,7 @@
  */
 
 const db = require('./../models');
-const {ErrorHandler} = require('./../utils/errorUtil');
+const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Subscriptions {
   static async addSubscription(req, res, next) {

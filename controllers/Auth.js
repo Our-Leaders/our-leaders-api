@@ -7,11 +7,12 @@ const bcryptJs = require('bcryptjs');
 
 const db = require('./../models');
 const Config = require('./../config/Config');
+const CodeUtil = require('./../utils/CodeUtil');
 const FacebookUtil = require('./../utils/FacebookUtil');
 const GoogleUtil = require('./../utils/GoogleUtil');
-const Logger = require('./../config/Logger');
 const OutputFormatters = require('./../utils/OutputFormatters');
-const { ErrorHandler } = require('./../utils/errorUtil');
+const Sms = require('./../communications/Sms');
+const { ErrorHandler } = require('../utils/errorUtil');
 
 class Auth {
   static async signUp(req, res, next) {
@@ -152,6 +153,75 @@ class Auth {
         token: Auth.tokenify(user)
       });
     } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
+  }
+
+  static async sendVerificationCode(req, res, next) {
+    const { phoneNumber } = req.query;
+    const userId = req.user.id;
+
+    try {
+      const user = await db.User.findById(userId);
+
+      if (!user) {
+        return res.status(404).send({
+          message: 'This user does not exist.',
+        });
+      }
+
+      if (user.isPhoneVerified) {
+        return res.status(200).send({
+          message: 'Your phone number has already been verified.',
+        });
+      }
+
+      const verificationCode = CodeUtil.generatePhoneVerificationCode();
+      const formattedNumber = OutputFormatters.formatPhoneNumber(phoneNumber);
+      
+      await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
+
+      user.phoneNumber = formattedNumber;
+      user.verificationCode = verificationCode;
+
+      await user.save();
+
+      res.status(200).send({
+        user: OutputFormatters.formatUser(user)
+      });
+    } catch(err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
+  }
+
+  static async verifyCode(req, res, next) {
+    const { verificationCode } = req.body;
+    const userId = req.user.id;
+
+    try {
+      const user = await db.User.findById(userId);
+
+      if (!user) {
+        return res.status(404).send({
+          message: 'This user does not exist.',
+        });
+      }
+
+      if (verificationCode !== user.verificationCode) {
+        return res.status(400).send({
+          message: 'Invalid verification code.',
+        });
+      }
+
+      user.verificationCode = null;
+      user.isPhoneVerified = true;
+
+      await user.save();
+
+      res.status(200).send({
+        user: OutputFormatters.formatUser(user)
+      });
+    } catch(err) {
       next(new ErrorHandler(500, 'An error occurred.'));
     }
   }

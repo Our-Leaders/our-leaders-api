@@ -3,6 +3,7 @@
  */
 
 const AuthCtrl = require('./../controllers/Auth');
+const AuthMiddleware = require('./../middleware/AuthenticationMiddleware');
 const AuthValidators = require('../validators/AuthValidators');
 
 module.exports = (router) => {
@@ -11,4 +12,16 @@ module.exports = (router) => {
   
   router.route('/auth/login')
     .post(AuthValidators.validateSignUp, AuthCtrl.login);
+
+  router.route('/auth/verify')
+    .get(
+      AuthMiddleware.authenticate,
+      AuthValidators.validateVerificationRequest,
+      AuthCtrl.sendVerificationCode
+    )
+    .post(
+      AuthMiddleware.authenticate,
+      AuthValidators.validateVerificationCode,
+      AuthCtrl.verifyCode
+    );
 };

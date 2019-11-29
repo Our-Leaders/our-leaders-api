@@ -1,4 +1,4 @@
-const { ErrorHandler } = require('../utils/errorUtil');
+const { ErrorHandler } = require('../utils/ErrorUtil');
 const { TypeUtil } = require('../utils/TypeUtil');
 const { PoliticalParty } = require('./../models')
 

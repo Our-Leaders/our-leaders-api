@@ -23,6 +23,14 @@ class OutputFormatters {
     };
   }
 
+  static formatPhoneNumber(phoneNumber) {
+    if (!phoneNumber) {
+      return '';
+    }
+
+    return phoneNumber.charAt(0) === '0' ? phoneNumber.replace('0', '234') : `234${phoneNumber}`
+  }
+
   static formatPolitician(politician) {
     if (!politician) {
       return {};

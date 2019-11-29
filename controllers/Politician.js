@@ -1,6 +1,6 @@
 const db = require('./../models');
 const OutputFormatters = require('./../utils/OutputFormatters');
-const { ErrorHandler } = require('./../utils/errorUtil');
+const { ErrorHandler } = require('../utils/ErrorUtil');
 
 class Politician {
   static async addAccomplishment(req, res, next) {
