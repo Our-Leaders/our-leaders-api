@@ -12,7 +12,7 @@ const FacebookUtil = require('./../utils/FacebookUtil');
 const GoogleUtil = require('./../utils/GoogleUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const Sms = require('./../communications/Sms');
-const { ErrorHandler } = require('../utils/errorUtil');
+const {ErrorHandler} = require('../utils/errorUtil');
 
 class Auth {
   static async signUp(req, res, next) {
@@ -89,8 +89,8 @@ class Auth {
   }
 
   static async login(req, res, next) {
-    const { body } = req;
-    const { email, password, googleId, facebookId } = body;
+    const {body} = req;
+    const {email, password, googleId, facebookId} = body;
     let user;
 
     try {
@@ -99,20 +99,20 @@ class Auth {
         user = await db.User.findOne({
           email
         });
-  
+
         if (!user) {
           return res.status(400).send({
             message: 'Wrong email or password',
           });
         }
-  
+
         if (!bcryptJs.compareSync(password, user.password)) {
           return res.status(400).send({
             message: 'Wrong email or password',
           });
         }
       } else if (googleId) {
-        const { sub, email } = await GoogleUtil.verifyToken(googleId);
+        const {sub, email} = await GoogleUtil.verifyToken(googleId);
 
         // check for an existing user
         user = await db.User.findOne({
@@ -126,7 +126,7 @@ class Auth {
           });
         }
       } else if (facebookId) {
-        const { id, email } = await FacebookUtil.verifyToken(facebookId);
+        const {id, email} = await FacebookUtil.verifyToken(facebookId);
 
         // check for an existing user
         // using id here instead of email because
@@ -158,7 +158,7 @@ class Auth {
   }
 
   static async sendVerificationCode(req, res, next) {
-    const { phoneNumber } = req.query;
+    const {phoneNumber} = req.query;
     const userId = req.user.id;
 
     try {
@@ -178,7 +178,7 @@ class Auth {
 
       const verificationCode = CodeUtil.generatePhoneVerificationCode();
       const formattedNumber = OutputFormatters.formatPhoneNumber(phoneNumber);
-      
+
       await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
 
       user.phoneNumber = formattedNumber;
@@ -189,13 +189,13 @@ class Auth {
       res.status(200).send({
         user: OutputFormatters.formatUser(user)
       });
-    } catch(err) {
+    } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.'));
     }
   }
 
   static async verifyCode(req, res, next) {
-    const { verificationCode } = req.body;
+    const {verificationCode} = req.body;
     const userId = req.user.id;
 
     try {
@@ -221,7 +221,7 @@ class Auth {
       res.status(200).send({
         user: OutputFormatters.formatUser(user)
       });
-    } catch(err) {
+    } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.'));
     }
   }
@@ -229,6 +229,7 @@ class Auth {
   static tokenify(user) {
     return jwt.sign({
       id: user._id,
+      email: user.email,
       role: user.role,
       permissions: user.permissions || {},
     }, Config.secret, {
