@@ -24,11 +24,10 @@ const FeedModel = mongoose.model('Feed', new Schema({
   publishedAt: {
     type: Date
   },
-  politician: {
+  politicians: [{
     type: String,
-    ref: 'Politician',
-    required: true
-  }
+    ref: 'Politician'
+  }]
 }, {
   timestamps: true
 }));
