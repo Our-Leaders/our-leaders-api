@@ -23,6 +23,11 @@ const FeedModel = mongoose.model('Feed', new Schema({
   },
   publishedAt: {
     type: Date
+  },
+  politician: {
+    type: String,
+    ref: 'Politician',
+    required: true
   }
 }, {
   timestamps: true
