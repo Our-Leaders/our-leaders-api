@@ -274,8 +274,6 @@ class Politician {
     const { body, params } = req;
     const { id } = params;
 
-    const updatedPolitician = {};
-
     try {
       const politician = await db.Politician.findById(id);
 

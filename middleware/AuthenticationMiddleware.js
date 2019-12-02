@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
 const { ErrorHandler } = require('../utils/ErrorUtil');
-const { User } = require('./../models');
 
 class AuthenticationMiddleware {
   static async authenticate(req, res, next) {
@@ -59,13 +58,13 @@ class AuthenticationMiddleware {
   static hasPermission({ property, action }) {
     return async function (req, res, next) {
       const { user } = req;
-      const { permissions = {}, id } = user;
+      const { permissions = {} } = user;
       const propertyPermissionObject = permissions[property];
 
       if (propertyPermissionObject[action]) {
         next();
       } else {
-        next(new ErrorHandler(403, 'You do not have sufficient priviledges to carry out this action.'));
+        next(new ErrorHandler(403, 'You do not have sufficient privileges to carry out this action.'));
       }
     };
   }

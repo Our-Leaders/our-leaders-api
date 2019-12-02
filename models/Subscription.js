@@ -17,7 +17,7 @@ const SubscriptionModel = mongoose.model('Subscription', new Schema({
     required: true,
     ref: 'Politician'
   },
-  email: {
+  user: {
     type: String,
     required: true
   },
