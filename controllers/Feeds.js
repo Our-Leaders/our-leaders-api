@@ -4,6 +4,7 @@
 
 const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const OutputFormatters = require('./../utils/OutputFormatters');
 
 class Feeds {
   static async getFeeds(req, res, next) {
@@ -46,8 +47,12 @@ class Feeds {
           }
         }
       ]);
-      console.log(feeds);
-      res.status(200).send({});
+
+      res.status(200).send({
+        feeds: feeds.result.map(x => {
+          return OutputFormatters.formatFeed(x)
+        })
+      });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
