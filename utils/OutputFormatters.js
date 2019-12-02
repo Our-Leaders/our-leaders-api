@@ -72,6 +72,32 @@ class OutputFormatters {
       createdAt: party.createdAt
     };
   }
+
+  static formatFeed(feed) {
+    if (!feed) {
+      return {};
+    }
+
+    const response = {
+      id: feed._id,
+      title: feed.title,
+      summary: feed.summary,
+      feedUrl: feed.feedUrl,
+      publishedAt: feed.publishedAt,
+      addedAt: feed.createdAt
+    };
+
+    response.politicians = feed.politicians.map(x => {
+      // if the politician is populated then format its response
+      if (typeof x === 'object') {
+        return OutputFormatters.formatPolitician(x);
+      }
+
+      return x;
+    });
+
+    return response;
+  }
 }
 
 module.exports = OutputFormatters;
