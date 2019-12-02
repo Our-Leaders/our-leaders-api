@@ -48,6 +48,13 @@ class Feeds {
         }
       ]);
 
+      // no feeds
+      if (!feeds.result) {
+        return res.status(200).send({
+          feeds: []
+        });
+      }
+
       res.status(200).send({
         feeds: feeds.result.map(x => {
           return OutputFormatters.formatFeed(x)

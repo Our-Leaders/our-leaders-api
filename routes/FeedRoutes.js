@@ -7,7 +7,7 @@ const FeedsCtrl = require('./../controllers/Feeds');
 
 module.exports = (router) => {
   router.route('/feeds')
-    .post(
+    .get(
       AuthMiddleware.authenticate,
       FeedsCtrl.getFeeds
     );
