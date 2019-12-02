@@ -18,7 +18,7 @@ class FeedsJob {
       // cache a list of the politicians and their ids
       const politicians = await db.Politician
         .find({})
-        .select('_id', 'name');
+        .select('_id name');
 
       for (let x = 0; x < newsItems.length; x++) {
         const newsItemHtml = $(newsItems[x]).html();
