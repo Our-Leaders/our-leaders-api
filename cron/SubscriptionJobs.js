@@ -3,6 +3,8 @@
  */
 
 const db = require('./../models');
+const Email = require('./../communications/Email');
+const EmailUtil = require('./../utils/EmailUtil');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
 
