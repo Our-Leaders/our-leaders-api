@@ -9,7 +9,7 @@ const db = require('./../models');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
 
-class FeedsJob {
+class FeedJobs {
   static async run() {
     try {
       const response = await axios.get(Config.feedUrl);
@@ -67,4 +67,4 @@ class FeedsJob {
   }
 }
 
-module.exports = FeedsJob;
+module.exports = FeedJobs;
