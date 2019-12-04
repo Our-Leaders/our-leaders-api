@@ -11,7 +11,8 @@ class CronScheduler {
   static startJobs() {
     const cronOptions = {
       scheduled: true,
-      timezone: 'Africa/Lagos'
+      // Africa/Lagos is not yet supported but algiers in the same timezone as lagos
+      timezone: 'Africa/Algiers'
     };
 
     // check feeds every two hours
@@ -23,8 +24,8 @@ class CronScheduler {
     // send weekly subscriptions at 12 PM every Sat
     nodeCron.schedule('0 0 12 * * SAT', SubscriptionJobs.dispatchWeeklyFeeds, cronOptions);
 
-    // send monthly subscriptions at 12 PM on the last month day
-    nodeCron.schedule('0 12 29 * *', SubscriptionJobs.dispatchMonthlyFeeds, cronOptions);
+    // send monthly subscriptions at 12 PM on the 28th day of each month
+    nodeCron.schedule('0 12 28 * *', SubscriptionJobs.dispatchMonthlyFeeds, cronOptions);
 
     Logger.log('Cron jobs started successfully.');
   }

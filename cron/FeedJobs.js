@@ -60,6 +60,7 @@ class FeedJobs {
         }
       }
 
+      Logger.log('Feed synchronization completed at ' + new Date());
     } catch (err) {
       Logger.error(err);
       Logger.error('An error occurred when refreshing feeds.')
