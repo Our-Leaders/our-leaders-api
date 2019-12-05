@@ -19,7 +19,8 @@ const SubscriptionModel = mongoose.model('Subscription', new Schema({
   },
   user: {
     type: String,
-    required: true
+    required: true,
+    ref: 'User'
   },
   frequency: {
     type: String,

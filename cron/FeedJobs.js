@@ -9,7 +9,7 @@ const db = require('./../models');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
 
-class FeedsJob {
+class FeedJobs {
   static async run() {
     try {
       const response = await axios.get(Config.feedUrl);
@@ -60,6 +60,7 @@ class FeedsJob {
         }
       }
 
+      Logger.log('Feed synchronization completed at ' + new Date());
     } catch (err) {
       Logger.error(err);
       Logger.error('An error occurred when refreshing feeds.')
@@ -67,4 +68,4 @@ class FeedsJob {
   }
 }
 
-module.exports = FeedsJob;
+module.exports = FeedJobs;

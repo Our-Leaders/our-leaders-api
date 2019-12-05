@@ -5,6 +5,7 @@
 const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
+const FeedUtil = require('./../utils/FeedUtil');
 
 class Feeds {
   static async getFeeds(req, res, next) {
@@ -21,42 +22,10 @@ class Feeds {
       });
 
       // check for feeds with the politician ids
-      const feeds = await db.Feed.aggregate([
-        {
-          $unwind: '$politicians'
-        }, {
-          $match: {
-            politicians: {
-              $in: politicianIds
-            }
-          }
-        }, {
-          $group: {
-            _id: '$_id',
-            politicians: {
-              $addToSet: '$politicians'
-            }
-          }
-        }, {
-          $project: {
-            _id: 1,
-            title: 1,
-            summary: 1,
-            publishedAt: 1,
-            politicians: 1
-          }
-        }
-      ]);
-
-      // no feeds
-      if (!feeds.result) {
-        return res.status(200).send({
-          feeds: []
-        });
-      }
+      const feeds = await FeedUtil.queryFeeds(politicianIds);
 
       res.status(200).send({
-        feeds: feeds.result.map(x => {
+        feeds: feeds.map(x => {
           return OutputFormatters.formatFeed(x)
         })
       });
