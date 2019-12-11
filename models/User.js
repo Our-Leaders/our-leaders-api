@@ -140,6 +140,12 @@ const UserModel = mongoose.model('User', new Schema({
         default: false
       },
     },
+    users: {
+      update: {
+        type: Boolean,
+        default: false
+      }
+    }
   },
 }, {
   timestamps: true
