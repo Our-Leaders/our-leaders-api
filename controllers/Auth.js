@@ -179,13 +179,13 @@ class Auth {
       const verificationCode = CodeUtil.generatePhoneVerificationCode();
       const formattedNumber = OutputFormatters.formatPhoneNumber(phoneNumber);
 
-      await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
-
       user.phoneNumber = formattedNumber;
       user.verificationCode = verificationCode;
 
       await user.save();
 
+      await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
+      
       res.status(200).send({
         user: OutputFormatters.formatUser(user)
       });
