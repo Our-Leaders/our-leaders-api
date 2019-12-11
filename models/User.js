@@ -48,6 +48,10 @@ const UserModel = mongoose.model('User', new Schema({
   ageRange: {
     type: String
   },
+  isBlocked: {
+    type: Boolean,
+    default: false
+  },
   isEmailVerified: {
     type: Boolean,
     default: false
@@ -136,6 +140,12 @@ const UserModel = mongoose.model('User', new Schema({
         default: false
       },
     },
+    users: {
+      update: {
+        type: Boolean,
+        default: false
+      }
+    }
   },
 }, {
   timestamps: true

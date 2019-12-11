@@ -19,7 +19,8 @@ class OutputFormatters {
       isEmailVerified: user.isEmailVerified,
       isPhoneVerified: user.isPhoneVerified,
       role: user.role,
-      joinedAt: user.createdAt
+      joinedAt: user.createdAt,
+      isBlocked: user.isBlocked
     };
   }
 

@@ -148,6 +148,12 @@ class Auth {
         }
       }
 
+      if (user.isBlocked) {
+        return res.status(400).send({
+          message: 'Your account has been blocked. Please contact the administrator.'
+        });
+      }
+
       res.status(200).send({
         user: OutputFormatters.formatUser(user),
         token: Auth.tokenify(user)
