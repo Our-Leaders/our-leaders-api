@@ -5,7 +5,13 @@
 const db = require('./../models');
 
 class Users {
+  static async blockUser(req, res) {
 
+  }
+
+  static async unblockUser(req, res) {
+
+  }
 }
 
 module.exports = Users;
