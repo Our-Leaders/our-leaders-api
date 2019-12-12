@@ -22,7 +22,13 @@ const JobModel = mongoose.model('Job', new Schema({
   category: {
     type: String,
     required: true
+  },
+  isArchived: {
+    type: Boolean,
+    default: false
   }
+}, {
+  timestamps: true
 }));
 
 module.exports = JobModel;
