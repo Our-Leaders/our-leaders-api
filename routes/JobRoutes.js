@@ -10,6 +10,7 @@ module.exports = (router) => {
   router.route('/jobs')
     .post(
       AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
       JobValidators.validateCreation,
       JobsCtrl.addJobListing
     );

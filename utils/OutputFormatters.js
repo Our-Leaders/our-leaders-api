@@ -99,6 +99,21 @@ class OutputFormatters {
 
     return response;
   }
+
+  static formatJob(job) {
+    if (!job) {
+      return {};
+    }
+
+    return {
+      id: job._id,
+      title: job.title,
+      description: job.description,
+      location: job.location,
+      category: job.category,
+      isArchived: job.isArchived
+    };
+  }
 }
 
 module.exports = OutputFormatters;
