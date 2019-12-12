@@ -12,6 +12,7 @@ const Tag = require('./Tag');
 const Feed = require('./Feed');
 const User = require('./User');
 const Subscription = require('./Subscription');
+const Job = require('./Job');
 
 const db = {};
 mongoose.connect(Config.database, {
@@ -25,5 +26,6 @@ db.Tag = Tag;
 db.Feed = Feed;
 db.User = User;
 db.Subscription = Subscription;
+db.Job = Job;
 
 module.exports = db;
