@@ -145,6 +145,12 @@ const UserModel = mongoose.model('User', new Schema({
         type: Boolean,
         default: false
       }
+    },
+    jobs: {
+      create: {
+        type: Boolean,
+        default: false
+      }
     }
   },
 }, {
