@@ -66,6 +66,28 @@ class Jobs {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async unarchiveJobListing(req, res, next) {
+    const {params} = req;
+    const {jobId} = params;
+
+    try {
+      const job = await db.Job.findById(jobId);
+
+      if (!job) {
+        return next(new ErrorHandler(404, 'A job listing with the provided id does not.'));
+      }
+
+      job.isArchived = false;
+      await job.save();
+
+      res.status(200).send({
+        job: OutputFormatters.formatJob(job)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Jobs;
