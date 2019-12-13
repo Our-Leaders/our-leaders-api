@@ -150,6 +150,10 @@ const UserModel = mongoose.model('User', new Schema({
       create: {
         type: Boolean,
         default: false
+      },
+      update: {
+        type: Boolean,
+        default: false
       }
     }
   },
