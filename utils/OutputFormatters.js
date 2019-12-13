@@ -111,6 +111,7 @@ class OutputFormatters {
       description: job.description,
       location: job.location,
       category: job.category,
+      applicationLink: job.applicationLink,
       isArchived: job.isArchived
     };
   }
