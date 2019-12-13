@@ -1,6 +1,6 @@
 const { ErrorHandler } = require('../utils/ErrorUtil');
 const { TypeUtil } = require('../utils/TypeUtil');
-const { PoliticalParty } = require('./../models')
+const { PoliticalParty } = require('./../models');
 
 class PoliticianValidators {
   static validateCreation(req, res, next) {
