@@ -7,7 +7,7 @@ const StatisticsCtrl = require('./../controllers/Statistics');
 
 module.exports = (router) => {
   router.route('/statistics')
-    .post(
+    .get(
       AuthMiddleware.authenticate,
       StatisticsCtrl.getStats
     );
