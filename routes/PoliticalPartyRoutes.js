@@ -1,6 +1,7 @@
 /**
  * Created by bolorundurowb on 13/11/2019
  */
+const multer = require('multer');
 
 const AuthMiddleware = require('./../middleware/AuthenticationMiddleware');
 const PoliticalPartyCtrl = require('./../controllers/PoliticalParties');
