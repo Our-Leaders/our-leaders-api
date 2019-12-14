@@ -23,6 +23,9 @@ const JobModel = mongoose.model('Job', new Schema({
     type: String,
     required: true
   },
+  applicationLink: {
+    type: String
+  },
   isArchived: {
     type: Boolean,
     default: false
