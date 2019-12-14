@@ -7,6 +7,12 @@ class OutputFormatters {
     if (!user) {
       return {};
     }
+    let joinedBy;
+    if (user.facebookId) {
+      joinedBy = 'facebook';
+    } else if (user.googleId) {
+      joinedBy = 'google';
+    }
 
     return {
       id: user._id,
@@ -20,6 +26,7 @@ class OutputFormatters {
       isPhoneVerified: user.isPhoneVerified,
       role: user.role,
       joinedAt: user.createdAt,
+      joinedBy,
       isBlocked: user.isBlocked
     };
   }
