@@ -52,6 +52,10 @@ const UserModel = mongoose.model('User', new Schema({
     type: Boolean,
     default: false
   },
+  isDeleted: {
+    type: Boolean,
+    default: false
+  },
   isEmailVerified: {
     type: Boolean,
     default: false
