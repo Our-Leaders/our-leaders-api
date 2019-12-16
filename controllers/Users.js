@@ -50,7 +50,24 @@ class Users {
   }
 
   static async deleteAccount(req, res, next) {
+    const {userId} = req.params;
 
+    try {
+      const user = await db.User.findById(userId);
+
+      if (!user) {
+        return next(new ErrorHandler(404, 'A user with the provided id does not exist.'));
+      }
+
+      user.isDeleted = true;
+      await user.save();
+
+      res.status(200).send({
+        message: 'User account successfully deleted.'
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
   }
 }
 
