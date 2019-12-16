@@ -148,6 +148,10 @@ const UserModel = mongoose.model('User', new Schema({
       update: {
         type: Boolean,
         default: false
+      },
+      delete: {
+        type: Boolean,
+        default: false
       }
     },
     jobs: {
