@@ -68,21 +68,31 @@ class Auth {
         email: user.email
       });
 
-      if (existingUser) {
+      // if a user exists and is not deleted then reflect conflict
+      if (existingUser && !existingUser.isDeleted) {
         return res.status(409).send({
           message: 'A user with the provided user profile already exists.'
         });
+      } else if (existingUser && existingUser.isDeleted) {
+        // re-enable the user account and authenticate them
+        existingUser.isDeleted = false;
+        await existingUser.save();
+
+        return res.status(200).send({
+          user: OutputFormatters.formatUser(existingUser),
+          token: Auth.tokenify(existingUser)
+        });
+      } else {
+        // persist new user
+        await user.save();
+
+        // TODO: if user is signing up with email and password, send verification email
+
+        res.status(200).send({
+          user: OutputFormatters.formatUser(user),
+          token: Auth.tokenify(user)
+        });
       }
-
-      // persist new user
-      await user.save();
-
-      // TODO: if user is signing up with email and password, send verification email
-
-      res.status(200).send({
-        user: OutputFormatters.formatUser(user),
-        token: Auth.tokenify(user)
-      });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.'));
     }
@@ -97,7 +107,8 @@ class Auth {
       if (email) {
         // check for an existing user
         user = await db.User.findOne({
-          email
+          email,
+          isDeleted: false
         });
 
         if (!user) {
@@ -191,7 +202,7 @@ class Auth {
       await user.save();
 
       await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
-      
+
       res.status(200).send({
         user: OutputFormatters.formatUser(user)
       });
