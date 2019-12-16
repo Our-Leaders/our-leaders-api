@@ -48,6 +48,10 @@ class Users {
       next(new ErrorHandler(500, 'An error occurred.'));
     }
   }
+
+  static async deleteAccount(req, res, next) {
+
+  }
 }
 
 module.exports = Users;
