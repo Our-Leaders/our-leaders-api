@@ -21,4 +21,12 @@ module.exports = (router) => {
       AuthMiddleware.hasPermission({property: 'users', action: 'update'}),
       UsersCtrl.unblockUser
     );
+
+  router.route('/users/:userId')
+    .delete(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({property: 'users', action: 'delete'}),
+      UsersCtrl.deleteAccount
+    );
 };
