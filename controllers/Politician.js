@@ -297,7 +297,13 @@ class Politician {
           politician.socials[socialUrl] = body.socialUrl;
         }
       });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 
+  static async getHighestVotedPoliticians(req, res, next) {
+    try {
 
     } catch (error) {
       next(new ErrorHandler(500, error.message));
