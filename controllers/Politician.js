@@ -304,7 +304,21 @@ class Politician {
 
   static async getHighestVotedPoliticians(req, res, next) {
     try {
+      const response = {};
 
+      response.current = await db.Politician
+        .findOne({status: 'current'})
+        .sort('-vote.up');
+
+      response.upcoming = await db.Politician
+        .findOne({status: 'upcoming'})
+        .sort('-vote.up');
+
+      response.past = await db.Politician
+        .findOne({status: 'past'})
+        .sort('-vote.up');
+
+      res.status(200).send(response);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
