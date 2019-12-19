@@ -6,17 +6,19 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class AdminValidators {
   static validateCreation(req, res, next) {
-    const {title, description, applicationLink, category} = req.body;
+    const {firstName, lastName, email, password, phone} = req.body;
     let message = '';
 
-    if (!title) {
-      message = 'A title is required.';
-    } else if (!description) {
-      message = 'A description is required.'
-    } else if (!applicationLink) {
-      message = 'An application link is required.'
-    } else if (!category) {
-      message = 'A listing category is required.'
+    if (!firstName) {
+      message = 'A first name is required.';
+    } else if (!lastName) {
+      message = 'A last name is required.'
+    } else if (!email) {
+      message = 'An email address is required.'
+    } else if (!phone) {
+      message = 'A phone number is required.'
+    } else if (!password) {
+      message = 'A password is required.'
     }
 
     if (message) {
