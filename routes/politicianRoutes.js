@@ -9,9 +9,16 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
-      AuthMiddleware.hasPermission({ property: 'politician', action: 'create' }),
+      AuthMiddleware.hasPermission({property: 'politician', action: 'create'}),
       PoliticianValidators.validateCreation,
       PoliticianCtrl.create
+    );
+
+  router.route('/politicians/highest-voted')
+    .get(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      PoliticianCtrl.getHighestVotedPoliticians
     );
 
   router.route('/politicians/:id')
@@ -19,7 +26,7 @@ module.exports = (router) => {
     .put(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
-      AuthMiddleware.hasPermission({ property: 'politician', action: 'update' }),
+      AuthMiddleware.hasPermission({property: 'politician', action: 'update'}),
       ImageMiddleware.uploadImage,
       PoliticianValidators.validatePoliticianUpdate,
       PoliticianCtrl.edit
@@ -29,7 +36,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
-      AuthMiddleware.hasPermission({ property: 'accomplishments', action: 'create' }),
+      AuthMiddleware.hasPermission({property: 'accomplishments', action: 'create'}),
       PoliticianValidators.validateAccomplishmentsCreation,
       ImageMiddleware.uploadImage,
       PoliticianCtrl.addAccomplishment
@@ -39,7 +46,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
-      AuthMiddleware.hasPermission({ property: 'educationalBackground', action: 'create' }),
+      AuthMiddleware.hasPermission({property: 'educationalBackground', action: 'create'}),
       PoliticianValidators.validateEducationalBackgroundCreation,
       PoliticianCtrl.addEducationalBackground
     );
@@ -55,7 +62,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
-      AuthMiddleware.hasPermission({ property: 'politicalBackground', action: 'create' }),
+      AuthMiddleware.hasPermission({property: 'politicalBackground', action: 'create'}),
       PoliticianValidators.validatePoliticalBackgroundCreation,
       PoliticianCtrl.addPoliticalBackground
     );
@@ -64,7 +71,7 @@ module.exports = (router) => {
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
-      AuthMiddleware.hasPermission({ property: 'professionalBackground', action: 'create' }),
+      AuthMiddleware.hasPermission({property: 'professionalBackground', action: 'create'}),
       PoliticianValidators.validateProfessionalBackgroundCreation,
       PoliticianCtrl.addProfessionalBackground
     );

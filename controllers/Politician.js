@@ -1,12 +1,12 @@
 const db = require('./../models');
 const OutputFormatters = require('./../utils/OutputFormatters');
-const { ErrorHandler } = require('../utils/ErrorUtil');
+const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Politician {
   static async addAccomplishment(req, res, next) {
-    const { body, params } = req;
-    const { id } = params;
-    let image = { publicId: null, url: null };
+    const {body, params} = req;
+    const {id} = params;
+    let image = {publicId: null, url: null};
 
     try {
       const politician = await db.Politician.findById(id);
@@ -43,8 +43,8 @@ class Politician {
   }
 
   static async addEducationalBackground(req, res, next) {
-    const { body, params } = req;
-    const { id } = params;
+    const {body, params} = req;
+    const {id} = params;
 
     try {
       const politician = await db.Politician.findById(id);
@@ -74,8 +74,8 @@ class Politician {
   }
 
   static async addVote(req, res, next) {
-    const { body, params } = req;
-    const { id } = params;
+    const {body, params} = req;
+    const {id} = params;
 
     try {
       const politician = await db.Politician.findById(id);
@@ -95,7 +95,7 @@ class Politician {
           politician.vote.up--;
           politician.vote.down++;
         }
-        
+
         if (!politician.voters[index].isUpvote && body.isUpvote) {
           politician.vote.down--;
           politician.vote.up++;
@@ -123,8 +123,8 @@ class Politician {
   }
 
   static async addPoliticalBackground(req, res, next) {
-    const { body, params } = req;
-    const { id } = params;
+    const {body, params} = req;
+    const {id} = params;
 
     try {
       const politician = await db.Politician.findById(id);
@@ -175,19 +175,19 @@ class Politician {
     let orQuery = [];
 
     if (query.name) {
-      orQuery.push({ name: { $regex: query.name, $options: 'i' } });
+      orQuery.push({name: {$regex: query.name, $options: 'i'}});
     }
 
     if (query.status) {
-      orQuery.push({ status: { $regex: query.status, $options: 'i' } });
+      orQuery.push({status: {$regex: query.status, $options: 'i'}});
     }
 
     if (query.state) {
-      orQuery.push({ state: { $regex: query.state, $options: 'i' } });
+      orQuery.push({state: {$regex: query.state, $options: 'i'}});
     }
 
     if (query.politicalPartyId) {
-      orQuery.push({ politicalParty: { $regex: query.politicalPartyId, $options: 'i' } });
+      orQuery.push({politicalParty: {$regex: query.politicalPartyId, $options: 'i'}});
     }
 
     if (query.politicalPosition) {
@@ -195,14 +195,14 @@ class Politician {
         politicalBackground: {
           $elemMatch: {
             inOffice: true,
-            position: { $regex: query.politicalPosition, $options: 'i' }
+            position: {$regex: query.politicalPosition, $options: 'i'}
           }
         }
       });
     }
 
     if (orQuery.length) {
-      findByQuery = { $or: orQuery };
+      findByQuery = {$or: orQuery};
     }
 
     try {
@@ -219,8 +219,8 @@ class Politician {
   }
 
   static async get(req, res, next) {
-    const { params } = req;
-    const { id } = params;
+    const {params} = req;
+    const {id} = params;
 
     try {
       const politician = await db.Politician.findById(id).populate('politicalParty');
@@ -238,8 +238,8 @@ class Politician {
   }
 
   static async addProfessionalBackground(req, res, next) {
-    const { body, params } = req;
-    const { id } = params;
+    const {body, params} = req;
+    const {id} = params;
 
     try {
       const politician = await db.Politician.findById(id);
@@ -271,8 +271,8 @@ class Politician {
   }
 
   static async edit(req, res, next) {
-    const { body, params } = req;
-    const { id } = params;
+    const {body, params} = req;
+    const {id} = params;
 
     try {
       const politician = await db.Politician.findById(id);
@@ -287,7 +287,7 @@ class Politician {
           politician[property] = body[property];
         }
       });
-  
+
       if (body.image) {
         politician.profileImage = body.image;
       }
@@ -297,8 +297,28 @@ class Politician {
           politician.socials[socialUrl] = body.socialUrl;
         }
       });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 
+  static async getHighestVotedPoliticians(req, res, next) {
+    try {
+      const response = {};
 
+      response.current = await db.Politician
+        .findOne({status: 'current'})
+        .sort('-vote.up');
+
+      response.upcoming = await db.Politician
+        .findOne({status: 'upcoming'})
+        .sort('-vote.up');
+
+      response.past = await db.Politician
+        .findOne({status: 'past'})
+        .sort('-vote.up');
+
+      res.status(200).send(response);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
