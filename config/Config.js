@@ -33,5 +33,11 @@ module.exports = {
     bsApiKey: process.env.BS_API_KEY,
     bsSenderId: process.env.BS_SENDER_ID
   },
-  feedUrl: 'https://www.tostvnetwork.com/category/news/'
+  feedUrl: 'https://www.tostvnetwork.com/category/news/',
+  superAdmin: {
+    email: process.env.SUPER_EMAIL,
+    password: process.env.SUPER_PASS,
+    firstName: 'Super',
+    lastName: 'Admin'
+  }
 };
