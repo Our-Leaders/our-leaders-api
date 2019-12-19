@@ -36,6 +36,8 @@ module.exports = {
   feedUrl: 'https://www.tostvnetwork.com/category/news/',
   superAdmin: {
     email: process.env.SUPER_EMAIL,
-    password: process.env.SUPER_PASS
+    password: process.env.SUPER_PASS,
+    firstName: 'Super',
+    lastName: 'Admin'
   }
 };
