@@ -8,8 +8,31 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
   static async createAdmin(req, res, next) {
-    try {
+    const {firstName, lastName, email, password, phone} = req.body;
 
+    try {
+      let admin = await db.User
+        .findOne({email});
+
+      if (admin) {
+        return next(new ErrorHandler(409, 'A user with the provided email address already exists.'));
+      }
+
+      admin = new db.User({
+        firstName,
+        lastName,
+        email,
+        password,
+        phoneNumber: phone,
+        role: 'admin'
+      });
+      await admin.save();
+
+      // TODO: send invite email with default password
+
+      res.status(201).send({
+        admin: OutputFormatters.formatAdmin(admin)
+      });
     } catch (err) {
       next(new ErrorHandler(500, error.message));
     }

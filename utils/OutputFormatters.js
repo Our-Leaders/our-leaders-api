@@ -31,6 +31,22 @@ class OutputFormatters {
     };
   }
 
+  static formatAdmin(admin) {
+    if (!admin) {
+      return {};
+    }
+
+    return {
+      id: admin._id,
+      firstName: admin.firstName,
+      lastName: admin.lastName,
+      phoneNumber: admin.phoneNumber,
+      email: admin.email,
+      role: admin.role,
+      joinedAt: admin.createdAt
+    };
+  }
+
   static formatPhoneNumber(phoneNumber) {
     if (!phoneNumber) {
       return '';
