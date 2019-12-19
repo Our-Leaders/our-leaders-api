@@ -6,12 +6,12 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "12.*",
-    "yarn": "1.*"
+    "node": "12.*"
   },
   "scripts": {
-    "start": "nodemon server.js",
-    "start:prod": "node server.js"
+    "init": "node config/Init.js",
+    "start": "npm run init && nodemon server.js",
+    "start:prod": "npm run init && node server.js"
   },
   "dependencies": {
     "axios": "^0.19.0",
