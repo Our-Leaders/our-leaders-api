@@ -9,16 +9,13 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 class Users {
   static async getUsers(req, res, next) {
     try {
-      let sort = req.params.sort;
-
-      // check if a sort column is set or default to first name
-      if (!sort) {
-        sort = 'firstName';
-      }
+      let {sort, limit, skip} = req.params;
 
       const users = await db.User
         .find({})
-        .sort(sort);
+        .skip(skip)
+        .limit(limit)
+        .sort(sort || 'firstName'); // default to ordering by first name
 
       res.status(200).send({
         users: users.map(x => OutputFormatters.formatUser(x))
