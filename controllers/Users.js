@@ -7,6 +7,24 @@ const {ErrorHandler} = require('../utils/errorUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 
 class Users {
+  static async getUsers(req, res, next) {
+    try {
+      let {sort, limit, skip} = req.params;
+
+      const users = await db.User
+        .find({})
+        .skip(skip)
+        .limit(limit)
+        .sort(sort || 'firstName'); // default to ordering by first name
+
+      res.status(200).send({
+        users: users.map(x => OutputFormatters.formatUser(x))
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
+  }
+
   static async blockUser(req, res, next) {
     const {userId} = req.params;
 
