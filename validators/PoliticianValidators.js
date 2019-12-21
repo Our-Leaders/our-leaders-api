@@ -3,7 +3,7 @@ const { TypeUtil } = require('../utils/TypeUtil');
 const { PoliticalParty } = require('./../models');
 
 class PoliticianValidators {
-  static validateCreation(req, res, next) {
+  static async validateCreation(req, res, next) {
     const body = req.body;
     let message = '';
 

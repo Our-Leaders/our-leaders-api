@@ -45,10 +45,12 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
   },
   vote: {
     down: {
-      type: Number
+      type: Number,
+      default: 0,
     },
     up: {
-      type: Number
+      type: Number,
+      default: 0,
     }
   },
   voters: [{
