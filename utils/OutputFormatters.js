@@ -43,7 +43,8 @@ class OutputFormatters {
       phoneNumber: admin.phoneNumber,
       email: admin.email,
       role: admin.role,
-      joinedAt: admin.createdAt
+      joinedAt: admin.createdAt,
+      permissions: admin.permissions
     };
   }
 
