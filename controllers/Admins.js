@@ -39,20 +39,6 @@ class Admins {
     }
   }
 
-  static async deleteAdmin(req, res, next) {
-    const {adminId} = req.params;
-
-    try {
-      await db.User.findByIdAndDelete(adminId);
-
-      res.status(200).send({
-        message: 'Admin successfully deleted.'
-      });
-    } catch (err) {
-      next(new ErrorHandler(500, error.message));
-    }
-  }
-
   static async updateAdmin(req, res, next) {
     const {adminId} = req.params;
     const {body} = req;
@@ -74,6 +60,27 @@ class Admins {
 
       res.status(200).send({
         admin: OutputFormatters.formatAdmin(admin)
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async deleteAdmin(req, res, next) {
+    const {adminId} = req.params;
+
+    try {
+      const admin = await db.User.findById(adminId);
+
+      if (!admin) {
+        return next(new ErrorHandler(409, 'An admin with the provided id does not exist.'));
+      }
+
+      admin.isDeleted = true;
+      await admin.save();
+
+      res.status(200).send({
+        message: 'Admin successfully deleted.'
       });
     } catch (err) {
       next(new ErrorHandler(500, error.message));
