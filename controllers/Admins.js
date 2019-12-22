@@ -8,7 +8,7 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
   static async createAdmin(req, res, next) {
-    const {firstName, lastName, email, password, phone, permissions} = req.body;
+    const {firstName, lastName, email, password, phoneNumber, permissions} = req.body;
 
     try {
       let admin = await db.User
@@ -24,7 +24,7 @@ class Admins {
         email,
         password,
         permissions,
-        phoneNumber: phone,
+        phoneNumber,
         role: 'admin'
       });
       await admin.save();
@@ -47,6 +47,33 @@ class Admins {
 
       res.status(200).send({
         message: 'Admin successfully deleted.'
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async updateAdmin(req, res, next) {
+    const {adminId} = req.params;
+    const {body} = req;
+
+    try {
+      let admin = await db.User
+        .findById(adminId);
+
+      if (!admin) {
+        return next(new ErrorHandler(409, 'An admin with the provided id does not exist.'));
+      }
+
+      ['firstName', 'lastName', 'email', 'permissions', 'phoneNumber'].forEach(prop => {
+        if (body[prop]) {
+          admin[prop] = body[prop];
+        }
+      });
+      await admin.save();
+
+      res.status(200).send({
+        admin: OutputFormatters.formatAdmin(admin)
       });
     } catch (err) {
       next(new ErrorHandler(500, error.message));
