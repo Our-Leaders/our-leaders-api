@@ -14,4 +14,11 @@ module.exports = (router) => {
       AdminValidators.validateCreation,
       AdminsCtrl.createAdmin
     );
+
+  router.route('/admins/:adminId')
+    .delete(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isSuperAdmin,
+      AdminsCtrl.deleteAdmin
+    );
 };
