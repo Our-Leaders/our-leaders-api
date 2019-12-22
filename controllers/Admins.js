@@ -14,19 +14,22 @@ class Admins {
       let admin = await db.User
         .findOne({email});
 
-      if (admin) {
+      if (!admin) {
+        admin = new db.User({
+          role: 'admin'
+        });
+      } else if (admin.isDeleted) {
+        admin.isDeleted = false;
+      } else {
         return next(new ErrorHandler(409, 'A user with the provided email address already exists.'));
       }
 
-      admin = new db.User({
-        firstName,
-        lastName,
-        email,
-        password,
-        permissions,
-        phoneNumber,
-        role: 'admin'
-      });
+      admin.firstName = firstName;
+      admin.lastName = lastName;
+      admin.password = password;
+      admin.email = email;
+      admin.phoneNumber = phoneNumber;
+      admin.permission = permissions;
       await admin.save();
 
       // TODO: send invite email with default password
