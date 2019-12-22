@@ -6,7 +6,7 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class AdminValidators {
   static validateCreation(req, res, next) {
-    const {firstName, lastName, email, password, phone, permissions} = req.body;
+    const {firstName, lastName, email, password, phoneNumber, permissions} = req.body;
     let message = '';
 
     if (!firstName) {
@@ -15,7 +15,7 @@ class AdminValidators {
       message = 'A last name is required.'
     } else if (!email) {
       message = 'An email address is required.'
-    } else if (!phone) {
+    } else if (!phoneNumber) {
       message = 'A phone number is required.'
     } else if (!password) {
       message = 'A password is required.'

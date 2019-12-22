@@ -20,5 +20,10 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       AuthMiddleware.isSuperAdmin,
       AdminsCtrl.deleteAdmin
+     )
+    .put(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isSuperAdmin,
+      AdminsCtrl.updateAdmin
     );
 };
