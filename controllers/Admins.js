@@ -38,6 +38,20 @@ class Admins {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async deleteAdmin(req, res, next) {
+    const {adminId} = req.params;
+
+    try {
+      await db.User.findByIdAndDelete(adminId);
+
+      res.status(200).send({
+        message: 'Admin successfully deleted.'
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Admins;
