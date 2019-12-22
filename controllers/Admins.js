@@ -8,7 +8,7 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
   static async createAdmin(req, res, next) {
-    const {firstName, lastName, email, password, phone, permissions} = req.body;
+    const {firstName, lastName, email, password, phoneNumber, permissions} = req.body;
 
     try {
       let admin = await db.User
@@ -24,7 +24,7 @@ class Admins {
         email,
         password,
         permissions,
-        phoneNumber: phone,
+        phoneNumber,
         role: 'admin'
       });
       await admin.save();
