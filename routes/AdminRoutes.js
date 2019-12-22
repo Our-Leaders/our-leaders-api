@@ -16,6 +16,11 @@ module.exports = (router) => {
     );
 
   router.route('/admins/:adminId')
+    .delete(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isSuperAdmin,
+      AdminsCtrl.deleteAdmin
+     )
     .put(
       AuthMiddleware.authenticate,
       AuthMiddleware.isSuperAdmin,
