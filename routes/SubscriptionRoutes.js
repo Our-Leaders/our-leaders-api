@@ -15,7 +15,7 @@ module.exports = (router) => {
     );
 
   router.route('/subscriptions/check')
-    .post(
+    .get(
       AuthMiddleware.authenticate,
       SubscriptionCtrl.checkSubscription
     );
