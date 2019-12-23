@@ -8,6 +8,10 @@ const SubscriptionValidators = require('./../validators/SubscriptionValidators')
 
 module.exports = (router) => {
   router.route('/subscriptions')
+    .get(
+      AuthMiddleware.authenticate,
+      SubscriptionCtrl.getSubscriptions
+    )
     .post(
       AuthMiddleware.authenticate,
       SubscriptionValidators.validateCreation,
