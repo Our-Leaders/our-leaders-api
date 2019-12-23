@@ -139,6 +139,27 @@ class OutputFormatters {
       isArchived: job.isArchived
     };
   }
+
+  static formatSubscription(subscription) {
+    if (!subscription) {
+      return {};
+    }
+
+    const response = {
+      id: subscription._id,
+      frequency: subscription.frequency
+    };
+
+    if (subscription.politician) {
+      response.politician = OutputFormatters.formatPolitician(subscription.politician);
+    }
+
+    if (subscription.user) {
+      response.user = OutputFormatters.formatUser(subscription.user);
+    }
+
+    return response;
+  }
 }
 
 module.exports = OutputFormatters;

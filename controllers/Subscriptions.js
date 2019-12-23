@@ -3,9 +3,28 @@
  */
 
 const db = require('./../models');
+const OutputFormatter = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Subscriptions {
+  static async getSubscriptions(req, res, next) {
+    const {id} = req.user;
+
+    try {
+      const subscriptions = await db.Subscription
+        .find({
+          user: id
+        })
+        .populate('politician');
+
+      res.status(200).send({
+        subscriptions: subscriptions.map(x => OutputFormatter.formatSubscription(x))
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async addSubscription(req, res, next) {
     const {body} = req;
 
