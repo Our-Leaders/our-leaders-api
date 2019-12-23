@@ -13,4 +13,10 @@ module.exports = (router) => {
       SubscriptionValidators.validateCreation,
       SubscriptionCtrl.addSubscription
     );
+
+  router.route('/subscriptions/check')
+    .post(
+      AuthMiddleware.authenticate,
+      SubscriptionCtrl.checkSubscription
+    );
 };
