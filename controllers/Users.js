@@ -67,6 +67,36 @@ class Users {
     }
   }
 
+  static async getVotes(req, res, next) {
+    const {id} = req.user;
+
+    try {
+      const politicians = await db.Politician
+        .find({
+          rooms: {
+            $elemMatch: {
+              id: id
+            }
+          }
+        })
+        .select('_id name vote voters politicalBackground');
+
+      res.status(200).send({
+        votes: politicians.map(x => {
+          return {
+            politicianId: x._id,
+            name: x.name,
+            vote: x.vote,
+            voters: x.voters,
+            position: x.politicalBackground[0]?.position
+          }
+        })
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
+  }
+
   static async deleteAccount(req, res, next) {
     const {userId} = req.params;
 
