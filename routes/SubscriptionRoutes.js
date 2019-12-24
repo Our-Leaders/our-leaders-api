@@ -17,4 +17,16 @@ module.exports = (router) => {
       SubscriptionValidators.validateCreation,
       SubscriptionCtrl.addSubscription
     );
+
+  router.route('/subscriptions/check')
+    .get(
+      AuthMiddleware.authenticate,
+      SubscriptionCtrl.checkSubscription
+    );
+
+  router.route('/subscriptions/:subscriptionId')
+    .delete(
+      AuthMiddleware.authenticate,
+      SubscriptionCtrl.removeSubscription
+    );
 };

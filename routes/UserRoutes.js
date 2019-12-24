@@ -36,4 +36,10 @@ module.exports = (router) => {
       AuthMiddleware.isAdmin,
       UsersCtrl.getUsers
     );
+
+  router.route('/users/:userId/votes')
+    .get(
+      AuthMiddleware.authenticate,
+      UsersCtrl.getVotes
+    );
 };
