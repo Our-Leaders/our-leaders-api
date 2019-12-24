@@ -19,4 +19,10 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       SubscriptionCtrl.checkSubscription
     );
+
+  router.route('/subscriptions/:subscriptionId')
+    .delete(
+      AuthMiddleware.authenticate,
+      SubscriptionCtrl.removeSubscription
+    );
 };

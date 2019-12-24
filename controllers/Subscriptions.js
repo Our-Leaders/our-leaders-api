@@ -60,6 +60,28 @@ class Subscriptions {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async removeSubscription(req, res, next) {
+    const {subscriptionId} = req.params;
+    const {id} = req.user;
+
+    try {
+      const subscription = await db.Subscription.findOne({
+        _id: subscriptionId,
+        user: id
+      });
+
+      if (subscription) {
+        await db.Subscription.findByIdAndDelete(subscriptionId);
+      }
+
+      res.status(200).send({
+        message: 'Unsubscription successful.'
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Subscriptions;
