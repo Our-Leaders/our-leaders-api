@@ -3,9 +3,28 @@
  */
 
 const db = require('./../models');
+const OutputFormatter = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Subscriptions {
+  static async getSubscriptions(req, res, next) {
+    const {id} = req.user;
+
+    try {
+      const subscriptions = await db.Subscription
+        .find({
+          user: id
+        })
+        .populate('politician');
+
+      res.status(200).send({
+        subscriptions: subscriptions.map(x => OutputFormatter.formatSubscription(x))
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async checkSubscription(req, res, next) {
     const {politicianId} = req.params;
     const {id} = req.user;
@@ -35,20 +54,21 @@ class Subscriptions {
   }
 
   static async addSubscription(req, res, next) {
-    const {body} = req;
+    const {body, user} = req;
+    const {id} = user;
 
     try {
       let subscription = await db.Subscription.findOne({
         politician: body.politicianId,
-        email: body.email
+        user: id
       });
 
       // if a subscription does not exist, create one
       if (!subscription) {
         subscription = new db.Subscription({
           politician: body.politicianId,
-          email: body.email,
-          frequency: body.frequency || 'daily'
+          frequency: body.frequency || 'daily',
+          user: id
         });
         await subscription.save();
       }
