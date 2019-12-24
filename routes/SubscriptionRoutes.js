@@ -18,7 +18,7 @@ module.exports = (router) => {
       SubscriptionCtrl.addSubscription
     );
 
-  router.route('/subscriptions/check')
+  router.route('/subscriptions/check/:politicianId')
     .get(
       AuthMiddleware.authenticate,
       SubscriptionCtrl.checkSubscription
