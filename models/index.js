@@ -13,7 +13,7 @@ const Feed = require('./Feed');
 const User = require('./User');
 const Subscription = require('./Subscription');
 const Job = require('./Job');
-const Setting = require('./Page');
+const Page = require('./Page');
 
 const db = {};
 mongoose.connect(Config.database, {

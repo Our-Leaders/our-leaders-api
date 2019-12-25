@@ -11,6 +11,7 @@ const StatisticRoutes = require('./StatisticRoutes');
 const SubscriptionRoutes = require('./SubscriptionRoutes');
 const UserRoutes = require('./UserRoutes');
 const AdminRoutes = require('./AdminRoutes');
+const PageRoutes = require('./PageRoutes');
 
 module.exports = (router) => {
   AuthRoutes(router);
@@ -22,6 +23,7 @@ module.exports = (router) => {
   SubscriptionRoutes(router);
   UserRoutes(router);
   AdminRoutes(router);
+  PageRoutes(router);
 
   return router;
 };
