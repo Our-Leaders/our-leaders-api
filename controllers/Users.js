@@ -83,13 +83,18 @@ class Users {
 
       res.status(200).send({
         votes: politicians.map(x => {
-          return {
+          const response = {
             politicianId: x._id,
             name: x.name,
             vote: x.vote,
-            voters: x.voters,
-            position: x.politicalBackground[0].position
+            voters: x.voters
+          };
+
+          if (x.politicalBackground[0]) {
+            response.position = x.politicalBackground[0].position
           }
+
+          return response;
         })
       });
     } catch (err) {

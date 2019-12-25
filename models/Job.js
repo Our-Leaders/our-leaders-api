@@ -16,6 +16,10 @@ const JobModel = mongoose.model('Job', new Schema({
     type: String,
     required: true
   },
+  type: {
+    type: String,
+    enum: ['full', 'contract', 'part', 'remote']
+  },
   location: {
     type: String
   },
@@ -25,6 +29,14 @@ const JobModel = mongoose.model('Job', new Schema({
   },
   applicationLink: {
     type: String
+  },
+  image: {
+    url: {
+      type: String
+    },
+    id: {
+      type: String
+    }
   },
   isArchived: {
     type: Boolean,

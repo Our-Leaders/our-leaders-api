@@ -133,9 +133,11 @@ class OutputFormatters {
       id: job._id,
       title: job.title,
       description: job.description,
+      type: job.type,
       location: job.location,
       category: job.category,
       applicationLink: job.applicationLink,
+      image: job.image,
       isArchived: job.isArchived
     };
   }
