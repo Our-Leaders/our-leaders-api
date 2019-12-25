@@ -30,6 +30,7 @@ const Logger = require('./Logger');
       Logger.log('Site wide settings seeded.');
     } else {
       setting = new db.Setting({
+        aboutUs: `We aim to educate The People on how to properly get involved with policies and decisions being made on their behalf and how these decisions may affect The People. We also aim to create a platform where The Leaders can learn directly from The People. Their perspectives, opinions, and ideas, and utilize this information when making decisions on behalf of The People.`,
         contact: {
           address: '8, Lawal Street, Off Oweh street, Jibowu, Yaba Lagos, Nigeria',
           phoneNumber: '234) 817 543 9754',
