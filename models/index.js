@@ -13,7 +13,7 @@ const Feed = require('./Feed');
 const User = require('./User');
 const Subscription = require('./Subscription');
 const Job = require('./Job');
-const Setting = require('./Setting');
+const Setting = require('./Page');
 
 const db = {};
 mongoose.connect(Config.database, {
@@ -28,6 +28,6 @@ db.Feed = Feed;
 db.User = User;
 db.Subscription = Subscription;
 db.Job = Job;
-db.Setting = Setting;
+db.Page = Page;
 
 module.exports = db;

@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const SettingModel = mongoose.model('Setting', new Schema({
+const PageModel = mongoose.model('Page', new Schema({
   _id: {
     type: String,
     default: shortId.generate
@@ -44,4 +44,4 @@ const SettingModel = mongoose.model('Setting', new Schema({
   timestamps: true
 }));
 
-module.exports = SettingModel;
+module.exports = PageModel;

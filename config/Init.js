@@ -23,22 +23,22 @@ const Logger = require('./Logger');
       Logger.log('Super admin has been seeded successfully.')
     }
 
-    // seed the settings
-    let setting = await db.Setting.findOne({});
+    // seed the web page info
+    let page = await db.Page.findOne({});
 
-    if (setting) {
-      Logger.log('Site wide settings seeded.');
+    if (page) {
+      Logger.log('Web pages info already exists.');
     } else {
-      setting = new db.Setting({
+      page = new db.Page({
         aboutUs: `We aim to educate The People on how to properly get involved with policies and decisions being made on their behalf and how these decisions may affect The People. We also aim to create a platform where The Leaders can learn directly from The People. Their perspectives, opinions, and ideas, and utilize this information when making decisions on behalf of The People.`,
         contact: {
           address: '8, Lawal Street, Off Oweh street, Jibowu, Yaba Lagos, Nigeria',
-          phoneNumber: '234) 817 543 9754',
+          phoneNumber: '(234) 817 543 9754',
           email: 'hello@ourleaders.africa'
         }
       });
-      await setting.save();
-      Logger.log('Site settings seeded successfully.');
+      await page.save();
+      Logger.log('Web pages info seeded successfully.');
     }
 
     process.exit(0);
