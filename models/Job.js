@@ -16,6 +16,10 @@ const JobModel = mongoose.model('Job', new Schema({
     type: String,
     required: true
   },
+  type: {
+    type: String,
+    enum: ['full', 'contract']
+  },
   location: {
     type: String
   },
