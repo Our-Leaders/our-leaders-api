@@ -88,7 +88,7 @@ class Users {
             name: x.name,
             vote: x.vote,
             voters: x.voters,
-            position: x.politicalBackground[0]?.position
+            position: x.politicalBackground[0].position
           }
         })
       });
