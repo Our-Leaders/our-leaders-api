@@ -133,6 +133,7 @@ class OutputFormatters {
       id: job._id,
       title: job.title,
       description: job.description,
+      type: job.typ,
       location: job.location,
       category: job.category,
       applicationLink: job.applicationLink,

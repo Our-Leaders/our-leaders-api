@@ -4,10 +4,18 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Jobs {
   static async addJobListing(req, res, next) {
-    const {body} = req;
+    const {title, description, applicationLink, category, type} = req.body;
 
     try {
-      const job = new db.Job(body);
+      const job = new db.Job({
+        title,
+        description,
+        type,
+        location,
+        category,
+        applicationLink,
+        isArchived: false
+      });
       await job.save();
 
       res.status(201).send({
