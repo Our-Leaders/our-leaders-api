@@ -47,7 +47,7 @@ class Subscriptions {
 
       return res.status(200).send({
         message: 'You are subscribed to the specified politician.',
-        subscription
+        subscription: OutputFormatter.formatSubscription(subscription)
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
@@ -76,7 +76,7 @@ class Subscriptions {
 
       res.status(200).send({
         message: 'Subscription created successfully.',
-        subscription
+        subscription: OutputFormatter.formatSubscription(subscription)
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
