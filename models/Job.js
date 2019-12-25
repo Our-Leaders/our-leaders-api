@@ -30,7 +30,7 @@ const JobModel = mongoose.model('Job', new Schema({
   applicationLink: {
     type: String
   },
-  photo: {
+  image: {
     url: {
       type: String
     },

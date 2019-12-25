@@ -137,6 +137,7 @@ class OutputFormatters {
       location: job.location,
       category: job.category,
       applicationLink: job.applicationLink,
+      image: job.image,
       isArchived: job.isArchived
     };
   }

@@ -4,7 +4,7 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Jobs {
   static async addJobListing(req, res, next) {
-    const {title, description, applicationLink, category, type} = req.body;
+    const {title, description, applicationLink, category, type, image} = req.body;
 
     try {
       const job = new db.Job({
@@ -14,6 +14,7 @@ class Jobs {
         location,
         category,
         applicationLink,
+        image,
         isArchived: false
       });
       await job.save();
@@ -37,7 +38,7 @@ class Jobs {
         return next(new ErrorHandler(404, 'A job listing with the provided id does not.'));
       }
 
-      ['title', 'description', 'location', 'category'].forEach(prop => {
+      ['title', 'description', 'location', 'category', 'image'].forEach(prop => {
         if (body[prop]) {
           job[prop] = body[prop];
         }
