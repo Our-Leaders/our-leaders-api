@@ -163,6 +163,12 @@ const UserModel = mongoose.model('User', new Schema({
         type: Boolean,
         default: false
       }
+    },
+    pages: {
+      update: {
+        type: Boolean,
+        default: false
+      }
     }
   },
 }, {
