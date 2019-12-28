@@ -11,5 +11,11 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
       PagesCtrl.getPages
+    )
+    .put(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({property: 'pages', action: 'update'}),
+      PagesCtrl.updatePages
     );
 };
