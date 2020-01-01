@@ -1,7 +1,10 @@
+const multer = require('multer');
 const AuthMiddleware = require('./../middleware/AuthenticationMiddleware');
 const ImageMiddleware = require('./../middleware/ImageMiddleware');
 const PoliticianCtrl = require('./../controllers/Politician');
 const PoliticianValidators = require('./../validators/PoliticianValidators');
+
+const Upload = multer({dest: 'uploads/'});
 
 module.exports = (router) => {
   router.route('/politicians')
@@ -10,6 +13,8 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
       AuthMiddleware.hasPermission({property: 'politician', action: 'create'}),
+      Upload.single('file'),
+      ImageMiddleware.uploadImage,
       PoliticianValidators.validateCreation,
       PoliticianCtrl.create
     );

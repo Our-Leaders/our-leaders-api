@@ -158,7 +158,14 @@ class Politician {
 
   static async create(req, res, next) {
     try {
-      const politician = new db.Politician(req.body);
+      const { body } = req;
+      let payload = {...body};
+
+      if (body.image) {
+        payload = { ...payload, profileImage: body.image };
+      }
+      
+      const politician = new db.Politician(payload);
       await politician.save();
 
       res.status(201).send({
