@@ -29,7 +29,10 @@ class PoliticalParties {
         ideology: body.ideology,
         socials: body.socials,
         partyBackground: body.partyBackground,
-        partyDescription: body.partyDescription
+        partyDescription:  {
+          founded: body.yearEstablished,
+          partyChairman: body.partyLeader
+        }
       });
       await party.save();
 
