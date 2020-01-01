@@ -14,9 +14,9 @@ module.exports = (router) => {
   router.route('/political-party')
     .post(
       AuthMiddleware.authenticate,
-      PoliticalPartyValidators.validateCreation,
       Upload.single('file'),
       ImageMiddleware.uploadLogo,
+      PoliticalPartyValidators.validateCreation,
       PoliticalPartyCtrl.create
     )
     .get(PoliticalPartyCtrl.find);
