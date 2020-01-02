@@ -12,7 +12,7 @@ const FacebookUtil = require('./../utils/FacebookUtil');
 const GoogleUtil = require('./../utils/GoogleUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const Sms = require('./../communications/Sms');
-const {ErrorHandler} = require('../utils/errorUtil');
+const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Auth {
   static async signUp(req, res, next) {
