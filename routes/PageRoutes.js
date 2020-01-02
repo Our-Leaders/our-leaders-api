@@ -8,8 +8,6 @@ const PagesCtrl = require('./../controllers/Pages');
 module.exports = (router) => {
   router.route('/pages')
     .get(
-      AuthMiddleware.authenticate,
-      AuthMiddleware.isAdmin,
       PagesCtrl.getPages
     )
     .put(
