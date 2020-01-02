@@ -19,6 +19,44 @@ const Logger = require('./Logger');
     } else {
       superAdmin = new db.User(Config.superAdmin);
       superAdmin.role = 'superadmin';
+      superAdmin.permissions = {
+        politician: {
+          create: true,
+          update: true,
+          delete: true
+        },
+        educationalBackground: {
+          create: true,
+          update: true,
+          delete: true
+        },
+        politicalBackground: {
+          create: true,
+          update: true,
+          delete: true
+        },
+        professionalBackground: {
+          create: true,
+          update: true,
+          delete: true
+        },
+        accomplishments: {
+          create: true,
+          update: true,
+          delete: true
+        },
+        users: {
+          update: true,
+          delete: true
+        },
+        jobs: {
+          create: true,
+          update: true
+        },
+        pages: {
+          update: true
+        }
+      };
       await superAdmin.save();
       Logger.log('Super admin has been seeded successfully.')
     }
