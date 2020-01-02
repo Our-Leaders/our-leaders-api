@@ -1,7 +1,7 @@
 const axios = require('axios');
 
-const Config = require('./../Config/Config');
-const Logger = require('./../Config/Logger');
+const Config = require('./../config/Config');
+const Logger = require('./../config/Logger');
 
 class Sms {
   static async sendMessage(recipient, message) {
@@ -21,6 +21,6 @@ class Sms {
       Logger.error(err);
     }
   };
-};
+}
 
 module.exports = Sms;
