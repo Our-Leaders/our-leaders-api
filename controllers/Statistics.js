@@ -11,6 +11,7 @@ class Statistics {
       const response = {
         parties: await db.PoliticalParty.count({}),
         admins: await db.User.count({$or: [{role: 'admin'}, {role: 'superadmin'}]}),
+        leaders: await db.Politician.count(),
         currentLeaders: await db.Politician.count({status: 'current'}),
         upcomingLeaders: await db.Politician.count({status: 'upcoming'})
       };
