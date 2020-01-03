@@ -5,7 +5,7 @@
 const jwt = require('jsonwebtoken');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
-const { ErrorHandler } = require('../utils/ErrorUtil');
+const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class AuthenticationMiddleware {
   static async authenticate(req, res, next) {
@@ -24,7 +24,7 @@ class AuthenticationMiddleware {
       }
     } catch (err) {
       Logger.error(err);
-      return next(ErrorHandler(500, err.message || JSON.stringify(err)));
+      return next(new ErrorHandler(500, err.message || JSON.stringify(err)));
     }
   }
 
@@ -32,7 +32,7 @@ class AuthenticationMiddleware {
     if (req.user.role === 'superadmin' || req.user.role === 'admin') {
       next();
     } else {
-      next(ErrorHandler(403, 'You lack necessary permissions to carry out this action.'));
+      next(new ErrorHandler(403, 'You lack necessary permissions to carry out this action.'));
     }
   }
 
@@ -40,15 +40,15 @@ class AuthenticationMiddleware {
     if (req.user.role === 'superadmin') {
       next();
     } else {
-      next(ErrorHandler(403, 'You lack necessary permissions to carry out this action.'));
+      next(new ErrorHandler(403, 'You lack necessary permissions to carry out this action.'));
     }
   }
 
   // I feel we should have a more robust check for permissions for this
-  static hasPermission({ property, action }) {
+  static hasPermission({property, action}) {
     return function (req, res, next) {
-      const { user } = req;
-      const { permissions = {} } = user;
+      const {user} = req;
+      const {permissions = {}} = user;
       const propertyPermissionObject = permissions[property];
 
       if (propertyPermissionObject[action]) {
