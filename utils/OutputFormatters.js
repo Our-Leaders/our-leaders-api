@@ -44,7 +44,9 @@ class OutputFormatters {
       email: admin.email,
       role: admin.role,
       joinedAt: admin.createdAt,
-      permissions: admin.permissions
+      permissions: admin.permissions,
+      isBlocked: admin.isBlocked,
+      isDeleted: admin.isDeleted,
     };
   }
 
