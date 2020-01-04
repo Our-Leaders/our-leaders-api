@@ -11,7 +11,7 @@ class AuthenticationMiddleware {
   static async authenticate(req, res, next) {
     const token = req.headers['x-access-token'] || req.headers['authorization'];
     if (!token) {
-      return next(ErrorHandler(401, 'An authentication token in the header is required.'));
+      return next(new ErrorHandler(401, 'An authentication token in the header is required.'));
     }
 
     try {
