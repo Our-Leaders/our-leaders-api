@@ -103,6 +103,33 @@ class Admins {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async findAdmin(req, res, next) {
+    // const query = req.query;
+    // let findByQuery = {};
+    // let orQuery = [];
+
+    // isBlocked
+
+    // if (orQuery.length) {
+    //   findByQuery = {$or: orQuery};
+    // }
+
+    try {
+      const admins = await db.User.find({
+        $or: [
+          { role: 'superadmin' },
+          { role: 'admin' },
+        ],
+      });
+      const serializedAdmins = admins.map(admin => OutputFormatters.formatAdmin(admin));
+      res.status(200).send({
+        admins: serializedAdmins
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Admins;

@@ -8,6 +8,11 @@ const AdminsCtrl = require('./../controllers/Admins');
 
 module.exports = (router) => {
   router.route('/admins')
+    .get(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      AdminsCtrl.findAdmin
+    )
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isSuperAdmin,
