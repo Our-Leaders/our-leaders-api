@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const TrendingPoliticianModel = mongoose.model('TrendingPolitician', new Schema({
+const TrendModel = mongoose.model('Trend', new Schema({
   _id: {
     type: String,
     default: shortId.generate
@@ -21,4 +21,4 @@ const TrendingPoliticianModel = mongoose.model('TrendingPolitician', new Schema(
   timestamps: true
 }));
 
-module.exports = TrendingPoliticianModel;
+module.exports = TrendModel;
