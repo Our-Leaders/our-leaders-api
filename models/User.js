@@ -169,7 +169,21 @@ const UserModel = mongoose.model('User', new Schema({
         type: Boolean,
         default: false
       }
-    }
+    },
+    trends: {
+      create: {
+        type: Boolean,
+        default: false
+      },
+      update: {
+        type: Boolean,
+        default: false
+      },
+      delete: {
+        type: Boolean,
+        default: false
+      },
+    },
   },
 }, {
   timestamps: true

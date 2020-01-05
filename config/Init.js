@@ -55,6 +55,11 @@ const Logger = require('./Logger');
         },
         pages: {
           update: true
+        },
+        trends: {
+          create: true,
+          update: true,
+          delete: true
         }
       };
       await superAdmin.save();
