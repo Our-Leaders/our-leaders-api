@@ -164,6 +164,18 @@ class OutputFormatters {
 
     return response;
   }
+
+  static formatTrend(trend) {
+    if (!trend) {
+      return {};
+    }
+
+    return {
+      id: trend._id,
+      order: trend.order,
+      politician: OutputFormatters.formatPolitician(trend.politician)
+    };
+  }
 }
 
 module.exports = OutputFormatters;
