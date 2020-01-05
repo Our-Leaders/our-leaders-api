@@ -29,6 +29,22 @@ class Trends {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async get(req, res, next) {
+    try {
+      const trends = await db.Trend.find().populate('politician');
+
+      const serializedTrends = trends.map(trend => {
+        return OutputFormatters.formatTrend(trend);
+      });
+
+      res.status(200).send({
+        trends: serializedTrends
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Trends;
