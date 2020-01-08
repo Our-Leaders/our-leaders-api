@@ -213,7 +213,7 @@ class Politician {
     }
 
     try {
-      const politicians = await db.Politician.find(findByQuery);
+      const politicians = await db.Politician.find(findByQuery).populate('politicalParty');
       const serializedPoliticians = politicians.map(politician => {
         return OutputFormatters.formatPolitician(politician);
       });
