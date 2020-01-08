@@ -299,10 +299,22 @@ class Politician {
         politician.profileImage = body.image;
       }
 
+
+      if (!politician.socials) {
+        politician.socials = {};
+      }
+
       ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
         if (body[socialUrl]) {
-          politician.socials[socialUrl] = body.socialUrl;
+          politician.socials[socialUrl] = body[socialUrl];
         }
+      });
+
+      await politician.save();
+      const editedPolitician = await politician.populate('politicalParty').execPopulate();
+
+      res.status(200).send({
+        politician: OutputFormatters.formatPolitician(editedPolitician)
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
