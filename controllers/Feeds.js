@@ -10,6 +10,7 @@ const FeedUtil = require('./../utils/FeedUtil');
 class Feeds {
   static async getFeeds(req, res, next) {
     const {user} = req;
+    const {politicianId} = req.params;
 
     try {
       // get politician ids for all user subscription
