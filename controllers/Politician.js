@@ -304,6 +304,10 @@ class Politician {
         politician.socials = {};
       }
 
+      if (body.socials) {
+        politician.socials = body.socials;
+      }
+
       ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
         if (body[socialUrl]) {
           politician.socials[socialUrl] = body[socialUrl];
