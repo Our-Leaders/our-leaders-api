@@ -85,6 +85,40 @@ class PoliticalParties {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async edit(req, res, next) {
+    const {body, params} = req;
+    const {id} = params;
+
+    try {
+      const politicalParty = await db.PoliticalParty.findById(id);
+
+      if (!politicalParty) {
+        next(new ErrorHandler(404, 'Political Party doesn\'t exist'));
+        return;
+      }
+
+      ['name', 'acronym','ideoloogy', 'logo', 'partyBackground', 'socials'].forEach((property) => {
+        politicalParty[property] = body[property];
+      });
+
+      if (body.yearEstablished) {
+        politicalParty.partyDescription.founded = body.yearEstablished;
+      }
+
+      if (body.partyLeader) {
+        politicalParty.partyDescription.partyChairman = body.partyLeader;
+      }
+
+      await politicalParty.save();
+
+      res.status(200).send({
+        politicalParty: OutputFormatters.formatPoliticalParty(politicalParty)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = PoliticalParties;
