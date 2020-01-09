@@ -32,6 +32,7 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
       AuthMiddleware.hasPermission({property: 'politician', action: 'update'}),
+      Upload.single('file'),
       ImageMiddleware.uploadImage,
       PoliticianValidators.validatePoliticianUpdate,
       PoliticianCtrl.edit
