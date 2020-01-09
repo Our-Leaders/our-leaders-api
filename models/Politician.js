@@ -21,7 +21,12 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
     required: true
   },
   manifesto: {
-    type: String
+    summary: {
+      type: String,
+    },
+    url: {
+      type: String,
+    },
   },
   stateOfOrigin: {
     type: String,

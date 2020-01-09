@@ -158,8 +158,8 @@ class PoliticianValidators {
       message = 'Please enter a valid date of birth for the politician';
     } else if (body.religion !== undefined && body.religion.trim().length < 1) {
       message = 'Please enter a valid religion for the politician';
-    } else if (body.manifesto !== undefined && body.manifesto.trim().length < 1) {
-      message = 'Please enter a valid manifesto for the politician';
+    } else if (body.manifesto !== undefined && typeof (body.manifesto) !== 'object' && body.manifesto.summary.trim().length < 1) {
+      message = 'Please enter a valid summary for politician manifesto';
     } else if (body.stateOfOrigin !== undefined && body.stateOfOrigin.trim().length < 1) {
       message = 'Please enter a valid state of origin for the politician';
     } else if (body.status !== undefined && body.status.trim().length < 1) {
