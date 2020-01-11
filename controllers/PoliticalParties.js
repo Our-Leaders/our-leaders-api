@@ -27,13 +27,19 @@ class PoliticalParties {
         acronym: body.acronym,
         logo: body.logo,
         ideology: body.ideology,
-        socials: body.socials,
         partyBackground: body.partyBackground,
         partyDescription:  {
           founded: body.yearEstablished,
           partyChairman: body.partyLeader
         }
       });
+
+      ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
+        if (body[socialUrl]) {
+          party.socials[socialUrl] = body[socialUrl];
+        }
+      });
+
       await party.save();
 
       res.status(201).send({
@@ -98,8 +104,10 @@ class PoliticalParties {
         return;
       }
 
-      ['name', 'acronym','ideoloogy', 'logo', 'partyBackground', 'socials'].forEach((property) => {
-        politicalParty[property] = body[property];
+      ['name', 'acronym','ideology', 'partyBackground'].forEach((property) => {
+        if (body[property]) {
+          politicalParty[property] = body[property];
+        }
       });
 
       if (body.yearEstablished) {
@@ -109,6 +117,16 @@ class PoliticalParties {
       if (body.partyLeader) {
         politicalParty.partyDescription.partyChairman = body.partyLeader;
       }
+
+      if (body.logo) {
+        politicalParty.logo = body.logo;
+      }
+
+      ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
+        if (body[socialUrl]) {
+          politicalParty.socials[socialUrl] = body[socialUrl] || '';
+        }
+      });
 
       await politicalParty.save();
 

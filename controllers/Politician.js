@@ -166,6 +166,13 @@ class Politician {
       }
       
       const politician = new db.Politician(payload);
+
+      ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
+        if (body[socialUrl]) {
+          politician.socials[socialUrl] = body[socialUrl];
+        }
+      });
+
       await politician.save();
 
       res.status(201).send({
@@ -302,10 +309,6 @@ class Politician {
 
       if (!politician.socials) {
         politician.socials = {};
-      }
-
-      if (body.socials) {
-        politician.socials = body.socials;
       }
 
       ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
