@@ -13,17 +13,20 @@ class ImageMiddleware {
         height: req.body.height
       });
       next();
-    } else {
-      next();
     }
+
+    next();
   }
 
   static async uploadLogo(req, res, next) {
     const file = req.file;
-    req.body.logo = await ImageUtil.uploadFile(file, {
-      width: 200,
-      height: 200
-    });
+    if (file) {
+      req.body.logo = await ImageUtil.uploadFile(file, {
+        width: 200,
+        height: 200
+      });
+    }
+
     next();
   }
 }
