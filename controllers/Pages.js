@@ -37,12 +37,14 @@ class Pages {
         next(new ErrorHandler(404, 'Web pages info was not found.'));
       }
 
-      ['aboutUs', 'contact', 'socials'].forEach(prop => {
-        if (body[prop]) {
-          page[prop] = prop;
-        }
-      });
-
+      page.aboutUs = body.aboutUs;
+      page.contact.address = body.contact.address;
+      page.contact.phoneNumber = body.contact.phoneNumber;
+      page.contact.email = body.contact.email;
+      page.socials.facebook = body.socials.facebook;
+      page.socials.twitter = body.socials.twitter;
+      page.socials.instagram = body.socials.instagram;
+      page.socials.linkedIn = body.socials.linkedIn;
       await page.save();
 
       res.status(200).send({
