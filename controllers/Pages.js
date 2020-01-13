@@ -28,7 +28,6 @@ class Pages {
 
   static async updatePages(req, res, next) {
     const {body} = req;
-    console.log(body);
 
     try {
       const page = await db.Page.findOne({});
