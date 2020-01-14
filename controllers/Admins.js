@@ -7,6 +7,24 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
+  static async findAdmin(req, res, next) {
+    try {
+      const admins = await db.User.find({
+        $or: [
+          { role: 'superadmin' },
+          { role: 'admin' },
+        ],
+      })
+        .sort({firstName: 'asc', lastName: 'asc'});
+      const serializedAdmins = admins.map(admin => OutputFormatters.formatAdmin(admin));
+      res.status(200).send({
+        admins: serializedAdmins
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async createAdmin(req, res, next) {
     const {firstName, lastName, email, password, phoneNumber, permissions} = req.body;
 
@@ -36,20 +54,6 @@ class Admins {
 
       res.status(201).send({
         admin: OutputFormatters.formatAdmin(admin)
-      });
-    } catch (err) {
-      next(new ErrorHandler(500, error.message));
-    }
-  }
-
-  static async deleteAdmin(req, res, next) {
-    const {adminId} = req.params;
-
-    try {
-      await db.User.findByIdAndDelete(adminId);
-
-      res.status(200).send({
-        message: 'Admin successfully deleted.'       
       });
     } catch (err) {
       next(new ErrorHandler(500, error.message));
@@ -100,33 +104,6 @@ class Admins {
         message: 'Admin successfully deleted.'
       });
     } catch (err) {
-      next(new ErrorHandler(500, error.message));
-    }
-  }
-
-  static async findAdmin(req, res, next) {
-    // const query = req.query;
-    // let findByQuery = {};
-    // let orQuery = [];
-
-    // isBlocked
-
-    // if (orQuery.length) {
-    //   findByQuery = {$or: orQuery};
-    // }
-
-    try {
-      const admins = await db.User.find({
-        $or: [
-          { role: 'superadmin' },
-          { role: 'admin' },
-        ],
-      });
-      const serializedAdmins = admins.map(admin => OutputFormatters.formatAdmin(admin));
-      res.status(200).send({
-        admins: serializedAdmins
-      });
-    } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
   }
