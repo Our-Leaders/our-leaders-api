@@ -97,6 +97,20 @@ class Jobs {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async removeCategory(req, res, next) {
+    const {categoryName} = req.params;
+
+    try {
+      await db.Job.deleteMany({category: categoryName});
+
+      res.status(200).send({
+        message: `${categoryName} successfully removed.`
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Jobs;
