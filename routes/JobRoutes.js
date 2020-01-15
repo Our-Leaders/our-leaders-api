@@ -48,4 +48,11 @@ module.exports = (router) => {
       AuthMiddleware.hasPermission({property: 'jobs', action: 'update'}),
       JobsCtrl.unarchiveJobListing
     );
+
+  router.route('/jobs/categories/:categoryName')
+    .delete(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isSuperAdmin,
+      JobsCtrl.removeCategory
+    );
 };
