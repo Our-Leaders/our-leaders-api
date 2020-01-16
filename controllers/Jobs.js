@@ -3,6 +3,28 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Jobs {
+  static async retrieveJobListings(req, res, next) {
+    const {categoryName, type} = req.params;
+
+    try {
+      const query = {
+        isArchived: false
+      };
+
+      if (categoryName) {
+        query.category = categoryName;
+      }
+
+      if (type) {
+        query.type = type;
+      }
+
+      const jobs = await db.Job.find(query);
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async addJobListing(req, res, next) {
     const {title, description, applicationLink, category, type, image} = req.body;
 
