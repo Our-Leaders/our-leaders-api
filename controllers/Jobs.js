@@ -5,12 +5,18 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Jobs {
   static async retrieveJobListings(req, res, next) {
-    const {categoryName, type} = req.params;
+    const {params, user} = req;
+    const {categoryName, type} = params;
 
     try {
-      const query = {
+      let query = {
         isArchived: false
       };
+
+      // if the user is authenticated and is an admin, then add in archived jobs
+      if (user && ['admin', 'superadmin'].includes(user.role)) {
+        query = {};
+      }
 
       if (categoryName) {
         query.category = categoryName;
