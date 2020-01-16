@@ -13,6 +13,9 @@ const Upload = multer({dest: 'uploads/'});
 
 module.exports = (router) => {
   router.route('/jobs')
+    .get(
+      JobsCtrl.retrieveJobListings
+    )
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
