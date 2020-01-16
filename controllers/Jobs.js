@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const db = require('./../models');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
@@ -20,6 +21,11 @@ class Jobs {
       }
 
       const jobs = await db.Job.find(query);
+      const groupedJobs = _.groupBy(jobs, 'category');
+
+      res.status(200).send({
+        jobs: groupedJobs
+      });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
