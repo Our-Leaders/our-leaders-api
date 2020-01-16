@@ -28,6 +28,15 @@ class AuthenticationMiddleware {
     }
   }
 
+  static async optionalAuthenticate(req, res, next) {
+    const token = req.headers['x-access-token'] || req.headers['authorization'];
+    if (!token) {
+      next();
+    } else {
+      await AuthenticationMiddleware.authenticate(req, res, next);
+    }
+  }
+
   static isAdmin(req, res, next) {
     if (req.user.role === 'superadmin' || req.user.role === 'admin') {
       next();
