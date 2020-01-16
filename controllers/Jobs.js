@@ -1,8 +1,42 @@
+const _ = require('lodash');
 const db = require('./../models');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Jobs {
+  static async retrieveJobListings(req, res, next) {
+    const {params, user} = req;
+    const {categoryName, type} = params;
+
+    try {
+      let query = {
+        isArchived: false
+      };
+
+      // if the user is authenticated and is an admin, then add in archived jobs
+      if (user && ['admin', 'superadmin'].includes(user.role)) {
+        query = {};
+      }
+
+      if (categoryName) {
+        query.category = categoryName;
+      }
+
+      if (type) {
+        query.type = type;
+      }
+
+      const jobs = await db.Job.find(query);
+      const groupedJobs = _.groupBy(jobs, 'category');
+
+      res.status(200).send({
+        jobs: groupedJobs
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async addJobListing(req, res, next) {
     const {title, description, applicationLink, category, type, image} = req.body;
 
