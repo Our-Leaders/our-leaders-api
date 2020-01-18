@@ -293,7 +293,6 @@ class Politician {
 
       if (!politician) {
         next(new ErrorHandler(404, 'Politician doesn\'t exist'));
-        return;
       }
 
       ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin', 'politicalParty', 'status'].forEach((property) => {
