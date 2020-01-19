@@ -5,8 +5,8 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Jobs {
   static async retrieveJobListings(req, res, next) {
-    const {params, user} = req;
-    const {categoryName, type} = params;
+    const {query, user} = req;
+    const {categoryName, type} = query;
 
     try {
       let query = {
@@ -38,7 +38,7 @@ class Jobs {
   }
 
   static async addJobListing(req, res, next) {
-    const {title, description, applicationLink, category, type, image} = req.body;
+    const {title, description, applicationLink, location, category, type, image} = req.body;
 
     try {
       const job = new db.Job({
