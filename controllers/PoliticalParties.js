@@ -27,13 +27,19 @@ class PoliticalParties {
         acronym: body.acronym,
         logo: body.logo,
         ideology: body.ideology,
-        socials: body.socials,
         partyBackground: body.partyBackground,
         partyDescription:  {
           founded: body.yearEstablished,
           partyChairman: body.partyLeader
         }
       });
+
+      ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
+        if (body[socialUrl]) {
+          party.socials[socialUrl] = body[socialUrl];
+        }
+      });
+
       await party.save();
 
       res.status(201).send({
@@ -80,6 +86,52 @@ class PoliticalParties {
 
       res.status(200).send({
         politicalParties: serializedPoliticalParties
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async edit(req, res, next) {
+    const {body, params} = req;
+    const {id} = params;
+
+    try {
+      const politicalParty = await db.PoliticalParty.findById(id);
+
+      if (!politicalParty) {
+        next(new ErrorHandler(404, 'Political Party doesn\'t exist'));
+        return;
+      }
+
+      ['name', 'acronym','ideology', 'partyBackground'].forEach((property) => {
+        if (body[property]) {
+          politicalParty[property] = body[property];
+        }
+      });
+
+      if (body.yearEstablished) {
+        politicalParty.partyDescription.founded = body.yearEstablished;
+      }
+
+      if (body.partyLeader) {
+        politicalParty.partyDescription.partyChairman = body.partyLeader;
+      }
+
+      if (body.logo) {
+        politicalParty.logo = body.logo;
+      }
+
+      ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
+        if (body[socialUrl]) {
+          politicalParty.socials[socialUrl] = body[socialUrl] || '';
+        }
+      });
+
+      await politicalParty.save();
+
+      res.status(200).send({
+        politicalParty: OutputFormatters.formatPoliticalParty(politicalParty)
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));

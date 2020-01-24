@@ -20,4 +20,13 @@ module.exports = (router) => {
       PoliticalPartyCtrl.create
     )
     .get(PoliticalPartyCtrl.find);
+
+  router.route('/political-party/:id')
+    .put(
+      AuthMiddleware.authenticate,
+      Upload.single('file'),
+      ImageMiddleware.uploadLogo,
+      PoliticalPartyValidators.validateUpdate,
+      PoliticalPartyCtrl.edit
+    )
 };

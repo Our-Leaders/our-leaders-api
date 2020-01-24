@@ -166,6 +166,13 @@ class Politician {
       }
       
       const politician = new db.Politician(payload);
+
+      ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
+        if (body[socialUrl]) {
+          politician.socials[socialUrl] = body[socialUrl];
+        }
+      });
+
       await politician.save();
 
       res.status(201).send({
@@ -286,7 +293,6 @@ class Politician {
 
       if (!politician) {
         next(new ErrorHandler(404, 'Politician doesn\'t exist'));
-        return;
       }
 
       ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin', 'politicalParty', 'status'].forEach((property) => {

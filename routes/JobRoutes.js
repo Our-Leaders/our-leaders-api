@@ -13,6 +13,10 @@ const Upload = multer({dest: 'uploads/'});
 
 module.exports = (router) => {
   router.route('/jobs')
+    .get(
+      AuthMiddleware.optionalAuthenticate,
+      JobsCtrl.retrieveJobListings
+    )
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
@@ -47,5 +51,12 @@ module.exports = (router) => {
       AuthMiddleware.isAdmin,
       AuthMiddleware.hasPermission({property: 'jobs', action: 'update'}),
       JobsCtrl.unarchiveJobListing
+    );
+
+  router.route('/jobs/categories/:categoryName')
+    .delete(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isSuperAdmin,
+      JobsCtrl.removeCategory
     );
 };

@@ -1,10 +1,44 @@
+const _ = require('lodash');
 const db = require('./../models');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Jobs {
+  static async retrieveJobListings(req, res, next) {
+    const {query, user} = req;
+    const {categoryName, type} = query;
+
+    try {
+      let query = {
+        isArchived: false
+      };
+
+      // if the user is authenticated and is an admin, then add in archived jobs
+      if (user && ['admin', 'superadmin'].includes(user.role)) {
+        query = {};
+      }
+
+      if (categoryName) {
+        query.category = categoryName;
+      }
+
+      if (type) {
+        query.type = type;
+      }
+
+      const jobs = await db.Job.find(query);
+      const groupedJobs = _.groupBy(jobs, 'category');
+
+      res.status(200).send({
+        jobs: groupedJobs
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async addJobListing(req, res, next) {
-    const {title, description, applicationLink, category, type, image} = req.body;
+    const {title, description, applicationLink, location, category, type, image} = req.body;
 
     try {
       const job = new db.Job({
@@ -92,6 +126,20 @@ class Jobs {
 
       res.status(200).send({
         job: OutputFormatters.formatJob(job)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async removeCategory(req, res, next) {
+    const {categoryName} = req.params;
+
+    try {
+      await db.Job.deleteMany({category: categoryName});
+
+      res.status(200).send({
+        message: `${categoryName} successfully removed.`
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
