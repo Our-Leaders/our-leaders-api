@@ -9,7 +9,7 @@ class StringUtil {
 
   static generateTransactionReference() {
     const prefix = 'OLA';
-    const suffix = Math.random().toString().slice(0, 10);
+    const suffix = Math.random().toString().slice(2, 12);
     return `${prefix}-${suffix}`
   }
 }
