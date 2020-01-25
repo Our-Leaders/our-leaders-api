@@ -39,5 +39,9 @@ module.exports = {
     password: process.env.SUPER_PASS,
     firstName: 'Super',
     lastName: 'Admin'
+  },
+  paystack: {
+    publicKey: process.env.PAYSTACK_PUBLIC_KEY,
+    secretKey: process.env.PAYSTACK_SECRET_KEY
   }
 };
