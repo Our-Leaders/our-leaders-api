@@ -29,6 +29,11 @@ const DonationModel = mongoose.model('Donation', new Schema({
   transactionReference: {
     type: String,
     required: true
+  },
+  status: {
+    type: String,
+    enum: ['void', 'verified'],
+    default: 'void'
   }
 }, {
   timestamp: true
