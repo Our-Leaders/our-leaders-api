@@ -14,6 +14,7 @@ const User = require('./User');
 const Subscription = require('./Subscription');
 const Job = require('./Job');
 const Page = require('./Page');
+const Donation = require('./Donation');
 
 const db = {};
 mongoose.connect(Config.database, {
@@ -29,5 +30,6 @@ db.User = User;
 db.Subscription = Subscription;
 db.Job = Job;
 db.Page = Page;
+db.Donation = Donation;
 
 module.exports = db;

@@ -10,6 +10,25 @@ const DonationModel = mongoose.model('Donation', new Schema({
   },
   name: {
     type: String
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  isAnonymous: {
+    type: Boolean,
+    default: false
+  },
+  currency: {
+    type: String,
+    default: 'NGN'
+  },
+  amount: {
+    type: Number
+  },
+  transactionReference: {
+    type: String,
+    required: true
   }
 }, {
   timestamp: true
