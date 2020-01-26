@@ -1,5 +1,6 @@
 const db = require('./../models');
 const Config = require('./../config/Config');
+const Logger = require('./../config/Logger');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const StringUtil = require('./../utils/StringUtil');
 
@@ -34,6 +35,16 @@ class Transactions {
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
+  }
+
+  static async webhook(req, res) {
+    try {
+
+    } catch (error) {
+      Logger.error(error);
+    }
+
+    res.status(200).send();
   }
 }
 
