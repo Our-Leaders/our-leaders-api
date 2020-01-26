@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const db = require('./../models');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
@@ -38,13 +40,23 @@ class Transactions {
   }
 
   static async webhook(req, res) {
-    try {
+    const {headers, body} = req;
 
+    try {
+      const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(req.body)).digest('hex');
+      // verify the paystack payload
+      if (hash === headers['x-paystack-signature']) {
+        // check if event is a transaction verification
+        if (body.event === 'charge.success') {
+
+        }
+      }
+
+      res.status(200).send();
     } catch (error) {
       Logger.error(error);
+      res.status(400).send();
     }
-
-    res.status(200).send();
   }
 }
 
