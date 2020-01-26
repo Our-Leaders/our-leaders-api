@@ -55,6 +55,7 @@ class Transactions {
 
           if (donation) {
             donation.status = 'verified';
+            donation.amount = data.data.amount;
             donation.card = {
               cardType: data.authorization.card_type,
               expMonth: data.authorization.exp_month,
