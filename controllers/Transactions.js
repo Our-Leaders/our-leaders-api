@@ -43,12 +43,27 @@ class Transactions {
     const {headers, body} = req;
 
     try {
-      const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(req.body)).digest('hex');
+      const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(body)).digest('hex');
       // verify the paystack payload
       if (hash === headers['x-paystack-signature']) {
         // check if event is a transaction verification
-        if (body.event === 'charge.success') {
+        const {event, data} = body;
+        if (event === 'charge.success') {
+          const donation = await db.Donation({
+            transactionReference: data.reference
+          });
 
+          if (donation) {
+            donation.status = 'verified';
+            donation.card = {
+              cardType: data.authorization.card_type,
+              expMonth: data.authorization.exp_month,
+              expYear: data.authorization.exp_year,
+              country: data.authorization.country_code,
+              lastFour: data.authorization.last4
+            };
+            await donation.save();
+          }
         }
       }
 
