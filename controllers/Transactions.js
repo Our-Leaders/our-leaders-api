@@ -54,6 +54,7 @@ class Transactions {
           });
 
           if (donation) {
+            donation.currency = data.currency;
             donation.status = 'verified';
             donation.amount = data.data.amount;
             donation.card = {
