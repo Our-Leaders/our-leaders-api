@@ -12,8 +12,8 @@ class Admins {
     try {
       const admins = await db.User.find({
         $or: [
-          { role: 'superadmin' },
-          { role: 'admin' },
+          {role: 'superadmin'},
+          {role: 'admin'},
         ],
       })
         .sort({firstName: 'asc', lastName: 'asc'});
