@@ -3,7 +3,10 @@
  */
 
 const db = require('./../models');
+const Email = require('./../communications/Email');
 const OutputFormatters = require('./../utils/OutputFormatters');
+const StringUtil = require('./../utils/StringUtil');
+const EmailUtil = require('./../utils/EmailUtil');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
@@ -11,8 +14,8 @@ class Admins {
     try {
       const admins = await db.User.find({
         $or: [
-          { role: 'superadmin' },
-          { role: 'admin' },
+          {role: 'superadmin'},
+          {role: 'admin'},
         ],
       })
         .sort({firstName: 'asc', lastName: 'asc'});
@@ -26,7 +29,7 @@ class Admins {
   }
 
   static async createAdmin(req, res, next) {
-    const {firstName, lastName, email, password, phoneNumber, permissions} = req.body;
+    const {firstName, lastName, email, phoneNumber, permissions} = req.body;
 
     try {
       let admin = await db.User
@@ -42,19 +45,23 @@ class Admins {
         return next(new ErrorHandler(409, 'A user with the provided email address already exists.'));
       }
 
+      const defaultPassword = StringUtil.generatePassword();
+
       admin.firstName = firstName;
       admin.lastName = lastName;
-      admin.password = password;
+      admin.password = defaultPassword;
       admin.email = email;
       admin.phoneNumber = phoneNumber;
       admin.permission = permissions;
       await admin.save();
 
-      // TODO: send invite email with default password
-
       res.status(201).send({
         admin: OutputFormatters.formatAdmin(admin)
       });
+
+      // send invite email with default password
+      const payload = EmailUtil.getNewAdminEmail(admin.email, admin.firstName, defaultPassword);
+      await Email.send(payload);
     } catch (err) {
       next(new ErrorHandler(500, error.message));
     }

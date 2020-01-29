@@ -6,8 +6,6 @@ const handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
 
-const Config = require('./../config/Config');
-
 class EmailUtil {
   static getSubscriptionEmail(email, firstName, feeds) {
     const templateName = 'subscriptionFeed';
@@ -17,6 +15,17 @@ class EmailUtil {
       to: [email],
       subject: `Feeds from your subscriptions`,
       html: EmailUtil.generateHtml(templateName, {firstName, feeds})
+    };
+  }
+
+  static getNewAdminEmail(email, firstName, defaultPassword) {
+    const templateName = 'adminInvite';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [email],
+      subject: `You have been added as an admin`,
+      html: EmailUtil.generateHtml(templateName, {firstName, defaultPassword})
     };
   }
 
