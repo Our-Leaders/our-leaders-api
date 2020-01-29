@@ -3,8 +3,10 @@
  */
 
 const db = require('./../models');
+const Email = require('./../communications/Email');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const StringUtil = require('./../utils/StringUtil');
+const EmailUtil = require('./../utils/EmailUtil');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
@@ -53,11 +55,13 @@ class Admins {
       admin.permission = permissions;
       await admin.save();
 
-      // TODO: send invite email with default password
-
       res.status(201).send({
         admin: OutputFormatters.formatAdmin(admin)
       });
+
+      // send invite email with default password
+      const payload = EmailUtil.getNewAdminEmail(admin.email, admin.firstName, defaultPassword);
+      await Email.send(payload);
     } catch (err) {
       next(new ErrorHandler(500, error.message));
     }
