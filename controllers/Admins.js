@@ -4,6 +4,7 @@
 
 const db = require('./../models');
 const OutputFormatters = require('./../utils/OutputFormatters');
+const StringUtil = require('./../utils/StringUtil');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
@@ -26,7 +27,7 @@ class Admins {
   }
 
   static async createAdmin(req, res, next) {
-    const {firstName, lastName, email, password, phoneNumber, permissions} = req.body;
+    const {firstName, lastName, email, phoneNumber, permissions} = req.body;
 
     try {
       let admin = await db.User
@@ -42,9 +43,11 @@ class Admins {
         return next(new ErrorHandler(409, 'A user with the provided email address already exists.'));
       }
 
+      const defaultPassword = StringUtil.generatePassword();
+
       admin.firstName = firstName;
       admin.lastName = lastName;
-      admin.password = password;
+      admin.password = defaultPassword;
       admin.email = email;
       admin.phoneNumber = phoneNumber;
       admin.permission = permissions;
