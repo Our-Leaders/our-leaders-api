@@ -12,12 +12,16 @@ class Transactions {
 
     try {
       const donation = new db.Donation({
-        name,
         email,
         isAnonymous,
         amount: Math.abs(amount),
         transactionReference: StringUtil.generateTransactionReference()
       });
+
+      // only save the name if the user doesnt want anonymity
+      if (!isAnonymous) {
+        donation.name = name;
+      }
 
       if (currency) {
         donation.currency = currency;
