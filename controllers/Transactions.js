@@ -43,7 +43,7 @@ class Transactions {
     const {headers, body} = req;
 
     try {
-      const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(body)).digest('hex');
+      const hash = crypto.createHmac('sha512', Config.secret).update(JSON.stringify(body)).digest('hex');
       // verify the paystack payload
       if (hash === headers['x-paystack-signature']) {
         // check if event is a transaction verification
