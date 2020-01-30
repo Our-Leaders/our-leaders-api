@@ -23,6 +23,10 @@ module.exports = (router) => {
     );
 
   router.route('/users/:userId')
+    .put(
+      AuthMiddleware.authenticate,
+      UsersCtrl.updateUser
+    )
     .delete(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
