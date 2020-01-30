@@ -26,7 +26,31 @@ class Users {
   }
 
   static async updateUser(req, res, next) {
+    const {params, user, body} = req;
+    const {userId} = params;
 
+    try {
+      // if the caller is an admin with user update permissions then proceed else check to see if the owner is making the call
+      if (!((user.role === 'superadmin' || user.role === 'admin') && user.permissions['users']['update'])) {
+        if (user.id !== userId) {
+          return next(new ErrorHandler(404, 'Only the account owner or an authorized admin can update a users profile.'));
+        }
+      }
+
+      ['firstName', 'lastName', 'gender', 'ageRange'].forEach(prop => {
+        if (body[prop]) {
+          user[prop] = body[prop];
+        }
+      });
+
+      await user.save();
+
+      return res.status(200).send({
+        user: OutputFormatters.formatUser(user)
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'))
+    }
   }
 
   static async blockUser(req, res, next) {
