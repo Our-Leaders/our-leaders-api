@@ -25,6 +25,10 @@ class Users {
     }
   }
 
+  static async updateUser(req, res, next) {
+
+  }
+
   static async blockUser(req, res, next) {
     const {userId} = req.params;
 
