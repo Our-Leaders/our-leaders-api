@@ -37,7 +37,8 @@ class Admins {
 
       if (!admin) {
         admin = new db.User({
-          role: 'admin'
+          role: 'admin',
+          isUsingDefaultPassword: true
         });
       } else if (admin.isDeleted) {
         admin.isDeleted = false;

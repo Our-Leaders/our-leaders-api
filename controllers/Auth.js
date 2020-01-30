@@ -27,14 +27,17 @@ class Auth {
           firstName: body.firstName,
           lastName: body.lastName,
           email: body.email,
-          password: body.password
+          password: body.password,
+          isEmailVerified: false,
+          isUsingDefaultPassword: false
         });
       } else if (body.googleId) {
         const response = await GoogleUtil.verifyToken(body.googleId);
         user = new db.User({
           googleId: response.sub,
           email: response.email,
-          isEmailVerified: true
+          isEmailVerified: true,
+          isUsingDefaultPassword: false
         });
 
         // split the name provided by Google into first and last name
@@ -54,7 +57,8 @@ class Auth {
           firstName: response.first_name,
           lastName: response.last_name,
           gender: response.gender,
-          isEmailVerified: true
+          isEmailVerified: true,
+          isUsingDefaultPassword: false
         });
       }
 
