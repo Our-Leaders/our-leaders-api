@@ -158,13 +158,13 @@ class Politician {
 
   static async create(req, res, next) {
     try {
-      const { body } = req;
+      const {body} = req;
       let payload = {...body};
 
       if (body.image) {
-        payload = { ...payload, profileImage: body.image };
+        payload = {...payload, profileImage: body.image};
       }
-      
+
       const politician = new db.Politician(payload);
 
       ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
@@ -184,32 +184,32 @@ class Politician {
   }
 
   static async find(req, res, next) {
-    const query = req.query;
+    const {name, status, state, politicalPartyId, politicalPosition} = req.query;
     let findByQuery = {};
     let orQuery = [];
 
-    if (query.name) {
-      orQuery.push({name: {$regex: query.name, $options: 'i'}});
+    if (name) {
+      orQuery.push({name: {$regex: name, $options: 'i'}});
     }
 
-    if (query.status) {
-      orQuery.push({status: {$regex: query.status, $options: 'i'}});
+    if (status) {
+      orQuery.push({status: {$regex: status, $options: 'i'}});
     }
 
-    if (query.state) {
-      orQuery.push({state: {$regex: query.state, $options: 'i'}});
+    if (state) {
+      orQuery.push({state: {$regex: state, $options: 'i'}});
     }
 
-    if (query.politicalPartyId) {
-      orQuery.push({politicalParty: {$regex: query.politicalPartyId, $options: 'i'}});
+    if (politicalPartyId) {
+      orQuery.push({politicalParty: {$regex: politicalPartyId, $options: 'i'}});
     }
 
-    if (query.politicalPosition) {
+    if (politicalPosition) {
       orQuery.push({
         politicalBackground: {
           $elemMatch: {
             inOffice: true,
-            position: {$regex: query.politicalPosition, $options: 'i'}
+            position: {$regex: politicalPosition, $options: 'i'}
           }
         }
       });
@@ -220,10 +220,14 @@ class Politician {
     }
 
     try {
-      const politicians = await db.Politician.find(findByQuery).populate('politicalParty');
+      const politicians = await db.Politician
+        .find(findByQuery)
+        .populate('politicalParty');
+
       const serializedPoliticians = politicians.map(politician => {
         return OutputFormatters.formatPolitician(politician);
       });
+
       res.status(200).send({
         politicians: serializedPoliticians
       });
