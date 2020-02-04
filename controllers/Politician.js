@@ -231,12 +231,14 @@ class Politician {
         .skip(skip)
         .limit(limit);
 
+      const total = await db.Politician.count(findByQuery);
       const serializedPoliticians = politicians.map(politician => {
         return OutputFormatters.formatPolitician(politician);
       });
 
       res.status(200).send({
-        politicians: serializedPoliticians
+        politicians: serializedPoliticians,
+        total
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));

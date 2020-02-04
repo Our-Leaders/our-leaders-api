@@ -86,12 +86,14 @@ class PoliticalParties {
         .skip(skip)
         .limit(limit);
 
+      const total = await db.PoliticalParty.count(findByQuery);
       const serializedPoliticalParties = politicalParties.map(party => {
         return OutputFormatters.formatPoliticalParty(party);
       });
 
       res.status(200).send({
-        politicalParties: serializedPoliticalParties
+        politicalParties: serializedPoliticalParties,
+        total
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
