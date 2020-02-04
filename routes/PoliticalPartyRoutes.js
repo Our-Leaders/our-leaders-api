@@ -12,14 +12,14 @@ const Upload = multer({dest: 'uploads/'});
 
 module.exports = (router) => {
   router.route('/political-party')
+    .get(PoliticalPartyCtrl.find)
     .post(
       AuthMiddleware.authenticate,
       Upload.single('file'),
       ImageMiddleware.uploadLogo,
       PoliticalPartyValidators.validateCreation,
       PoliticalPartyCtrl.create
-    )
-    .get(PoliticalPartyCtrl.find);
+    );
 
   router.route('/political-party/:id')
     .put(
@@ -28,5 +28,5 @@ module.exports = (router) => {
       ImageMiddleware.uploadLogo,
       PoliticalPartyValidators.validateUpdate,
       PoliticalPartyCtrl.edit
-    )
+    );
 };

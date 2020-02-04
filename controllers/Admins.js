@@ -12,13 +12,17 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 class Admins {
   static async findAdmin(req, res, next) {
     try {
-      const admins = await db.User.find({
-        $or: [
-          {role: 'superadmin'},
-          {role: 'admin'},
-        ],
-      })
-        .sort({firstName: 'asc', lastName: 'asc'});
+      const admins = await db.User
+        .find({
+          $or: [
+            {role: 'superadmin'},
+            {role: 'admin'},
+          ],
+        })
+        .sort({
+          firstName: 'asc',
+          lastName: 'asc'
+        });
       const serializedAdmins = admins.map(admin => OutputFormatters.formatAdmin(admin));
       res.status(200).send({
         admins: serializedAdmins
