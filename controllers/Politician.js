@@ -184,6 +184,8 @@ class Politician {
   }
 
   static async find(req, res, next) {
+    const skip = +req.query.skip || 0;
+    const limit = +req.query.limit || 18; // determined by the mockups
     const {name, status, state, politicalPartyId, politicalPosition} = req.query;
     let findByQuery = {};
     let orQuery = [];
@@ -215,14 +217,19 @@ class Politician {
       });
     }
 
-    if (orQuery.length) {
+    // if the search parameters are more than one then use 'or', otherwise use 'where'
+    if (orQuery.length > 1) {
       findByQuery = {$or: orQuery};
+    } else if (orQuery.length === 1) {
+      findByQuery = orQuery[0]
     }
 
     try {
       const politicians = await db.Politician
         .find(findByQuery)
-        .populate('politicalParty');
+        .populate('politicalParty')
+        .skip(skip)
+        .limit(limit);
 
       const serializedPoliticians = politicians.map(politician => {
         return OutputFormatters.formatPolitician(politician);
