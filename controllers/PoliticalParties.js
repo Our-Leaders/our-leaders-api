@@ -84,7 +84,10 @@ class PoliticalParties {
       const politicalParties = await db.PoliticalParty
         .find(findByQuery)
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .sort({
+          name: 'asc'
+        });
 
       const total = await db.PoliticalParty.count(findByQuery);
       const serializedPoliticalParties = politicalParties.map(party => {

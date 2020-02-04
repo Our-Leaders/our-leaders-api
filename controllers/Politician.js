@@ -229,7 +229,10 @@ class Politician {
         .find(findByQuery)
         .populate('politicalParty')
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .sort({
+          name: 'asc'
+        });
 
       const total = await db.Politician.count(findByQuery);
       const serializedPoliticians = politicians.map(politician => {
