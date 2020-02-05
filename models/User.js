@@ -60,6 +60,10 @@ const UserModel = mongoose.model('User', new Schema({
     type: Boolean,
     default: false
   },
+  isUsingDefaultPassword: {
+    type: Boolean,
+    default: false
+  },
   isPhoneVerified: {
     type: Boolean,
     default: false

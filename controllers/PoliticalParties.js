@@ -28,7 +28,7 @@ class PoliticalParties {
         logo: body.logo,
         ideology: body.ideology,
         partyBackground: body.partyBackground,
-        partyDescription:  {
+        partyDescription: {
           founded: body.yearEstablished,
           partyChairman: body.partyLeader
         }
@@ -54,24 +54,26 @@ class PoliticalParties {
   }
 
   static async find(req, res, next) {
-    const {query} = req;
+    const skip = +req.query.skip || 0;
+    const limit = +req.query.limit || 18; // determined by the mockups
+    const {name, acronym, partyBackground, partyDescription} = req.query;
     let findByQuery = {};
     let orQuery = [];
 
-    if (query.name) {
-      orQuery.push({name: {$regex: query.name, $options: 'i'}});
+    if (name) {
+      orQuery.push({name: {$regex: name, $options: 'i'}});
     }
 
-    if (query.acronym) {
-      orQuery.push({acronym: {$regex: query.acronym, $options: 'i'}});
+    if (acronym) {
+      orQuery.push({acronym: {$regex: acronym, $options: 'i'}});
     }
 
-    if (query.partyBackground) {
-      orQuery.push({partyBackground: {$regex: query.partyBackground, $options: 'i'}});
+    if (partyBackground) {
+      orQuery.push({partyBackground: {$regex: partyBackground, $options: 'i'}});
     }
 
-    if (query.partyDescription) {
-      orQuery.push({partyDescription: {$regex: query.partyDescription, $options: 'i'}});
+    if (partyDescription) {
+      orQuery.push({partyDescription: {$regex: partyDescription, $options: 'i'}});
     }
 
     if (orQuery.length) {
@@ -79,13 +81,22 @@ class PoliticalParties {
     }
 
     try {
-      const politicalParties = await db.PoliticalParty.find(findByQuery);
+      const politicalParties = await db.PoliticalParty
+        .find(findByQuery)
+        .skip(skip)
+        .limit(limit)
+        .sort({
+          name: 'asc'
+        });
+
+      const total = await db.PoliticalParty.count(findByQuery);
       const serializedPoliticalParties = politicalParties.map(party => {
         return OutputFormatters.formatPoliticalParty(party);
       });
 
       res.status(200).send({
-        politicalParties: serializedPoliticalParties
+        politicalParties: serializedPoliticalParties,
+        total
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
@@ -104,7 +115,7 @@ class PoliticalParties {
         return;
       }
 
-      ['name', 'acronym','ideology', 'partyBackground'].forEach((property) => {
+      ['name', 'acronym', 'ideology', 'partyBackground'].forEach((property) => {
         if (body[property]) {
           politicalParty[property] = body[property];
         }

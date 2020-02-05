@@ -11,6 +11,7 @@ const PoliticalPartyRoutes = require('./PoliticalPartyRoutes');
 const PoliticianRoutes = require('./PoliticianRoutes');
 const StatisticRoutes = require('./StatisticRoutes');
 const SubscriptionRoutes = require('./SubscriptionRoutes');
+const TransactionRoutes = require('./TransactionRoutes');
 const UserRoutes = require('./UserRoutes');
 
 module.exports = (router) => {
@@ -23,6 +24,7 @@ module.exports = (router) => {
   PoliticianRoutes(router);
   StatisticRoutes(router);
   SubscriptionRoutes(router);
+  TransactionRoutes(router);
   UserRoutes(router);
 
   return router;

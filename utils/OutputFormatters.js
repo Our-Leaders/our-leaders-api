@@ -27,7 +27,8 @@ class OutputFormatters {
       role: user.role,
       joinedAt: user.createdAt,
       joinedBy,
-      isBlocked: user.isBlocked
+      isBlocked: user.isBlocked,
+      isUsingDefaultPassword: user.isUsingDefaultPassword
     };
   }
 
@@ -47,6 +48,7 @@ class OutputFormatters {
       permissions: admin.permissions,
       isBlocked: admin.isBlocked,
       isDeleted: admin.isDeleted,
+      isUsingDefaultPassword: admin.isUsingDefaultPassword
     };
   }
 

@@ -14,6 +14,7 @@ const User = require('./User');
 const Subscription = require('./Subscription');
 const Job = require('./Job');
 const Page = require('./Page');
+const Donation = require('./Donation');
 const Trend = require('./Trend');
 
 const db = {};
@@ -26,10 +27,11 @@ db.PoliticalParty = PoliticalParty;
 db.Politician = Politician;
 db.Tag = Tag;
 db.Feed = Feed;
-db.User = User;
 db.Subscription = Subscription;
+db.User = User;
 db.Job = Job;
 db.Page = Page;
+db.Donation = Donation;
 db.Trend = Trend;
 
 module.exports = db;

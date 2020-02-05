@@ -3,19 +3,26 @@
  */
 
 const db = require('./../models');
+const Email = require('./../communications/Email');
 const OutputFormatters = require('./../utils/OutputFormatters');
+const StringUtil = require('./../utils/StringUtil');
+const EmailUtil = require('./../utils/EmailUtil');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
   static async findAdmin(req, res, next) {
     try {
-      const admins = await db.User.find({
-        $or: [
-          { role: 'superadmin' },
-          { role: 'admin' },
-        ],
-      })
-        .sort({firstName: 'asc', lastName: 'asc'});
+      const admins = await db.User
+        .find({
+          $or: [
+            {role: 'superadmin'},
+            {role: 'admin'},
+          ],
+        })
+        .sort({
+          firstName: 'asc',
+          lastName: 'asc'
+        });
       const serializedAdmins = admins.map(admin => OutputFormatters.formatAdmin(admin));
       res.status(200).send({
         admins: serializedAdmins
@@ -26,7 +33,7 @@ class Admins {
   }
 
   static async createAdmin(req, res, next) {
-    const {firstName, lastName, email, password, phoneNumber, permissions} = req.body;
+    const {firstName, lastName, email, phoneNumber, permissions} = req.body;
 
     try {
       let admin = await db.User
@@ -34,7 +41,8 @@ class Admins {
 
       if (!admin) {
         admin = new db.User({
-          role: 'admin'
+          role: 'admin',
+          isUsingDefaultPassword: true
         });
       } else if (admin.isDeleted) {
         admin.isDeleted = false;
@@ -42,19 +50,23 @@ class Admins {
         return next(new ErrorHandler(409, 'A user with the provided email address already exists.'));
       }
 
+      const defaultPassword = StringUtil.generatePassword();
+
       admin.firstName = firstName;
       admin.lastName = lastName;
-      admin.password = password;
+      admin.password = defaultPassword;
       admin.email = email;
       admin.phoneNumber = phoneNumber;
       admin.permission = permissions;
       await admin.save();
 
-      // TODO: send invite email with default password
-
       res.status(201).send({
         admin: OutputFormatters.formatAdmin(admin)
       });
+
+      // send invite email with default password
+      const payload = EmailUtil.getNewAdminEmail(admin.email, admin.firstName, defaultPassword);
+      await Email.send(payload);
     } catch (err) {
       next(new ErrorHandler(500, error.message));
     }
