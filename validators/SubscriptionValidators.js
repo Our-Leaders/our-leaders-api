@@ -4,7 +4,7 @@
 
 class SubscriptionValidators {
   static validateCreation(req, res, next) {
-    const body = req.body;
+    const {body} = req;
     let message = '';
 
     if (!body.politicianId) {
