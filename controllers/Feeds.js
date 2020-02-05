@@ -9,8 +9,8 @@ const FeedUtil = require('./../utils/FeedUtil');
 
 class Feeds {
   static async getFeeds(req, res, next) {
-    const {user} = req;
-    const {politicianId} = req.params;
+    const {user, query} = req;
+    const {politicianId} = query;
 
     try {
       let politicianIds;
@@ -19,9 +19,9 @@ class Feeds {
       if (politicianId) {
         politicianIds = [politicianId];
       } else {
-        // get politician ids for all user subscription
+        // get politician ids for all user subscriptions
         const subscriptions = await db.Subscription
-          .find({email: user.email})
+          .find({user: user.id})
           .select('politician');
 
         politicianIds = subscriptions.map(x => {
