@@ -9,8 +9,6 @@ class SubscriptionValidators {
 
     if (!body.politicianId) {
       message = 'A politicians id is required.';
-    } else if (!body.email) {
-      message = 'An email address is required.'
     }
 
     if (message) {
