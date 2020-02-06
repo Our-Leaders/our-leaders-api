@@ -48,6 +48,10 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
     type: String,
     enum: ['upcoming', 'current', 'past']
   },
+  numberOfViews: {
+    type: Number,
+    default: 0
+  },
   vote: {
     down: {
       type: Number,

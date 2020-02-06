@@ -20,11 +20,7 @@ module.exports = (router) => {
     );
 
   router.route('/politicians/highest-voted')
-    .get(
-      AuthMiddleware.authenticate,
-      AuthMiddleware.isAdmin,
-      PoliticianCtrl.getHighestVotedPoliticians
-    );
+    .get(PoliticianCtrl.getHighestVotedPoliticians);
 
   router.route('/politicians/:id')
     .get(PoliticianCtrl.get)

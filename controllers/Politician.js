@@ -254,6 +254,9 @@ class Politician {
 
     try {
       const politician = await db.Politician.findById(id).populate('politicalParty');
+      // increment number of views
+      politician.numberOfViews++;
+      await politician.save();
 
       if (politician) {
         res.status(200).send({
@@ -347,17 +350,24 @@ class Politician {
     try {
       const response = {};
 
-      response.current = await db.Politician
-        .findOne({status: 'current'})
+      const current = await db.Politician
+        .find({status: 'current'})
+        .populate('politicalParty')
         .sort('-vote.up');
 
-      response.upcoming = await db.Politician
-        .findOne({status: 'upcoming'})
+      const upcoming = await db.Politician
+        .find({status: 'upcoming'})
+        .populate('politicalParty')
         .sort('-vote.up');
 
-      response.past = await db.Politician
-        .findOne({status: 'past'})
+      const past = await db.Politician
+        .find({status: 'past'})
+        .populate('politicalParty')
         .sort('-vote.up');
+
+      response.current = current.map(politician => OutputFormatters.formatPolitician(politician));
+      response.upcoming = upcoming.map(politician => OutputFormatters.formatPolitician(politician));
+      response.past = past.map(politician => OutputFormatters.formatPolitician(politician));
 
       res.status(200).send(response);
     } catch (error) {
