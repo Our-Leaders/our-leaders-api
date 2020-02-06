@@ -4,7 +4,6 @@
 
 const nodeCron = require('node-cron');
 const FeedsJob = require('./FeedJobs');
-const SubscriptionJobs = require('./SubscriptionJobs');
 const Logger = require('./../config/Logger');
 
 class CronScheduler {
