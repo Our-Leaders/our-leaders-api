@@ -45,6 +45,38 @@ class Trends {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async getTrendingPoliticians(req, res, next) {
+    try {
+      const trendingPoliticiansLimit = 10; // This is just an arbitrary number, can be changed later or added to future settings
+      const trends = await db.Trend.find().populate('politician');
+      let trendingPoliticians = [];
+
+      if (trends.length < trendingPoliticiansLimit) {
+        let trendingPoliticianIds = [];
+        trends.forEach(trend => {
+          trendingPoliticianIds.push(trend.politician.id);
+          trendingPoliticians.push(trend.politician);
+        });
+
+        const mostViewed = await db.Politician
+          .find({_id: {$nin: trendingPoliticianIds}})
+          .sort('-numberOfViews')
+          .limit(trendingPoliticiansLimit - trends.length);
+
+        trendingPoliticians = trendingPoliticians.concat(mostViewed);
+      }
+
+      const serializedPoliticians = trendingPoliticians.map(politician => {
+        return OutputFormatters.formatPolitician(politician);
+      });
+      res.status(200).send({
+        trendingPoliticians: serializedPoliticians
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Trends;
