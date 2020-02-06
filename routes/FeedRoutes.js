@@ -14,7 +14,6 @@ module.exports = (router) => {
 
   router.route('/feeds/politician/:politicianId')
     .get(
-      AuthMiddleware.authenticate,
       FeedsCtrl.getPoliticianFeeds
     );
 };
