@@ -14,18 +14,16 @@ const SubscriptionModel = mongoose.model('Subscription', new Schema({
   },
   politician: {
     type: String,
-    required: true,
     ref: 'Politician'
   },
-  user: {
+  email: {
     type: String,
-    required: true,
-    ref: 'User'
+    required: true
   },
-  frequency: {
+  type: {
     type: String,
-    enum: ['daily', 'weekly', 'monthly'],
-    default: 'monthly'
+    enum: ['newsletter', 'feeds'],
+    default: 'feeds'
   }
 }));
 

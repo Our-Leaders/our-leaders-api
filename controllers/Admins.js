@@ -23,7 +23,9 @@ class Admins {
           firstName: 'asc',
           lastName: 'asc'
         });
+
       const serializedAdmins = admins.map(admin => OutputFormatters.formatAdmin(admin));
+
       res.status(200).send({
         admins: serializedAdmins
       });

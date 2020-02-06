@@ -13,7 +13,7 @@ module.exports = (router) => {
       SubscriptionCtrl.getSubscriptions
     )
     .post(
-      AuthMiddleware.authenticate,
+      AuthMiddleware.optionalAuthenticate,
       SubscriptionValidators.validateCreation,
       SubscriptionCtrl.addSubscription
     );

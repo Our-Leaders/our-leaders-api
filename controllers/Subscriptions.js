@@ -8,14 +8,13 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Subscriptions {
   static async getSubscriptions(req, res, next) {
-    const {id} = req.user;
+    const {email} = req.user;
 
     try {
       const subscriptions = await db.Subscription
-        .find({
-          user: id
-        })
-        .populate('politician');
+        .find({email})
+        .populate('politician')
+        .sort({createdAt: 'desc'});
 
       res.status(200).send({
         subscriptions: subscriptions.map(x => OutputFormatter.formatSubscription(x))
@@ -27,17 +26,18 @@ class Subscriptions {
 
   static async checkSubscription(req, res, next) {
     const {politicianId} = req.params;
-    const {id} = req.user;
+    const {email} = req.user;
 
     try {
       if (!politicianId) {
         return next(new ErrorHandler(400, 'A politician id is required as a query param.'));
       }
 
-      const subscription = await db.Subscription({
-        politician: politicianId,
-        user: id
-      });
+      const subscription = await db.Subscription
+        .findOne({
+          politician: politicianId,
+          email
+        });
 
       if (!subscription) {
         return res.status(404).send({
@@ -55,21 +55,21 @@ class Subscriptions {
   }
 
   static async addSubscription(req, res, next) {
-    const {body, user} = req;
-    const {id} = user;
+    const {politicianId, email, type} = req.body;
 
     try {
-      let subscription = await db.Subscription.findOne({
-        politician: body.politicianId,
-        user: id
-      });
+      let subscription = await db.Subscription
+        .findOne({
+          email,
+          type
+        });
 
       // if a subscription does not exist, create one
       if (!subscription) {
         subscription = new db.Subscription({
-          politician: body.politicianId,
-          frequency: body.frequency || 'daily',
-          user: id
+          politician: politicianId,
+          email,
+          type
         });
         await subscription.save();
       }
@@ -85,16 +85,18 @@ class Subscriptions {
 
   static async removeSubscription(req, res, next) {
     const {subscriptionId} = req.params;
-    const {id} = req.user;
+    const {email} = req.user;
 
     try {
-      const subscription = await db.Subscription.findOne({
-        _id: subscriptionId,
-        user: id
-      });
+      const subscription = await db.Subscription
+        .findOne({
+          _id: subscriptionId,
+          email
+        });
 
       if (subscription) {
-        await db.Subscription.findByIdAndDelete(subscriptionId);
+        await db.Subscription
+          .findByIdAndDelete(subscriptionId);
       }
 
       res.status(200).send({

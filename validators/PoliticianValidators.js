@@ -1,6 +1,6 @@
-const { ErrorHandler } = require('../utils/ErrorUtil');
-const { TypeUtil } = require('../utils/TypeUtil');
-const { PoliticalParty } = require('./../models');
+const {ErrorHandler} = require('../utils/ErrorUtil');
+const {TypeUtil} = require('../utils/TypeUtil');
+const {PoliticalParty} = require('./../models');
 
 class PoliticianValidators {
   static async validateCreation(req, res, next) {
@@ -15,7 +15,7 @@ class PoliticianValidators {
       message = 'The politician\'s religion is required.';
     } else if (!body.stateOfOrigin) {
       message = 'The politician\'s state of origin is required.';
-    } else if (body.status !== undefined && body.status.trim().length < 1) {
+    } else if (!body.status || body.status.trim().length < 1) {
       message = 'Please enter a valid status for the politician';
     }
 
@@ -23,7 +23,7 @@ class PoliticianValidators {
       if (body.politicalParty.trim().length < 1) {
         message = 'Please enter a valid value for the political party';
       } else {
-        // guessing the politicalParty value will the ID for party
+        // guessing the politicalParty value will be the party id
         const politicalParty = await PoliticalParty.findById(body.politicalParty);
 
         if (!politicalParty) {
@@ -149,7 +149,7 @@ class PoliticianValidators {
   }
 
   static async validatePoliticianUpdate(req, res, next) {
-    const { body } = req;
+    const {body} = req;
     let message = '';
 
     if (body.name !== undefined && body.name.trim().length < 1) {

@@ -4,13 +4,20 @@
 
 class SubscriptionValidators {
   static validateCreation(req, res, next) {
-    const body = req.body;
+    const {body, user} = req;
     let message = '';
 
-    if (!body.politicianId) {
+    // if the caller is authenticated then use their email address
+    if (user) {
+      body.email = user.email;
+    }
+
+    if (!body.email) {
+      message = 'An email address is required for visitors.';
+    } else if (!body.type) {
+      message = 'A subscription type is required.';
+    } else if (body.type === 'feeds' && !body.politicianId) {
       message = 'A politicians id is required.';
-    } else if (!body.email) {
-      message = 'An email address is required.'
     }
 
     if (message) {

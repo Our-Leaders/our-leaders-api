@@ -9,26 +9,31 @@ class FeedUtil {
     const aggregatePipeline = [
       {
         $unwind: '$politicians'
-      }, {
+      },
+      {
         $match: {
           politicians: {
             $in: politicianIds
           }
         }
-      }, {
+      },
+      {
         $group: {
           _id: '$_id',
-          politicians: {
-            $addToSet: '$politicians'
+          title: {
+            $first: '$title'
+          },
+          summary: {
+            $first: '$summary'
+          },
+          publishedAt: {
+            $first: '$publishedAt'
           }
         }
-      }, {
-        $project: {
-          _id: 1,
-          title: 1,
-          summary: 1,
-          publishedAt: 1,
-          politicians: 1
+      },
+      {
+        $sort: {
+          publishedAt: -1
         }
       }
     ];
@@ -39,13 +44,7 @@ class FeedUtil {
       });
     }
 
-    const response = await db.Feed.aggregate(aggregatePipeline);
-
-    if (!response.result) {
-      return [];
-    }
-
-    return response.result;
+    return db.Feed.aggregate(aggregatePipeline);
   }
 }
 

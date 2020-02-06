@@ -6,9 +6,14 @@ const AuthMiddleware = require('./../middleware/AuthenticationMiddleware');
 const FeedsCtrl = require('./../controllers/Feeds');
 
 module.exports = (router) => {
-  router.route('/feeds')
+  router.route('/feeds/user')
     .get(
       AuthMiddleware.authenticate,
-      FeedsCtrl.getFeeds
+      FeedsCtrl.getUserFeeds
+    );
+
+  router.route('/feeds/politician/:politicianId')
+    .get(
+      FeedsCtrl.getPoliticianFeeds
     );
 };
