@@ -254,6 +254,9 @@ class Politician {
 
     try {
       const politician = await db.Politician.findById(id).populate('politicalParty');
+      // increment number of views
+      politician.numberOfViews++;
+      await politician.save();
 
       if (politician) {
         res.status(200).send({
