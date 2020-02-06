@@ -154,7 +154,8 @@ class OutputFormatters {
     const response = {
       id: subscription._id,
       email: subscription.email,
-      type: subscription.type
+      type: subscription.type,
+      createdAt: subscription.createdAt
     };
 
     if (subscription.politician) {

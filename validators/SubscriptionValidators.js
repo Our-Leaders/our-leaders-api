@@ -17,7 +17,11 @@ class SubscriptionValidators {
     }
 
     if (!body.email) {
-      message = 'An email address is required.';
+      message = 'An email address is required for visitors.';
+    }
+
+    if (!body.type) {
+      message = 'A subscription type is required.';
     }
 
     if (message) {

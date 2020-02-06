@@ -8,14 +8,13 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Subscriptions {
   static async getSubscriptions(req, res, next) {
-    const {id} = req.user;
+    const {email} = req.user;
 
     try {
       const subscriptions = await db.Subscription
-        .find({
-          user: id
-        })
-        .populate('politician');
+        .find({email})
+        .populate('politician')
+        .sort({createdAt: 'desc'});
 
       res.status(200).send({
         subscriptions: subscriptions.map(x => OutputFormatter.formatSubscription(x))
@@ -27,7 +26,7 @@ class Subscriptions {
 
   static async checkSubscription(req, res, next) {
     const {politicianId} = req.params;
-    const {id} = req.user;
+    const {email} = req.user;
 
     try {
       if (!politicianId) {
@@ -36,7 +35,7 @@ class Subscriptions {
 
       const subscription = await db.Subscription({
         politician: politicianId,
-        user: id
+        email
       });
 
       if (!subscription) {
