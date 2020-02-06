@@ -73,14 +73,15 @@ class OutputFormatters {
       manifesto: politician.manifesto,
       stateOfOrigin: politician.stateOfOrigin,
       politicalParty: politician.politicalParty,
-      profileImage: politician.profileImage,
+      profileImage: politician.profileImage ? politician.profileImage.url : null,
       status: politician.status,
       vote: politician.vote,
       educationalBackground: politician.educationalBackground,
       politicalBackground: politician.politicalBackground,
       professionalBackground: politician.professionalBackground,
       socials: politician.socials,
-      accomplishments: politician.accomplishments
+      accomplishments: politician.accomplishments,
+      numberOfViews: politician.numberOfViews
     };
   }
 
