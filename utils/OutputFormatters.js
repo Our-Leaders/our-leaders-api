@@ -153,15 +153,12 @@ class OutputFormatters {
 
     const response = {
       id: subscription._id,
-      frequency: subscription.frequency
+      email: subscription.email,
+      type: subscription.type
     };
 
     if (subscription.politician) {
       response.politician = OutputFormatters.formatPolitician(subscription.politician);
-    }
-
-    if (subscription.user) {
-      response.user = OutputFormatters.formatUser(subscription.user);
     }
 
     return response;
