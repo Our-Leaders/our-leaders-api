@@ -116,14 +116,16 @@ class OutputFormatters {
       addedAt: feed.createdAt
     };
 
-    response.politicians = feed.politicians.map(x => {
-      // if the politician is populated then format its response
-      if (typeof x === 'object') {
-        return OutputFormatters.formatPolitician(x);
-      }
+    if (feed.politicians) {
+      response.politicians = feed.politicians.map(x => {
+        // if the politician is populated then format its response
+        if (typeof x === 'object') {
+          return OutputFormatters.formatPolitician(x);
+        }
 
-      return x;
-    });
+        return x;
+      });
+    }
 
     return response;
   }

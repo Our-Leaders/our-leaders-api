@@ -20,9 +20,6 @@ class FeedUtil {
       {
         $group: {
           _id: '$_id',
-          politicians: {
-            $addToSet: '$politicians'
-          },
           title: {
             $first: '$title'
           },
