@@ -14,7 +14,6 @@ const SubscriptionModel = mongoose.model('Subscription', new Schema({
   },
   politician: {
     type: String,
-    required: true,
     ref: 'Politician'
   },
   email: {

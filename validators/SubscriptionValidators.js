@@ -12,16 +12,12 @@ class SubscriptionValidators {
       body.email = user.email;
     }
 
-    if (!body.politicianId) {
-      message = 'A politicians id is required.';
-    }
-
     if (!body.email) {
       message = 'An email address is required for visitors.';
-    }
-
-    if (!body.type) {
+    } else if (!body.type) {
       message = 'A subscription type is required.';
+    } else if (body.type === 'feeds' && !body.politicianId) {
+      message = 'A politicians id is required.';
     }
 
     if (message) {
