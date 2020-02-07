@@ -2,6 +2,8 @@
  * Created by bolorundurowb on 13/11/2019
  */
 
+const {ErrorHandler} = require('../utils/ErrorUtil');
+
 class PoliticalPartyValidators {
   static validateCreation(req, res, next) {
     const body = req.body;
@@ -28,17 +30,17 @@ class PoliticalPartyValidators {
     const {body} = req;
     let message = '';
 
-    if (body.name || body.name.trim().length < 1) {
+    if (body.name !== undefined && body.name.trim().length < 1) {
       message = 'Please enter a valid name for the political party name';
-    } else if (!body.yearEstablished || body.yearEstablished <= 0) {
+    } else if (body.yearEstablished !== undefined && body.yearEstablished <= 0) {
       message = 'Please enter a valid value for the political party year established';
-    } else if (!body.partyLeader || body.partyLeader.trim().length < 1) {
+    } else if (body.partyLeader !== undefined && body.partyLeader.trim().length < 1) {
       message = 'Please enter a valid value for party leader';
-    } else if (!body.partyBackground || body.partyBackground.trim().length < 1) {
+    } else if (body.partyBackground !== undefined && body.partyBackground.trim().length < 1) {
       message = 'Please enter a valid value for party background';
-    } else if (!body.ideology || body.ideology.trim().length < 1) {
+    } else if (body.ideology !== undefined && body.ideology.trim().length < 1) {
       message = 'Please enter a valid value for party ideology';
-    } else if (!body.acronym || body.acronym.trim().length < 1) {
+    } else if (body.acronym !== undefined && body.acronym.trim().length < 1) {
       message = 'Please enter a valid value for party acronym';
     }
 
