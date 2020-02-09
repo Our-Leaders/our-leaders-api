@@ -59,7 +59,7 @@ class Admins {
       admin.password = defaultPassword;
       admin.email = email;
       admin.phoneNumber = phoneNumber;
-      admin.permission = permissions;
+      admin.permissions = permissions;
       await admin.save();
 
       res.status(201).send({

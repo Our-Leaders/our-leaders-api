@@ -17,9 +17,9 @@ class AdminValidators {
       message = 'An email address is required.'
     } else if (!phoneNumber) {
       message = 'A phone number is required.'
-    } else if (!password) {
+    }/*  else if (!password) {
       message = 'A password is required.'
-    } else if (!permissions) {
+    } */ else if (!permissions) {
       message = 'Admin permissions are required.'
     }
 
