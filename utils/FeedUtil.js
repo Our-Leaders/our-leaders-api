@@ -28,6 +28,9 @@ class FeedUtil {
           },
           publishedAt: {
             $first: '$publishedAt'
+          },
+          feedUrl: {
+            $first: '$feedUrl'
           }
         }
       },
