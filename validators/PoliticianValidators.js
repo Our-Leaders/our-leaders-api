@@ -1,5 +1,5 @@
 const {ErrorHandler} = require('../utils/ErrorUtil');
-const {TypeUtil} = require('../utils/TypeUtil');
+const TypeUtil = require('./../utils/TypeUtil');
 const {PoliticalParty} = require('./../models');
 
 class PoliticianValidators {

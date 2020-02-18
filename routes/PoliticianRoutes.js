@@ -39,8 +39,9 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
       AuthMiddleware.hasPermission({property: 'accomplishments', action: 'create'}),
-      PoliticianValidators.validateAccomplishmentsCreation,
+      Upload.single('file'),
       ImageMiddleware.uploadImage,
+      PoliticianValidators.validateAccomplishmentsCreation,
       PoliticianCtrl.addAccomplishment
     );
 
