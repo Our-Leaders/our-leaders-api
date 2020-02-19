@@ -8,4 +8,4 @@ class TypeUtil {
   }
 };
 
-return TypeUtil;
+module.exports = TypeUtil;
