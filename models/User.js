@@ -77,6 +77,9 @@ const UserModel = mongoose.model('User', new Schema({
     enum: ['user', 'admin', 'superadmin'],
     default: 'user'
   },
+  notificationsLastRetrievedAt: {
+    type: Date
+  },
   permissions: {
     politician: {
       create: {
