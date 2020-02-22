@@ -14,6 +14,7 @@ const SubscriptionRoutes = require('./SubscriptionRoutes');
 const TransactionRoutes = require('./TransactionRoutes');
 const UserRoutes = require('./UserRoutes');
 const TrendRoutes = require('./TrendRoutes');
+const NotificationRoutes = require('./NotificationRoutes');
 
 module.exports = (router) => {
   AdminRoutes(router);
@@ -28,6 +29,7 @@ module.exports = (router) => {
   TransactionRoutes(router);
   UserRoutes(router);
   TrendRoutes(router);
+  NotificationRoutes(router);
 
   return router;
 };
