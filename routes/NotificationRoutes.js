@@ -4,6 +4,7 @@
 
 const AuthMiddleware = require('./../middleware/AuthenticationMiddleware');
 const NotificationCtrl = require('./../controllers/Notifications');
+const NotificationValidators = require('./../validators/NotificationValidators');
 
 module.exports = (router) => {
   router.route('/notifications')
@@ -11,6 +12,7 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
       AuthMiddleware.hasPermission({property: 'notifications', action: 'create'}),
+      NotificationValidators.validateCreation,
       NotificationCtrl.create
     );
 };
