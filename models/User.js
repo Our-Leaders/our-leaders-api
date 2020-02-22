@@ -191,6 +191,12 @@ const UserModel = mongoose.model('User', new Schema({
         default: false
       },
     },
+    notifications: {
+      create: {
+        type: Boolean,
+        default: false
+      },
+    },
   },
 }, {
   timestamps: true

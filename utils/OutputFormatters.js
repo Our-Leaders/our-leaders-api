@@ -179,6 +179,26 @@ class OutputFormatters {
       politician: OutputFormatters.formatPolitician(trend.politician)
     };
   }
+
+  static formatNotification(notification) {
+    if (!notification) {
+      return {};
+    }
+
+    const response = {
+      id: notification._id,
+      url: notification.url,
+      message: notification.message,
+      entityId: notification.entityId,
+      entityType: notification.entityType
+    };
+
+    if (notification.addedBy) {
+      response.addedBy = OutputFormatters.formatAdmin(notification.addedBy);
+    }
+
+    return response;
+  }
 }
 
 module.exports = OutputFormatters;
