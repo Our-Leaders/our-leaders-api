@@ -1,10 +1,11 @@
 const db = require('./../models');
-const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const OutputFormatters = require('./../utils/OutputFormatters');
+const NotificationUtil = require('./../utils/NotificationUtil');
 
 class Politician {
   static async addAccomplishment(req, res, next) {
-    const {body, params} = req;
+    const {body, params, user} = req;
     const {id} = params;
     let image = {publicId: null, url: null};
 
@@ -31,19 +32,21 @@ class Politician {
         image: image,
         tags: body.tags
       });
-
       await politician.save();
 
       res.status(200).send({
         politician: OutputFormatters.formatPolitician(politician)
       });
+
+      // add in notification
+      await NotificationUtil.createPoliticianNotification(`Accomplishment added for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
   }
 
   static async addEducationalBackground(req, res, next) {
-    const {body, params} = req;
+    const {body, params, user} = req;
     const {id} = params;
 
     try {
@@ -68,6 +71,9 @@ class Politician {
       res.status(200).send({
         politician: OutputFormatters.formatPolitician(politician)
       });
+
+      // add in notification
+      await NotificationUtil.createPoliticianNotification(`Educational background added for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
@@ -271,7 +277,7 @@ class Politician {
   }
 
   static async addProfessionalBackground(req, res, next) {
-    const {body, params} = req;
+    const {body, params, user} = req;
     const {id} = params;
 
     try {
@@ -298,32 +304,56 @@ class Politician {
       res.status(200).send({
         politician: OutputFormatters.formatPolitician(politician)
       });
+
+      // add in notification
+      await NotificationUtil.createPoliticianNotification(`Professional background added for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
   }
 
   static async edit(req, res, next) {
-    const {body, params} = req;
+    const {body, params, user} = req;
     const {id} = params;
 
     try {
       const politician = await db.Politician.findById(id);
 
       if (!politician) {
-        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+        return next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
 
-      ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin', 'politicalParty', 'status'].forEach((property) => {
+      for (const property of ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin']) {
         if (body[property]) {
           politician[property] = body[property];
         }
-      });
+      }
+
+      // if the status changes, then trigger a notification
+      if (body.status && body.status !== politician.status) {
+        await NotificationUtil.createPoliticianNotification(`${politician.name} status changed from '${politician.status}' to '${body.status}.`, user.id, politician._id);
+
+        // update the politician
+        politician.status = body.status;
+      }
+
+      // if the politicians party changes, then trigger a notification
+      if (body.politicalParty && body.politicalParty !== politician.politicalParty) {
+        const party = await db.PoliticalParty.findById(body.politicalParty);
+
+        if (!party) {
+          return next(new ErrorHandler(404, 'The specified political party does not exist.'));
+        }
+
+        await NotificationUtil.createPoliticianNotification(`${politician.name} has decamped to ${party.name}.`, user.id, politician._id);
+
+        // update the politician
+        politician.politicalParty = body.politicalParty;
+      }
 
       if (body.image) {
         politician.profileImage = body.image;
       }
-
 
       if (!politician.socials) {
         politician.socials = {};

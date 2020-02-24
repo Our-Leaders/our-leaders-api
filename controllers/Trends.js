@@ -147,6 +147,6 @@ const resortTrendOrder = async(previousOrder, newOrder) => {
       await db.Trend.updateMany({order: {$gt: previousOrder, $lte: newOrder}}, {$inc: {order: -1}});
     }
   }
-}
+};
 
 module.exports = Trends;
