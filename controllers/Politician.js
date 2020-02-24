@@ -52,7 +52,7 @@ class Politician {
   }
 
   static async addEducationalBackground(req, res, next) {
-    const {body, params} = req;
+    const {body, params, user} = req;
     const {id} = params;
 
     try {
@@ -77,6 +77,16 @@ class Politician {
       res.status(200).send({
         politician: OutputFormatters.formatPolitician(politician)
       });
+
+      // add in notification
+      const notification = new db.Notification({
+        addedBy: user.id,
+        url: '',
+        message: `Educational background added for ${politician.name}.`,
+        entityId: politician._id,
+        entityType: 'politician'
+      });
+      await notification.save();
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
