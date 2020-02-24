@@ -4,7 +4,7 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Politician {
   static async addAccomplishment(req, res, next) {
-    const {body, params} = req;
+    const {body, params, user} = req;
     const {id} = params;
     let image = {publicId: null, url: null};
 
@@ -31,12 +31,21 @@ class Politician {
         image: image,
         tags: body.tags
       });
-
       await politician.save();
 
       res.status(200).send({
         politician: OutputFormatters.formatPolitician(politician)
       });
+
+      // add in notification
+      const notification = new db.Notification({
+        addedBy: user.id,
+        url: '',
+        message: `Accomplishment added for ${politician.name}.`,
+        entityId: politician._id,
+        entityType: 'politician'
+      });
+      await notification.save();
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
