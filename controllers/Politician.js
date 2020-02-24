@@ -306,14 +306,7 @@ class Politician {
       });
 
       // add in notification
-      const notification = new db.Notification({
-        addedBy: user.id,
-        url: '',
-        message: `Professional background added for ${politician.name}.`,
-        entityId: politician._id,
-        entityType: 'politician'
-      });
-      await notification.save();
+      await NotificationUtil.createPoliticianNotification(`Professional background added for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
