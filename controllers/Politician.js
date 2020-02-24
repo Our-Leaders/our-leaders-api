@@ -340,10 +340,10 @@ class Politician {
       const politician = await db.Politician.findById(id);
 
       if (!politician) {
-        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+        return next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
 
-      for (const property of ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin', 'politicalParty']) {
+      for (const property of ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin']) {
         if (body[property]) {
           politician[property] = body[property];
         }
@@ -362,6 +362,27 @@ class Politician {
 
         // update the politician
         politician.status = body.status;
+      }
+
+      // if the politicians party changes, then trigger a notification
+      if (body.politicalParty && body.politicalParty !== politician.politicalParty) {
+        const party = await db.PoliticalParty.findById(body.politicalParty);
+
+        if (!party) {
+          return next(new ErrorHandler(404, 'The specified political party does not exist.'));
+        }
+
+        const notification = new db.Notification({
+          addedBy: user.id,
+          url: '',
+          message: `${politician.name} has decamped to ${party.name}.`,
+          entityId: politician._id,
+          entityType: 'politician'
+        });
+        await notification.save();
+
+        // update the politician
+        politician.politicalParty = body.politicalParty;
       }
 
       if (body.image) {
