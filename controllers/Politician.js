@@ -313,7 +313,7 @@ class Politician {
   }
 
   static async edit(req, res, next) {
-    const {body, params} = req;
+    const {body, params, user} = req;
     const {id} = params;
 
     try {
@@ -323,16 +323,30 @@ class Politician {
         next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
 
-      ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin', 'politicalParty', 'status'].forEach((property) => {
+      for (const property of ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin', 'politicalParty']) {
         if (body[property]) {
           politician[property] = body[property];
         }
-      });
+      }
+
+      // if the status changes, then trigger a notification
+      if (body.status && body.status !== politician.status) {
+        const notification = new db.Notification({
+          addedBy: user.id,
+          url: '',
+          message: `${politician.name} status changed from '${politician.status}' to '${body.status}.`,
+          entityId: politician._id,
+          entityType: 'politician'
+        });
+        await notification.save();
+
+        // update the politician
+        politician.status = body.status;
+      }
 
       if (body.image) {
         politician.profileImage = body.image;
       }
-
 
       if (!politician.socials) {
         politician.socials = {};
