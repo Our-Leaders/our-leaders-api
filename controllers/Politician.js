@@ -352,14 +352,7 @@ class Politician {
           return next(new ErrorHandler(404, 'The specified political party does not exist.'));
         }
 
-        const notification = new db.Notification({
-          addedBy: user.id,
-          url: '',
-          message: `${politician.name} has decamped to ${party.name}.`,
-          entityId: politician._id,
-          entityType: 'politician'
-        });
-        await notification.save();
+        await NotificationUtil.createPoliticianNotification(`${politician.name} has decamped to ${party.name}.`, user.id, politician._id);
 
         // update the politician
         politician.politicalParty = body.politicalParty;
