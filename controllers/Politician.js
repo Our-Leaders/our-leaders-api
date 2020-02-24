@@ -1,6 +1,7 @@
 const db = require('./../models');
-const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const OutputFormatters = require('./../utils/OutputFormatters');
+const NotificationUtil = require('./../utils/NotificationUtil');
 
 class Politician {
   static async addAccomplishment(req, res, next) {
@@ -38,14 +39,7 @@ class Politician {
       });
 
       // add in notification
-      const notification = new db.Notification({
-        addedBy: user.id,
-        url: '',
-        message: `Accomplishment added for ${politician.name}.`,
-        entityId: politician._id,
-        entityType: 'politician'
-      });
-      await notification.save();
+      await NotificationUtil.createPoliticianNotification(`Accomplishment added for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
@@ -79,14 +73,7 @@ class Politician {
       });
 
       // add in notification
-      const notification = new db.Notification({
-        addedBy: user.id,
-        url: '',
-        message: `Educational background added for ${politician.name}.`,
-        entityId: politician._id,
-        entityType: 'politician'
-      });
-      await notification.save();
+      await NotificationUtil.createPoliticianNotification(`Educational background added for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
@@ -351,14 +338,7 @@ class Politician {
 
       // if the status changes, then trigger a notification
       if (body.status && body.status !== politician.status) {
-        const notification = new db.Notification({
-          addedBy: user.id,
-          url: '',
-          message: `${politician.name} status changed from '${politician.status}' to '${body.status}.`,
-          entityId: politician._id,
-          entityType: 'politician'
-        });
-        await notification.save();
+        await NotificationUtil.createPoliticianNotification(`${politician.name} status changed from '${politician.status}' to '${body.status}.`, user.id, politician._id);
 
         // update the politician
         politician.status = body.status;
