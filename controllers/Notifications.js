@@ -27,12 +27,26 @@ class Notifications {
 
       const notifications = await db.Notification
         .find({
-          createdAt: {
-            $gte: notificationLastAccessedAt
-          },
-          entityId: {
-            $in: subscribedPoliticians
-          }
+          $and: [
+            {
+              createdAt: {
+                $gte: notificationLastAccessedAt
+              }
+            },
+            {
+              $or: [
+                {
+                  entityType: 'politician',
+                  entityId: {
+                    $in: subscribedPoliticians
+                  }
+                },
+                {
+                  entityType: 'political-party'
+                }
+              ]
+            }
+          ]
         });
 
       res.status(200).send({
