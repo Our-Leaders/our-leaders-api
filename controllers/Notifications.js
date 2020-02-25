@@ -7,6 +7,16 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Notifications {
+  static async getAll(req, res, next) {
+    const {user} = req;
+
+    try {
+
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async create(req, res, next) {
     const {body, user} = req;
     const {url, message, entityId, entityType} = body;
