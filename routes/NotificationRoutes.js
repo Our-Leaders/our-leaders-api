@@ -8,6 +8,10 @@ const NotificationValidators = require('./../validators/NotificationValidators')
 
 module.exports = (router) => {
   router.route('/notifications')
+    .get(
+      AuthMiddleware.authenticate,
+      NotificationCtrl.getAll
+    )
     .post(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
