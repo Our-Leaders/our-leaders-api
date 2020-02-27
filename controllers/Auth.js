@@ -13,6 +13,7 @@ const GoogleUtil = require('./../utils/GoogleUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const Sms = require('./../communications/Sms');
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const MailChimpUtil = require('./../utils/MailChimpUtil');
 
 class Auth {
   static async signUp(req, res, next) {
@@ -89,6 +90,27 @@ class Auth {
       } else {
         // persist new user
         await user.save();
+
+        if (body.subscribe) {
+          let subscription = await db.Subscription
+            .findOne({
+              email: existingUser.email,
+              type: 'newsletter'
+            });
+
+          // if a subscription does not exist, create one
+          if (!subscription) {
+            const user = await db.User
+              .findById(req.user.id);
+            await MailChimpUtil.addUserToList(user);
+
+            subscription = new db.Subscription({
+              email: existingUser.email,
+              type: 'newsletter'
+            });
+            await subscription.save();
+          }
+        }
 
         // TODO: if user is signing up with email and password, send verification email
 
