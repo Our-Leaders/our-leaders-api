@@ -45,6 +45,7 @@ module.exports = {
     secretKey: process.env.PAYSTACK_SECRET_KEY
   },
   mailChimp: {
-    apiKey: process.env.MAILGUN_API_KEY
+    apiKey: process.env.MAILCHIMP_API_KEY,
+    listId: process.env.MAILCHIMP_LIST_ID
   }
 };
