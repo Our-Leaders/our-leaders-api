@@ -67,18 +67,18 @@ class Subscriptions {
 
       // if a subscription does not exist, create one
       if (!subscription) {
+        // if the subscription is for a newsletter, add to mailchimp
+        if (type === 'newsletter') {
+          const user = await db.User.findById(req.user.id);
+          await MailChimpUtil.addUserToList(user);
+        }
+
         subscription = new db.Subscription({
           politician: politicianId,
           email,
           type
         });
         await subscription.save();
-
-        // if the subscription is for a newsletter, add to mailchimp
-        if (type === 'newsletter') {
-          const user = await db.User.findById(req.user.id);
-          await MailChimpUtil.addUserToList(user);
-        }
       }
 
       res.status(200).send({
