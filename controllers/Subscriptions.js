@@ -5,6 +5,7 @@
 const db = require('./../models');
 const OutputFormatter = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const MailChimpUtil = require('./../utils/MailChimpUtil');
 
 class Subscriptions {
   static async getSubscriptions(req, res, next) {
@@ -72,6 +73,12 @@ class Subscriptions {
           type
         });
         await subscription.save();
+
+        // if the subscription is for a newsletter, add to mailchimp
+        if (type === 'newsletter') {
+          const user = await db.User.findById(req.user.id);
+          await MailChimpUtil.addUserToList(user);
+        }
       }
 
       res.status(200).send({
