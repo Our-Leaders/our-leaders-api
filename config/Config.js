@@ -43,5 +43,9 @@ module.exports = {
   paystack: {
     publicKey: process.env.PAYSTACK_PUBLIC_KEY,
     secretKey: process.env.PAYSTACK_SECRET_KEY
+  },
+  mailChimp: {
+    apiKey: process.env.MAILCHIMP_API_KEY,
+    listId: process.env.MAILCHIMP_LIST_ID
   }
 };

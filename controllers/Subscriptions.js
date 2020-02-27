@@ -5,6 +5,7 @@
 const db = require('./../models');
 const OutputFormatter = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const MailChimpUtil = require('./../utils/MailChimpUtil');
 
 class Subscriptions {
   static async getSubscriptions(req, res, next) {
@@ -66,6 +67,13 @@ class Subscriptions {
 
       // if a subscription does not exist, create one
       if (!subscription) {
+        // if the subscription is for a newsletter, add to mailchimp
+        if (type === 'newsletter') {
+          const user = await db.User
+            .findById(req.user.id);
+          await MailChimpUtil.addUserToList(user);
+        }
+
         subscription = new db.Subscription({
           politician: politicianId,
           email,
