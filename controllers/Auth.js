@@ -94,7 +94,7 @@ class Auth {
         if (body.subscribe) {
           let subscription = await db.Subscription
             .findOne({
-              email: existingUser.email,
+              email: user.email,
               type: 'newsletter'
             });
 
@@ -105,7 +105,7 @@ class Auth {
             await MailChimpUtil.addUserToList(user);
 
             subscription = new db.Subscription({
-              email: existingUser.email,
+              email: user.email,
               type: 'newsletter'
             });
             await subscription.save();
