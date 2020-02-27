@@ -26,6 +26,7 @@
     "handlebars": "^4.7.3",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
+    "mailchimp-api-v3": "^1.13.1",
     "mailgun.js": "^2.0.1",
     "mongoose": "^5.9.2",
     "morgan": "^1.9.1",
