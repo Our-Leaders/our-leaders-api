@@ -138,6 +138,9 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
     year: {
       type: Number
     },
+    url: {
+      type: String
+    },
     quarter: {
       type: String,
       enum: ['q1', 'q2', 'q3', 'q4']
