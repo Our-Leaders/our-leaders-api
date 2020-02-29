@@ -30,7 +30,8 @@ class Politician {
         year: body.year,
         quarter: body.quarter,
         image: image,
-        tags: body.tags
+        tags: body.tags,
+        url: body.url
       });
       await politician.save();
 
