@@ -69,8 +69,11 @@ class Subscriptions {
       if (!subscription) {
         // if the subscription is for a newsletter, add to mailchimp
         if (type === 'newsletter') {
-          const user = await db.User
-            .findById(req.user.id);
+          let user;
+
+          if (req.user.id) {
+
+          }
           await MailChimpUtil.addUserToList(user);
         }
 
