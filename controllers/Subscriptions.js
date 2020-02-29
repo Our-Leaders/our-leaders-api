@@ -71,9 +71,16 @@ class Subscriptions {
         if (type === 'newsletter') {
           let user;
 
+          // if caller is authenticated then
           if (req.user.id) {
-
+            user = await db.User
+              .findById(req.user.id);
+          } else {
+            user = {
+              email
+            }
           }
+
           await MailChimpUtil.addUserToList(user);
         }
 
