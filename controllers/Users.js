@@ -26,15 +26,21 @@ class Users {
   }
 
   static async updateUser(req, res, next) {
-    const {params, user, body} = req;
+    const {params, user: currentUser, body} = req;
     const {userId} = params;
 
     try {
       // if the caller is an admin with user update permissions then proceed, else check to see if the owner is making the call
-      if (!((user.role === 'superadmin' || user.role === 'admin') && user.permissions['users']['update'])) {
-        if (user.id !== userId) {
+      if (!((currentUser.role === 'superadmin' || currentUser.role === 'admin') && currentUser.permissions['users']['update'])) {
+        if (currentUser.id !== userId) {
           return next(new ErrorHandler(403, 'Only the account owner or an authorized admin can update a users profile.'));
         }
+      }
+
+      const user =  await db.User.findById(userId);
+
+      if (!user) {
+        return next(new ErrorHandler(404, 'User doesn\'t exist'));
       }
 
       ['firstName', 'lastName', 'gender', 'ageRange'].forEach(prop => {
