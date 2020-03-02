@@ -24,6 +24,10 @@ class AuthenticationMiddleware {
       }
     } catch (err) {
       Logger.error(err);
+      if (err.name === 'TokenExpiredError') {
+        return next(new ErrorHandler(401, 'The token provided was invalid or expired. Please login again.'));
+      }
+      
       return next(new ErrorHandler(500, err.message || JSON.stringify(err)));
     }
   }
