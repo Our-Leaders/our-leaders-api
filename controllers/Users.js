@@ -30,7 +30,7 @@ class Users {
     const {userId} = params;
 
     try {
-      // if the caller is an admin with user update permissions then proceed else check to see if the owner is making the call
+      // if the caller is an admin with user update permissions then proceed, else check to see if the owner is making the call
       if (!((user.role === 'superadmin' || user.role === 'admin') && user.permissions['users']['update'])) {
         if (user.id !== userId) {
           return next(new ErrorHandler(403, 'Only the account owner or an authorized admin can update a users profile.'));
