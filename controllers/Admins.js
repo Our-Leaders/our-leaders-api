@@ -101,6 +101,30 @@ class Admins {
     }
   }
 
+  static async updateAdminStatus(req, res, next) {
+    const {adminId} = req.params;
+    const {body} = req;
+
+    try {
+      let admin = await db.User
+        .findById(adminId);
+
+      if (!admin) {
+        return next(new ErrorHandler(409, 'An admin with the provided id does not exist.'));
+      }
+
+      admin.isBlocked = body.block;
+
+      await admin.save();
+
+      res.status(200).send({
+        admin: OutputFormatters.formatAdmin(admin)
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async deleteAdmin(req, res, next) {
     const {adminId} = req.params;
 
