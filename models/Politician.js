@@ -72,6 +72,10 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
     }
   }],
   educationalBackground: [{
+    _id: {
+      type: String,
+      default: shortId.generate
+    },
     degree: {
       type: String
     },
@@ -83,6 +87,10 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
     }
   }],
   politicalBackground: [{
+    _id: {
+      type: String,
+      default: shortId.generate
+    },
     position: {
       type: String
     },
@@ -104,6 +112,10 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
     }
   }],
   professionalBackground: [{
+    _id: {
+      type: String,
+      default: shortId.generate
+    },
     title: {
       type: String
     },
