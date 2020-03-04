@@ -64,25 +64,6 @@ class PoliticianValidators {
     }
   }
 
-  static validateEducationalBackgroundCreation(req, res, next) {
-    const body = req.body;
-    let message = '';
-
-    if (!body.degree) {
-      message = 'The degree for the educational background is required.';
-    } else if (!body.institution) {
-      message = 'The institution for the educational background is required.';
-    } else if (!body.startDate) {
-      message = 'The start date for the educational background is required.';
-    }
-
-    if (message) {
-      next(new ErrorHandler(400, message));
-    } else {
-      next();
-    }
-  }
-
   static validateVotes(req, res, next) {
     const body = req.body;
     let message = '';
@@ -98,24 +79,25 @@ class PoliticianValidators {
     }
   }
 
-  static validatePoliticalBackgroundCreation(req, res, next) {
+  static validatePoliticalBackgroundUpsert(req, res, next) {
     const body = req.body;
     let message = '';
 
-    if (!body.position) {
-      message = 'The position for the political background is required.'
-    } else if (!body.description) {
-      message = 'The description for the political background is required.';
-    } else if (!body.state) {
-      message = 'The state for the political background is required.';
-    } else if (!body.inOffice) {
-      message = 'The office current status for the political background is required.';
-    } else if (!body.startDate) {
-      message = 'The start date for the political background is required.';
-    } else if (!body.endDate) {
-      message = 'The end date for the political background is required.';
-    } else if (new Date(body.startDate) >= new Date(body.endDate)) {
-      message = 'Start date must be less than end date.';
+    for (let background of body.politicalBackground) {
+      if (!background.position) {
+        message = 'The position for the political background is required.'
+      } else if (!background.description) {
+        message = 'The description for the political background is required.';
+      } else if (!(background.inOffice === true || background.inOffice === false)) {
+        message = 'The office current status for the political background is required.';
+      } else if (!background.startDate) {
+        message = 'The start date for the political background is required.';
+      } else if (!background.endDate) {
+        message = 'The end date for the political background is required.';
+      } else if (new Date(background.startDate) >= new Date(background.endDate)) {
+        message = 'Start date must be less than end date.';
+      }
+      if (message) break;
     }
 
     if (message) {
@@ -125,20 +107,45 @@ class PoliticianValidators {
     }
   }
 
-  static validateProfessionalBackgroundCreation(req, res, next) {
+  static validateEducationalBackgroundUpsert(req, res, next) {
     const body = req.body;
     let message = '';
 
-    if (!body.title) {
-      message = 'The title for the professional background is required.'
-    } else if (!body.description) {
-      message = 'The description for the professional background is required.';
-    } else if (!body.startDate) {
-      message = 'The start date for the professional background is required.';
-    } else if (!body.endDate) {
-      message = 'The end date for the professional background is required.';
-    } else if (new Date(body.startDate) >= new Date(body.endDate)) {
-      message = 'The start date must come before the end date.';
+    for (let background of body.educationalBackground) {
+      if (!background.degree) {
+        message = 'The degree for the educational background is required.';
+      } else if (!background.institution) {
+        message = 'The institution for the educational background is required.';
+      } else if (!background.startDate) {
+        message = 'The start date for the educational background is required.';
+      }
+      if (message) break;
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
+    }
+  }
+
+  static validateProfessionalBackgroundUpsert(req, res, next) {
+    const body = req.body;
+    let message = '';
+
+    for (let background of body.professionalBackground) {
+      if (!background.title) {
+        message = 'The title for the professional background is required.'
+      } else if (!background.description) {
+        message = 'The description for the professional background is required.';
+      } else if (!background.startDate) {
+        message = 'The start date for the professional background is required.';
+      } else if (!background.endDate) {
+        message = 'The end date for the professional background is required.';
+      } else if (new Date(background.startDate) >= new Date(background.endDate)) {
+        message = 'The start date must come before the end date.';
+      }
+      if (message) break;
     }
 
     if (message) {
