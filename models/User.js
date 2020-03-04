@@ -95,35 +95,7 @@ const UserModel = mongoose.model('User', new Schema({
         default: false
       },
     },
-    educationalBackground: {
-      create: {
-        type: Boolean,
-        default: false
-      },
-      update: {
-        type: Boolean,
-        default: false
-      },
-      delete: {
-        type: Boolean,
-        default: false
-      },
-    },
-    politicalBackground: {
-      create: {
-        type: Boolean,
-        default: false
-      },
-      update: {
-        type: Boolean,
-        default: false
-      },
-      delete: {
-        type: Boolean,
-        default: false
-      },
-    },
-    professionalBackground: {
+    politicianBackground: {
       create: {
         type: Boolean,
         default: false
