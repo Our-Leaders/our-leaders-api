@@ -25,17 +25,7 @@ const Logger = require('./Logger');
           update: true,
           delete: true
         },
-        educationalBackground: {
-          create: true,
-          update: true,
-          delete: true
-        },
-        politicalBackground: {
-          create: true,
-          update: true,
-          delete: true
-        },
-        professionalBackground: {
+        politicianBackground: {
           create: true,
           update: true,
           delete: true

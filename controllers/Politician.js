@@ -46,40 +46,6 @@ class Politician {
     }
   }
 
-  static async addEducationalBackground(req, res, next) {
-    const {body, params, user} = req;
-    const {id} = params;
-
-    try {
-      const politician = await db.Politician.findById(id);
-
-      if (!politician) {
-        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
-      }
-
-      if (!politician.educationalBackground) {
-        politician.educationalBackground = [];
-      }
-
-      politician.educationalBackground.push({
-        degree: body.degree,
-        institution: body.institution,
-        startDate: body.startDate,
-      });
-
-      await politician.save();
-
-      res.status(200).send({
-        politician: OutputFormatters.formatPolitician(politician)
-      });
-
-      // add in notification
-      await NotificationUtil.createPoliticianNotification(`Educational background added for ${politician.name}.`, user.id, politician._id);
-    } catch (error) {
-      next(new ErrorHandler(500, error.message));
-    }
-  }
-
   static async addVote(req, res, next) {
     const {body, params} = req;
     const {id} = params;
@@ -129,10 +95,78 @@ class Politician {
     }
   }
 
-  static async addPoliticalBackground(req, res, next) {
-    const {body, params} = req;
-    const {id} = params;
+  static async addOrUpdatePoliticalBackground(politician, politicalBackground) {
+    for (let background of politicalBackground) {
+      if (background._id) {
+        await db.Politician.updateOne({ 'politicalBackground._id': background._id },
+          { '$set': {
+              'politicalBackground.$.position': background.position,
+              'politicalBackground.$.description': background.description,
+              'politicalBackground.$.inOffice': background.inOffice,
+              'politicalBackground.$.state': background.state,
+              'politicalBackground.$.startDate': background.startDate,
+              'politicalBackground.$.endDate': background.endDate,
+            },
+          });
+      } else {
+        politician.politicalBackground.push({
+          position: background.position,
+          description: background.description,
+          inOffice: background.inOffice,
+          state: background.state,
+          startDate: background.startDate,
+          endDate: background.endDate,
+        });
+      }
+    }
+  }
 
+  static async addOrUpdateEducationalBackground(politician, educationalBackground) {
+    for (let background of educationalBackground) {
+      if (background._id) {
+        await db.Politician.updateOne({ 'educationalBackground._id': background._id },
+          { '$set': {
+              'educationalBackground.$.degree': background.degree,
+              'educationalBackground.$.institution': background.institution,
+              'educationalBackground.$.startDate': background.startDate,
+            },
+          });
+      } else {
+        politician.educationalBackground.push({
+          degree: background.degree,
+          institution: background.institution,
+          startDate: background.startDate,
+        });
+      }
+    }
+  }
+
+  static async addOrUpdateProfessionalBackground(politician, professionalBackground) {
+    for (let background of professionalBackground) {
+      if (background._id) {
+        await db.Politician.updateOne({ 'professionalBackground._id': background._id },
+          { '$set': {
+              'professionalBackground.$.title': background.title,
+              'professionalBackground.$.description': background.description,
+              'professionalBackground.$.startDate': background.startDate,
+              'professionalBackground.$.endDate': background.endDate,
+            },
+          });
+      } else {
+        politician.professionalBackground.push({
+          title: background.title,
+          description: background.description,
+          startDate: background.startDate,
+          endDate: background.endDate,
+        });
+      }
+    }
+  }
+
+  static async addOrUpdatePoliticianBackground(req, res, next) {
+    const {body, params, user} = req;
+    const {id} = params;
+    
     try {
       const politician = await db.Politician.findById(id);
 
@@ -140,24 +174,16 @@ class Politician {
         next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
 
-      if (!politician.politicalBackground) {
-        politician.politicalBackground = [];
-      }
-
-      politician.politicalBackground.push({
-        position: body.position,
-        description: body.description,
-        inOffice: body.inOffice,
-        state: body.state,
-        startDate: body.startDate,
-        endDate: body.endDate
-      });
-
+      await Politician.addOrUpdatePoliticalBackground(politician, body.politicalBackground);
+      await Politician.addOrUpdateEducationalBackground(politician, body.educationalBackground);
+      await Politician.addOrUpdateProfessionalBackground(politician, body.professionalBackground);
       await politician.save();
 
       res.status(200).send({
         politician: OutputFormatters.formatPolitician(politician)
       });
+
+      await NotificationUtil.createPoliticianNotification(`Background updated for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
@@ -272,42 +298,6 @@ class Politician {
       } else {
         next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
-    } catch (error) {
-      next(new ErrorHandler(500, error.message));
-    }
-  }
-
-  static async addProfessionalBackground(req, res, next) {
-    const {body, params, user} = req;
-    const {id} = params;
-
-    try {
-      const politician = await db.Politician.findById(id);
-
-      if (!politician) {
-        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
-      }
-
-      // initialize the professional background if none exists
-      if (!politician.professionalBackground) {
-        politician.professionalBackground = [];
-      }
-
-      politician.professionalBackground.push({
-        title: body.title,
-        description: body.description,
-        startDate: body.startDate,
-        endDate: body.endDate
-      });
-
-      await politician.save();
-
-      res.status(200).send({
-        politician: OutputFormatters.formatPolitician(politician)
-      });
-
-      // add in notification
-      await NotificationUtil.createPoliticianNotification(`Professional background added for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
