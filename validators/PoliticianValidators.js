@@ -86,8 +86,8 @@ class PoliticianValidators {
     for (let background of body.politicalBackground) {
       if (!background.position) {
         message = 'The position for the political background is required.'
-      } else if (!background.description) {
-        message = 'The description for the political background is required.';
+      } else if (!background.description && !background.state) {
+        message = 'A description or state is required for the political background.';
       } else if (!(background.inOffice === true || background.inOffice === false)) {
         message = 'The office current status for the political background is required.';
       } else if (!background.startDate) {
@@ -136,8 +136,6 @@ class PoliticianValidators {
     for (let background of body.professionalBackground) {
       if (!background.title) {
         message = 'The title for the professional background is required.'
-      } else if (!background.description) {
-        message = 'The description for the professional background is required.';
       } else if (!background.startDate) {
         message = 'The start date for the professional background is required.';
       } else if (!background.endDate) {
