@@ -6,23 +6,23 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class PoliticalPartyValidators {
   static validateCreation(req, res, next) {
-    const body = req.body;
+    const {name, country, yearEstablished, partyLeader} = req.body;
     let message = '';
 
-    if (!body.name) {
+    if (!name) {
       message = 'The political party name is required.'
-    } else if (!body.yearEstablished || body.yearEstablished <= 0) {
+    } else if (!yearEstablished || yearEstablished <= 0) {
       message = 'The year established is required and must be positive.';
-    } else if (!body.partyLeader) {
+    } else if (!partyLeader) {
       message = 'The party leaders name is required.';
+    } else if (!country || country.length !== 2) {
+      message = 'Please enter a valid value for the party\'s country.';
     }
 
-    if (message) {
-      return res.status(400).send({
-        message
-      });
+    if (!message) {
+     next();
     } else {
-      next();
+      next(new ErrorHandler(400, message));
     }
   }
 
