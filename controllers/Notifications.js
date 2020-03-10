@@ -50,6 +50,8 @@ class Notifications {
         });
 
       // update user last seen
+      user.notificationsLastRetrievedAt = new Date();
+      await user.save();
 
       res.status(200).send({
         notifications: notifications.map(x => OutputFormatters.formatNotification(x))
