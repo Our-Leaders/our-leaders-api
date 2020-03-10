@@ -49,6 +49,8 @@ class Notifications {
           ]
         });
 
+      // update user last seen
+
       res.status(200).send({
         notifications: notifications.map(x => OutputFormatters.formatNotification(x))
       });
