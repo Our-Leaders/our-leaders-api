@@ -24,6 +24,7 @@ class PoliticalParties {
 
       party = new db.PoliticalParty({
         name: body.name,
+        country: body.country.toUpperCase(),
         acronym: body.acronym,
         logo: body.logo,
         ideology: body.ideology,
@@ -56,9 +57,13 @@ class PoliticalParties {
   static async find(req, res, next) {
     const skip = +req.query.skip || 0;
     const limit = +req.query.limit || 18; // determined by the mockups
-    const {name, acronym, partyBackground, partyDescription} = req.query;
+    const {name, country, acronym, partyBackground, partyDescription} = req.query;
     let findByQuery = {};
     let orQuery = [];
+
+    if (country) {
+      findByQuery.country = country.toUpperCase();
+    }
 
     if (name) {
       orQuery.push({name: {$regex: name, $options: 'i'}});
@@ -76,8 +81,13 @@ class PoliticalParties {
       orQuery.push({partyDescription: {$regex: partyDescription, $options: 'i'}});
     }
 
-    if (orQuery.length) {
-      findByQuery = {$or: orQuery};
+    if (orQuery.length > 0) {
+      // if there is only one optional query, mongo errors out
+      if (orQuery.length === 1) {
+        Object.assign(findByQuery, orQuery[0]);
+      } else {
+        findByQuery = {$or: orQuery};
+      }
     }
 
     try {
@@ -90,12 +100,11 @@ class PoliticalParties {
         });
 
       const total = await db.PoliticalParty.count(findByQuery);
-      const serializedPoliticalParties = politicalParties.map(party => {
-        return OutputFormatters.formatPoliticalParty(party);
-      });
 
       res.status(200).send({
-        politicalParties: serializedPoliticalParties,
+        politicalParties: politicalParties.map(x => {
+          return OutputFormatters.formatPoliticalParty(x);
+        }),
         total
       });
     } catch (error) {
