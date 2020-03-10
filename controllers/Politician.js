@@ -276,12 +276,11 @@ class Politician {
         });
 
       const total = await db.Politician.count(findByQuery);
-      const serializedPoliticians = politicians.map(politician => {
-        return OutputFormatters.formatPolitician(politician);
-      });
 
       res.status(200).send({
-        politicians: serializedPoliticians,
+        politicians: politicians.map(x => {
+          return OutputFormatters.formatPolitician(x);
+        }),
         total
       });
     } catch (error) {
