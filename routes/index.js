@@ -4,6 +4,7 @@
 
 const AdminRoutes = require('./AdminRoutes');
 const AuthRoutes = require('./AuthRoutes');
+const CountryRoutes = require('./CountryRoutes');
 const FeedRoutes = require('./FeedRoutes');
 const JobRoutes = require('./JobRoutes');
 const PageRoutes = require('./PageRoutes');
@@ -19,6 +20,7 @@ const NotificationRoutes = require('./NotificationRoutes');
 module.exports = (router) => {
   AdminRoutes(router);
   AuthRoutes(router);
+  CountryRoutes(router);
   FeedRoutes(router);
   JobRoutes(router);
   PageRoutes(router);
