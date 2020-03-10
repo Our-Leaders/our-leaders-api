@@ -193,6 +193,7 @@ class Politician {
     try {
       const {body} = req;
       let payload = {...body};
+      payload.country = payload.country.toUpperCase();
 
       if (body.image) {
         payload = {...payload, profileImage: body.image};
