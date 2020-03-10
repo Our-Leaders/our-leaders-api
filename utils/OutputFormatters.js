@@ -93,6 +93,7 @@ class OutputFormatters {
     return {
       id: party._id,
       name: party.name,
+      country: party.country,
       acronym: party.acronym,
       logo: party.logo.url,
       ideology: party.ideology,
