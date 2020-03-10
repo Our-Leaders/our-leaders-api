@@ -4,29 +4,31 @@ const {PoliticalParty} = require('./../models');
 
 class PoliticianValidators {
   static async validateCreation(req, res, next) {
-    const body = req.body;
+    const {name, dob, religion, country, stateOfOrigin, status, politicalParty} = req.body;
     let message = '';
 
-    if (!body.name) {
+    if (!name) {
       message = 'The politican\'s name is required.';
-    } else if (!body.dob) {
+    } else if (!dob) {
       message = 'The politician\'s date of birth is required.';
-    } else if (!body.religion) {
+    } else if (!religion) {
       message = 'The politician\'s religion is required.';
-    } else if (!body.stateOfOrigin) {
+    } else if (!stateOfOrigin) {
       message = 'The politician\'s state of origin is required.';
-    } else if (!body.status || body.status.trim().length < 1) {
+    } else if (!status || status.trim().length < 1) {
       message = 'Please enter a valid status for the politician';
+    } else if (!country || country.length !== 2) {
+      message = 'Please enter a valid value for the party\'s country.';
     }
 
-    if (body.politicalParty !== undefined) {
-      if (body.politicalParty.trim().length < 1) {
+    if (politicalParty !== undefined) {
+      if (politicalParty.trim().length < 1) {
         message = 'Please enter a valid value for the political party';
       } else {
         // guessing the politicalParty value will be the party id
-        const politicalParty = await PoliticalParty.findById(body.politicalParty);
+        const party = await PoliticalParty.findById(politicalParty);
 
-        if (!politicalParty) {
+        if (!party) {
           message = 'Political party doesn\'t exist, please enter an existing party';
         }
       }
