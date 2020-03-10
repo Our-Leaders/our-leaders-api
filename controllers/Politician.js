@@ -220,9 +220,13 @@ class Politician {
   static async find(req, res, next) {
     const skip = +req.query.skip || 0;
     const limit = +req.query.limit || 18; // determined by the mockups
-    const {name, status, state, politicalPartyId, politicalPosition} = req.query;
+    const {name, status, country, state, politicalPartyId, politicalPosition} = req.query;
     let findByQuery = {};
     let orQuery = [];
+
+    if (country) {
+      findByQuery.country = country.toUpperCase();
+    }
 
     if (name) {
       orQuery.push({name: {$regex: name, $options: 'i'}});
@@ -252,10 +256,13 @@ class Politician {
     }
 
     // if the search parameters are more than one then use 'or', otherwise use 'where'
-    if (orQuery.length > 1) {
-      findByQuery = {$or: orQuery};
-    } else if (orQuery.length === 1) {
-      findByQuery = orQuery[0]
+    if (orQuery.length > 0) {
+      // if there is only one optional query, mongo errors out
+      if (orQuery.length === 1) {
+        Object.assign(findByQuery, orQuery[0]);
+      } else {
+        findByQuery = {$or: orQuery};
+      }
     }
 
     try {
