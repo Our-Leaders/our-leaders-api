@@ -1,5 +1,6 @@
 const shortId = require('shortid');
 const mongoose = require('mongoose');
+const countryCodes = require('./../config/static/countries.json').map(x => x.code);
 
 const Schema = mongoose.Schema;
 
@@ -19,6 +20,12 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
   religion: {
     type: String,
     required: true
+  },
+  country: {
+    type: String,
+    required: true,
+    enum: countryCodes,
+    default: 'NG'
   },
   manifesto: {
     summary: {

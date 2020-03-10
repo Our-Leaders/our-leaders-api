@@ -70,6 +70,7 @@ class OutputFormatters {
       name: politician.name,
       dob: politician.dob,
       religion: politician.religion,
+      country: politician.country,
       manifesto: politician.manifesto,
       stateOfOrigin: politician.stateOfOrigin,
       politicalParty: politician.politicalParty,
@@ -93,6 +94,7 @@ class OutputFormatters {
     return {
       id: party._id,
       name: party.name,
+      country: party.country,
       acronym: party.acronym,
       logo: party.logo.url,
       ideology: party.ideology,
