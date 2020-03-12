@@ -5,6 +5,7 @@
 const handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
+const Config = require('./../config/Config');
 
 class EmailUtil {
   static getSubscriptionEmail(email, firstName, feeds) {
@@ -27,6 +28,20 @@ class EmailUtil {
       subject: `You have been added as an admin`,
       html: EmailUtil.generateHtml(templateName, {firstName, defaultPassword})
     };
+  }
+
+  static getPasswordReset(email, firstName, resetToken) {
+    const templateName = 'resetRequest';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [email],
+      subject: `Here is your password reset link`,
+      html: EmailUtil.generateHtml(templateName, {
+        firstName,
+        resetLink: `${Config.frontEndUrl}/auth/reset-password?token=${resetToken}`
+      })
+    }
   }
 
   static generateHtml(templateName, payload) {

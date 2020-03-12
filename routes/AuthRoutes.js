@@ -9,7 +9,7 @@ const AuthValidators = require('../validators/AuthValidators');
 module.exports = (router) => {
   router.route('/auth/signup')
     .post(AuthValidators.validateSignUp, AuthCtrl.signUp);
-  
+
   router.route('/auth/login')
     .post(AuthValidators.validateSignUp, AuthCtrl.login);
 
@@ -24,4 +24,7 @@ module.exports = (router) => {
       AuthValidators.validateVerificationCode,
       AuthCtrl.verifyCode
     );
+
+  router.route('/auth/request-reset')
+    .post(AuthValidators.validateResetRequest, AuthCtrl.requestPasswordReset);
 };
