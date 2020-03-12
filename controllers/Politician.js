@@ -103,7 +103,7 @@ class Politician {
               'politicalBackground.$.position': background.position,
               'politicalBackground.$.description': background.description,
               'politicalBackground.$.inOffice': background.inOffice,
-              'politicalBackground.$.state': background.state,
+              'politicalBackground.$.region': background.region,
               'politicalBackground.$.startDate': background.startDate,
               'politicalBackground.$.endDate': background.endDate,
             },
@@ -113,7 +113,7 @@ class Politician {
           position: background.position,
           description: background.description,
           inOffice: background.inOffice,
-          state: background.state,
+          region: background.region,
           startDate: background.startDate,
           endDate: background.endDate,
         });
@@ -193,7 +193,10 @@ class Politician {
     try {
       const {body} = req;
       let payload = {...body};
-      payload.country = payload.country.toUpperCase();
+
+      if (payload.country) {
+        payload.country = payload.country.toUpperCase();
+      }
 
       if (body.image) {
         payload = {...payload, profileImage: body.image};
@@ -220,7 +223,7 @@ class Politician {
   static async find(req, res, next) {
     const skip = +req.query.skip || 0;
     const limit = +req.query.limit || 18; // determined by the mockups
-    const {name, status, country, state, politicalPartyId, politicalPosition} = req.query;
+    const {name, status, country, region, politicalPartyId, politicalPosition} = req.query;
     let findByQuery = {};
     let orQuery = [];
 
@@ -236,8 +239,8 @@ class Politician {
       orQuery.push({status: {$regex: status, $options: 'i'}});
     }
 
-    if (state) {
-      orQuery.push({state: {$regex: state, $options: 'i'}});
+    if (region) {
+      orQuery.push({region: {$regex: region, $options: 'i'}});
     }
 
     if (politicalPartyId) {
