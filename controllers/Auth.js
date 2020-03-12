@@ -8,10 +8,12 @@ const bcryptJs = require('bcryptjs');
 const db = require('./../models');
 const Config = require('./../config/Config');
 const CodeUtil = require('./../utils/CodeUtil');
+const EmailUtil = require('./../utils/EmailUtil');
 const FacebookUtil = require('./../utils/FacebookUtil');
 const GoogleUtil = require('./../utils/GoogleUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const Sms = require('./../communications/Sms');
+const Mail = require('./../communications/Email');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const MailChimpUtil = require('./../utils/MailChimpUtil');
 
@@ -242,7 +244,8 @@ class Auth {
     const userId = req.user.id;
 
     try {
-      const user = await db.User.findById(userId);
+      const user = await db.User
+        .findById(userId);
 
       if (!user) {
         return res.status(404).send({
@@ -269,11 +272,26 @@ class Auth {
     }
   }
 
-  static requestPasswordReset(req, res, next) {
+  static async requestPasswordReset(req, res, next) {
     const {email} = req.body;
 
     try {
+      const user = await db.User
+        .findOne({
+          email
+        });
 
+      if (user) {
+        return next(new ErrorHandler(404, 'A user with the provided email does not exist.'));
+      }
+
+      const resetToken = btoa(user._id);
+      const payload = EmailUtil.getPasswordReset(user.email, resetToken);
+      await Mail.send(payload);
+
+      res.status(200).send({
+        message: 'Reset mail sent successfully.'
+      });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.'));
     }

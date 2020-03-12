@@ -29,6 +29,10 @@ class EmailUtil {
     };
   }
 
+  static getPasswordReset(email, resetToken) {
+
+  }
+
   static generateHtml(templateName, payload) {
     const baseEmailTemplateString = fs.readFileSync(path.join(path.dirname(__dirname), 'communications', 'templates', 'baseEmailTemplate.hbs'), 'utf8');
     const baseEmailTemplate = handlebars.compile(baseEmailTemplateString);
