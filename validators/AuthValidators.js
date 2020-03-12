@@ -2,7 +2,8 @@
  * Created by bolorundurowb on 11/11/2019
  */
 
- const StringUtil = require('./../utils/StringUtil');
+const StringUtil = require('./../utils/StringUtil');
+const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class AuthValidators {
   static validateSignUp(req, res, next) {
@@ -27,9 +28,7 @@ class AuthValidators {
     }
 
     if (message) {
-      return res.status(400).send({
-        message
-      });
+      next(new ErrorHandler(400, message));
     } else {
       next();
     }
@@ -44,9 +43,7 @@ class AuthValidators {
     }
 
     if (message) {
-      return res.status(400).send({
-        message
-      });
+      next(new ErrorHandler(400, message));
     } else {
       next();
     }
@@ -61,9 +58,22 @@ class AuthValidators {
     }
 
     if (message) {
-      return res.status(400).send({
-        message
-      });
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
+    }
+  }
+
+  static validateResetRequest(req, res, next) {
+    const {email} = req.body;
+    let message = '';
+
+    if (!email) {
+      message = 'Please enter a valid email address.';
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
     } else {
       next();
     }
