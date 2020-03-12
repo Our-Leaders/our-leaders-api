@@ -269,6 +269,16 @@ class Auth {
     }
   }
 
+  requestPasswordReset(req, res, next) {
+    const {email} = req.body;
+
+    try {
+
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
+  }
+
   static tokenify(user) {
     return jwt.sign({
       id: user._id,
