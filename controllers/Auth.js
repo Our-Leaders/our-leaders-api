@@ -269,7 +269,7 @@ class Auth {
     }
   }
 
-  requestPasswordReset(req, res, next) {
+  static requestPasswordReset(req, res, next) {
     const {email} = req.body;
 
     try {

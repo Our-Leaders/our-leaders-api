@@ -26,5 +26,5 @@ module.exports = (router) => {
     );
 
   router.route('/auth/request-reset')
-    .post(AuthValidators.validateResetRequest, AuthCtrl.sendVerificationCode);
+    .post(AuthValidators.validateResetRequest, AuthCtrl.requestPasswordReset);
 };
