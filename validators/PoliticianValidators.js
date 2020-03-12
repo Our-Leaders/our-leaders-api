@@ -17,8 +17,6 @@ class PoliticianValidators {
       message = 'The politician\'s state of origin is required.';
     } else if (!status || status.trim().length < 1) {
       message = 'Please enter a valid status for the politician';
-    } else if (!country || country.length !== 2) {
-      message = 'Please enter a valid value for the party\'s country.';
     }
 
     if (politicalParty !== undefined) {
@@ -88,8 +86,8 @@ class PoliticianValidators {
     for (let background of body.politicalBackground) {
       if (!background.position) {
         message = 'The position for the political background is required.'
-      } else if (!background.description && !background.state) {
-        message = 'A description or state is required for the political background.';
+      } else if (!background.description && !background.region) {
+        message = 'A description or region is required for the political background.';
       } else if (!(background.inOffice === true || background.inOffice === false)) {
         message = 'The office current status for the political background is required.';
       } else if (!background.startDate) {

@@ -108,7 +108,7 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
       type: Boolean,
       default: false
     },
-    state: {
+    region: {
       type: String
     },
     startDate: {
