@@ -39,7 +39,7 @@ class EmailUtil {
       subject: `Here is your password reset link`,
       html: EmailUtil.generateHtml(templateName, {
         firstName,
-        resetUrl: `${Config.frontEndUrl}/auth/reset-password?token=${resetToken}`
+        resetLink: `${Config.frontEndUrl}/auth/reset-password?token=${resetToken}`
       })
     }
   }
