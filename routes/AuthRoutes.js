@@ -27,4 +27,7 @@ module.exports = (router) => {
 
   router.route('/auth/request-reset')
     .post(AuthValidators.validateResetRequest, AuthCtrl.requestPasswordReset);
+
+  router.route('/auth/reset-password')
+    .post(AuthValidators.validatePasswordReset, AuthCtrl.resetPassword);
 };
