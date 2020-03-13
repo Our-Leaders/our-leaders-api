@@ -50,7 +50,7 @@ class EmailUtil {
     return {
       from: 'Our Leaders <no-reply@our-leaders.org>',
       to: [email],
-      subject: `Here is your password reset link`,
+      subject: `Your password has been reset successfully`,
       html: EmailUtil.generateHtml(templateName, {
         firstName
       })
