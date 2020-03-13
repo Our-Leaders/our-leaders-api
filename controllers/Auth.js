@@ -297,6 +297,10 @@ class Auth {
     }
   }
 
+  static async resetPassword(req, res,next) {
+
+  }
+
   static tokenify(user) {
     return jwt.sign({
       id: user._id,
