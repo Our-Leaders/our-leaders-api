@@ -30,7 +30,7 @@ class EmailUtil {
     };
   }
 
-  static getPasswordReset(email, firstName, resetToken) {
+  static getPasswordResetRequestEmail(email, firstName, resetToken) {
     const templateName = 'resetRequest';
 
     return {

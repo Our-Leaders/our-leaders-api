@@ -286,7 +286,7 @@ class Auth {
       }
 
       const resetToken = btoa(user._id);
-      const payload = EmailUtil.getPasswordReset(user.email, resetToken);
+      const payload = EmailUtil.getPasswordResetRequestEmail(user.email, resetToken);
       await Mail.send(payload);
 
       res.status(200).send({

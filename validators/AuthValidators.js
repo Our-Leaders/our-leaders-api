@@ -78,6 +78,27 @@ class AuthValidators {
       next();
     }
   }
+
+  static validatePasswordReset(req, res, next) {
+    const {token, password, confirmPassword} = req.body;
+    let message = '';
+
+    if (!token) {
+      message = 'A reset token needs to be provided.';
+    } else if (!password) {
+      message = 'Please enter a password.';
+    } else if (!confirmPassword) {
+      message = 'Please enter a password confirmation.';
+    } else if (password !== confirmPassword) {
+      message = 'Your password and the confirmation do not match.';
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
+    }
+  }
 }
 
 module.exports = AuthValidators;
