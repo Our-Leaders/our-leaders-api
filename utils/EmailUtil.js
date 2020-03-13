@@ -30,7 +30,7 @@ class EmailUtil {
     };
   }
 
-  static getPasswordReset(email, firstName, resetToken) {
+  static getPasswordResetRequestEmail(email, firstName, resetToken) {
     const templateName = 'resetRequest';
 
     return {
@@ -40,6 +40,19 @@ class EmailUtil {
       html: EmailUtil.generateHtml(templateName, {
         firstName,
         resetLink: `${Config.frontEndUrl}/auth/reset-password?token=${resetToken}`
+      })
+    }
+  }
+
+  static getPasswordResetEmail(email, firstName) {
+    const templateName = 'passwordReset';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [email],
+      subject: `Your password has been reset successfully`,
+      html: EmailUtil.generateHtml(templateName, {
+        firstName
       })
     }
   }

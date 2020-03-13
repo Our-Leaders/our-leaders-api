@@ -281,16 +281,39 @@ class Auth {
           email
         });
 
-      if (user) {
+      if (!user) {
         return next(new ErrorHandler(404, 'A user with the provided email does not exist.'));
       }
 
       const resetToken = btoa(user._id);
-      const payload = EmailUtil.getPasswordReset(user.email, resetToken);
+      const payload = EmailUtil.getPasswordResetRequestEmail(user.email, resetToken);
       await Mail.send(payload);
 
       res.status(200).send({
         message: 'Reset mail sent successfully.'
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
+  }
+
+  static async resetPassword(req, res,next) {
+    const {token, password} = req.body;
+
+    try {
+      const userId = atob(token);
+      const user = await db.User
+        .findById(userId);
+
+      if (!user) {
+        return next(new ErrorHandler(404, 'User was not found.'));
+      }
+
+      user.password = password;
+      await user.save();
+
+      res.status(200).send({
+        message: 'Password reset successfully.'
       });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.'));
