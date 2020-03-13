@@ -44,6 +44,19 @@ class EmailUtil {
     }
   }
 
+  static getPasswordResetEmail(email, firstName) {
+    const templateName = 'passwordReset';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [email],
+      subject: `Here is your password reset link`,
+      html: EmailUtil.generateHtml(templateName, {
+        firstName
+      })
+    }
+  }
+
   static generateHtml(templateName, payload) {
     const baseEmailTemplateString = fs.readFileSync(path.join(path.dirname(__dirname), 'communications', 'templates', 'baseEmailTemplate.hbs'), 'utf8');
     const baseEmailTemplate = handlebars.compile(baseEmailTemplateString);
