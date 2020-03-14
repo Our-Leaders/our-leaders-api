@@ -28,6 +28,10 @@ module.exports = (router) => {
     );
 
   router.route('/jobs/:jobId')
+    .post(
+      JobValidators.validateJobApplication,
+      JobsCtrl.applyToJobListing
+    )
     .put(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
