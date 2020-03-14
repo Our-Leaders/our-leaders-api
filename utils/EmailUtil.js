@@ -19,6 +19,17 @@ class EmailUtil {
     };
   }
 
+  static getApplicationReceivedEmail(jobTitle, firstName, email) {
+    const templateName = 'jobApplicationReceived';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [email],
+      subject: `Application Received for ${jobTitle}`,
+      html: EmailUtil.generateHtml(templateName, {jobTitle, firstName})
+    };
+  }
+
   static getSubscriptionEmail(email, firstName, feeds) {
     const templateName = 'subscriptionFeed';
 

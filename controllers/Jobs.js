@@ -76,12 +76,15 @@ class Jobs {
       }
 
       const payload = EmailUtil.getApplicationEmail(job.title, job.description, firstName, lastName, email, address, cv, portfolio, interested, strengths);
+      const payloadApplicant = EmailUtil.getApplicationReceivedEmail(job.title, firstName, email);
       await Email.send(payload);
+      await Email.send(payloadApplicant);
 
       res.status(201).send({
         message: 'Application successful.'
       });
     } catch (error) {
+      console.log(error);
       next(new ErrorHandler(500, error.message));
     }
   }
