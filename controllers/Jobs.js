@@ -84,7 +84,6 @@ class Jobs {
         message: 'Application successful.'
       });
     } catch (error) {
-      console.log(error);
       next(new ErrorHandler(500, error.message));
     }
   }
