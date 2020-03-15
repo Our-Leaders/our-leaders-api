@@ -1,5 +1,7 @@
 const _ = require('lodash');
 const db = require('./../models');
+const Email = require('./../communications/Email');
+const EmailUtil = require('./../utils/EmailUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 
@@ -55,6 +57,31 @@ class Jobs {
 
       res.status(201).send({
         job: OutputFormatters.formatJob(job)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async applyToJobListing(req, res, next) {
+    const {body, params} = req;
+    const {jobId} = params;
+    const {firstName, lastName, email, address, cv, portfolio, interested, strengths} = body;
+
+    try { 
+      const job = await db.Job.findById(jobId);
+
+      if (!job || job.isArchived) {
+        return next(new ErrorHandler(404, 'No such position currently exists.'));
+      }
+
+      const payload = EmailUtil.getApplicationEmail(job.title, job.description, firstName, lastName, email, address, cv, portfolio, interested, strengths);
+      const payloadApplicant = EmailUtil.getApplicationReceivedEmail(job.title, firstName, email);
+      await Email.send(payload);
+      await Email.send(payloadApplicant);
+
+      res.status(201).send({
+        message: 'Application successful.'
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));

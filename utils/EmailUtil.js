@@ -8,6 +8,28 @@ const path = require('path');
 const Config = require('./../config/Config');
 
 class EmailUtil {
+  static getApplicationEmail(jobTitle, jobDescription, firstName, lastName, email, address, cv, portfolio, interested, strengths) {
+    const templateName = 'jobApplication';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: ['thepeople@ourleaders.africa'],
+      subject: `New Application for ${jobTitle}`,
+      html: EmailUtil.generateHtml(templateName, {jobTitle, jobDescription, firstName, lastName, email, address, cv, portfolio, interested, strengths})
+    };
+  }
+
+  static getApplicationReceivedEmail(jobTitle, firstName, email) {
+    const templateName = 'jobApplicationReceived';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [email],
+      subject: `Application Received for ${jobTitle}`,
+      html: EmailUtil.generateHtml(templateName, {jobTitle, firstName})
+    };
+  }
+
   static getSubscriptionEmail(email, firstName, feeds) {
     const templateName = 'subscriptionFeed';
 
