@@ -54,7 +54,7 @@ class Politician {
       const politician = await db.Politician.findById(id);
 
       if (!politician) {
-        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+        return next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
 
       if (!politician.voters) {
@@ -98,8 +98,9 @@ class Politician {
   static async addOrUpdatePoliticalBackground(politician, politicalBackground) {
     for (let background of politicalBackground) {
       if (background._id) {
-        await db.Politician.updateOne({ 'politicalBackground._id': background._id },
-          { '$set': {
+        await db.Politician.updateOne({'politicalBackground._id': background._id},
+          {
+            '$set': {
               'politicalBackground.$.position': background.position,
               'politicalBackground.$.description': background.description,
               'politicalBackground.$.inOffice': background.inOffice,
@@ -124,8 +125,9 @@ class Politician {
   static async addOrUpdateEducationalBackground(politician, educationalBackground) {
     for (let background of educationalBackground) {
       if (background._id) {
-        await db.Politician.updateOne({ 'educationalBackground._id': background._id },
-          { '$set': {
+        await db.Politician.updateOne({'educationalBackground._id': background._id},
+          {
+            '$set': {
               'educationalBackground.$.degree': background.degree,
               'educationalBackground.$.institution': background.institution,
               'educationalBackground.$.startDate': background.startDate,
@@ -144,8 +146,9 @@ class Politician {
   static async addOrUpdateProfessionalBackground(politician, professionalBackground) {
     for (let background of professionalBackground) {
       if (background._id) {
-        await db.Politician.updateOne({ 'professionalBackground._id': background._id },
-          { '$set': {
+        await db.Politician.updateOne({'professionalBackground._id': background._id},
+          {
+            '$set': {
               'professionalBackground.$.title': background.title,
               'professionalBackground.$.description': background.description,
               'professionalBackground.$.startDate': background.startDate,
@@ -166,7 +169,7 @@ class Politician {
   static async addOrUpdatePoliticianBackground(req, res, next) {
     const {body, params, user} = req;
     const {id} = params;
-    
+
     try {
       const politician = await db.Politician.findById(id);
 
