@@ -33,7 +33,7 @@ module.exports = (router) => {
   router.route('/political-party/:id/vote')
     .post(
       AuthMiddleware.authenticate,
-      PoliticalPartyValidators.validateUpdate,
-      PoliticalPartyCtrl.edit
+      PoliticalPartyValidators.validateVotes,
+      PoliticalPartyCtrl.addVote
     );
 };
