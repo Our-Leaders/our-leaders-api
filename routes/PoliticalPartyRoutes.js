@@ -29,4 +29,11 @@ module.exports = (router) => {
       PoliticalPartyValidators.validateUpdate,
       PoliticalPartyCtrl.edit
     );
+
+  router.route('/political-party/:id/vote')
+    .post(
+      AuthMiddleware.authenticate,
+      PoliticalPartyValidators.validateUpdate,
+      PoliticalPartyCtrl.edit
+    );
 };
