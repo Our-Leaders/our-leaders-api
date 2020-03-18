@@ -65,10 +65,10 @@ class PoliticianValidators {
   }
 
   static validateVotes(req, res, next) {
-    const body = req.body;
+    const { isUpvote } = req.body;
     let message = '';
 
-    if (TypeUtil.isBoolean(body.isUpVote)) {
+    if (!TypeUtil.isBoolean(isUpvote)) {
       message = 'A vote is required.';
     }
 
