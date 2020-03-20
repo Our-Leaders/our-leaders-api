@@ -106,6 +106,10 @@ class OutputFormatters {
       votes: {
         up: party.votes.up.length,
         down: party.votes.down.length
+      },
+      voters: {
+        up: party.votes.up,
+        down: party.votes.down
       }
     };
   }
