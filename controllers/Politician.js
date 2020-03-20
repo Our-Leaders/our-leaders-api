@@ -67,18 +67,17 @@ class Politician {
         if (politician.voters[index].isUpvote && !body.isUpvote) {
           politician.vote.up--;
           politician.vote.down++;
-        }
-
-        if (!politician.voters[index].isUpvote && body.isUpvote) {
+        } else if (!politician.voters[index].isUpvote && body.isUpvote) {
           politician.vote.down--;
           politician.vote.up++;
         }
+        politician.voters[index].isUpvote = body.isUpvote;
       } else {
         politician.voters.push({
           id: req.user.id,
           isUpvote: body.isUpvote
         });
-        if (isUpvote) {
+        if (body.isUpvote) {
           politician.vote.up++;
         } else {
           politician.vote.down++;

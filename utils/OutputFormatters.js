@@ -77,6 +77,7 @@ class OutputFormatters {
       profileImage: politician.profileImage ? politician.profileImage.url : null,
       status: politician.status,
       vote: politician.vote,
+      voters: politician.voters,
       educationalBackground: politician.educationalBackground,
       politicalBackground: politician.politicalBackground,
       professionalBackground: politician.professionalBackground,
