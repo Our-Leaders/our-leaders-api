@@ -10,7 +10,7 @@ const bodyParser = require("body-parser");
 const Config = require('./config/Config');
 const Logger = require('./config/Logger');
 const Routes = require('./routes');
-const { handleError } = require('./utils/ErrorUtil');
+const {handleError} = require('./utils/ErrorUtil');
 const CronScheduler = require('./cron/CronScheduler');
 
 const app = express();
@@ -31,3 +31,10 @@ app.use((err, req, res, next) => {
   handleError(err, res);
 });
 app.listen(Config.port, () => Logger.log(`Server started on ${Config.port}`));
+
+// extend the array
+Array.prototype.remove = function (value) {
+  if (this.indexOf(value) !== -1) {
+    this.splice(this.indexOf(value), 1);
+  }
+};
