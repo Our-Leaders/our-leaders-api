@@ -13,7 +13,7 @@ class Politician {
       const politician = await db.Politician.findById(id);
 
       if (!politician) {
-        next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+        return next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
 
       if (!politician.accomplishments) {
