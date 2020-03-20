@@ -3,6 +3,7 @@
  */
 
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const TypeUtil = require('./../utils/TypeUtil');
 
 class PoliticalPartyValidators {
   static validateCreation(req, res, next) {
@@ -48,6 +49,21 @@ class PoliticalPartyValidators {
       next();
     } else {
       next(new ErrorHandler(400, message));
+    }
+  }
+
+  static validateVotes(req, res, next) {
+    const {isUpvote} = req.body;
+    let message = '';
+
+    if (!TypeUtil.isBoolean(isUpvote)) {
+      message = 'A vote is required.';
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
     }
   }
 }

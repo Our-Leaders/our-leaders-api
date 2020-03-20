@@ -60,6 +60,16 @@ const PoliticalPartyModel = mongoose.model('PoliticalParty', new Schema({
     partyChairman: {
       type: String
     }
+  },
+  votes: {
+    down: [{
+      type: String,
+      ref: 'User'
+    }],
+    up: [{
+      type: String,
+      ref: 'User'
+    }]
   }
 }, {
   timestamps: true

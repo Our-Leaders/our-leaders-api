@@ -157,6 +157,60 @@ class PoliticalParties {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async addVote(req, res, next) {
+    const {body, params, user} = req;
+    const {id} = params;
+    const {isUpvote} = body;
+
+    try {
+      const party = await db.PoliticalParty.findById(id);
+
+      if (!party) {
+        return next(new ErrorHandler(404, 'Party does not exist.'))
+      }
+
+      if (!party.votes) {
+        party.votes = {
+          up: [],
+          down: []
+        }
+      }
+
+      // determine if the user has upvoted or downvoted this party
+      const hasUpvoted = party.votes.up.includes(user.id);
+      const hasDownvoted = party.votes.down.includes(user.id);
+
+      // update party vote count based on user input
+      if (isUpvote) {
+        if (hasDownvoted) {
+          party.votes.down.remove(user.id);
+        }
+
+        // only track upvote if user has not upvoted before
+        if (!hasUpvoted) {
+          party.votes.up.push(user.id);
+        }
+      } else {
+        if (hasUpvoted) {
+          party.votes.up.remove(user.id);
+        }
+
+        // only track downvote if user has not downvoted before
+        if (!hasDownvoted) {
+          party.votes.down.push(user.id);
+        }
+      }
+
+      await party.save();
+
+      res.status(200).send({
+        politicalParty: OutputFormatters.formatPoliticalParty(party)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = PoliticalParties;
