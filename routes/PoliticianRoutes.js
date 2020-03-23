@@ -43,6 +43,15 @@ module.exports = (router) => {
       ImageMiddleware.uploadImage,
       PoliticianValidators.validateAccomplishmentsCreation,
       PoliticianCtrl.addAccomplishment
+    )
+    .put(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({property: 'accomplishments', action: 'update'}),
+      Upload.single('file'),
+      ImageMiddleware.uploadImage,
+      PoliticianValidators.validateAccomplishmentsCreation,
+      PoliticianCtrl.updateAccomplishment
     );
 
   router.route('/politicians/:id/background')
