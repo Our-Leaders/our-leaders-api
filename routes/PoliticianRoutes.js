@@ -43,7 +43,9 @@ module.exports = (router) => {
       ImageMiddleware.uploadImage,
       PoliticianValidators.validateAccomplishmentsCreation,
       PoliticianCtrl.addAccomplishment
-    )
+    );
+
+  router.route('/politicians/:id/accomplishments/:accomplishmentId')
     .put(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
@@ -52,6 +54,12 @@ module.exports = (router) => {
       ImageMiddleware.uploadImage,
       PoliticianValidators.validateAccomplishmentsCreation,
       PoliticianCtrl.updateAccomplishment
+    )
+    .delete(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({property: 'accomplishments', action: 'delete'}),
+      PoliticianCtrl.deleteAccomplishment
     );
 
   router.route('/politicians/:id/background')
