@@ -47,8 +47,8 @@ class PoliticianValidators {
       message = 'The title of the accomplishment is required.';
     } else if (!body.description) {
       message = 'The description of the accomplishment is required.';
-    } else if (!body.year) {
-      message = 'The year of the accomplishment is required.';
+    } else if (!body.date) {
+      message = 'The date of the accomplishment is required.';
     } else if (!body.quarter) {
       message = 'The quarter of the year of the accomplishment is required.';
     } else if (!body.tags || body.tags.length === 0) {

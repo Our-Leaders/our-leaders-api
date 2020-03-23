@@ -148,14 +148,18 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
     }
   },
   accomplishments: [{
+    _id: {
+      type: String,
+      default: shortId.generate
+    },
     title: {
       type: String
     },
     description: {
       type: String
     },
-    year: {
-      type: Number
+    date: {
+      type: Date
     },
     url: {
       type: String

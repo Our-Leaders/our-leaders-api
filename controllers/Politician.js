@@ -8,7 +8,7 @@ class Politician {
     const {body, params, user} = req;
     const {id} = params;
     let image = {publicId: null, url: null};
-
+    
     try {
       const politician = await db.Politician.findById(id);
 
@@ -27,7 +27,7 @@ class Politician {
       politician.accomplishments.push({
         title: body.title,
         description: body.description,
-        year: body.year,
+        date: body.date,
         quarter: body.quarter,
         image: image,
         tags: body.tags,
@@ -41,6 +41,70 @@ class Politician {
 
       // add in notification
       await NotificationUtil.createPoliticianNotification(`Accomplishment added for ${politician.name}.`, user.id, politician._id);
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async updateAccomplishment(req, res, next) {
+    const {body, params, user} = req;
+    let image = {publicId: null, url: null};
+    
+    try {
+      if (body.image) {
+        image = body.image;
+      }
+
+      const politician = await db.Politician.findOneAndUpdate({'accomplishments._id': params.accomplishmentId}, {
+        'accomplishments.$.title': body.title,
+        'accomplishments.$.description': body.description,
+        'accomplishments.$.date': body.date,
+        'accomplishments.$.quarter': body.quarter,
+        'accomplishments.$.image': image,
+        'accomplishments.$.tags': body.tags,
+        'accomplishments.$.url': body.url,
+      },
+      { new: true, useFindAndModify: false });
+
+      if (!politician) {
+        return next(new ErrorHandler(404, 'Accomplishment doesn\'t exist'));
+      }
+      
+      res.status(200).send({
+        politician: OutputFormatters.formatPolitician(politician)
+      });
+
+      // add in notification
+      await NotificationUtil.createPoliticianNotification(`Accomplishment updated for ${politician.name}.`, user.id, politician._id);
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async deleteAccomplishment(req, res, next) {
+    const {params, user} = req;
+    const {id, accomplishmentId} = params;
+    
+    try {
+      const politician = await db.Politician.findById(id);
+
+      if (!politician) {
+        return next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+      }
+
+      const accomplishments = politician.accomplishments.filter(accomplishment => {
+        return accomplishment._id !== accomplishmentId;
+      });
+
+      politician.accomplishments = accomplishments;
+      politician.save();
+      
+      res.status(200).send({
+        politician: OutputFormatters.formatPolitician(politician)
+      });
+
+      // add in notification
+      await NotificationUtil.createPoliticianNotification(`Accomplishment deleted for ${politician.name}.`, user.id, politician._id);
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
