@@ -40,6 +40,14 @@ const UserModel = mongoose.model('User', new Schema({
   facebookId: {
     type: String
   },
+  profileImage: {
+    publicId: {
+      type: String
+    },
+    url: {
+      type: String,
+    }
+  },
   gender: {
     type: String,
     enum: ['other', 'female', 'male'],
