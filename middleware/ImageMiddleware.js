@@ -9,10 +9,9 @@ class ImageMiddleware {
     const file = req.file;
     if (file) {
       req.body.image = await ImageUtil.uploadFile(file, {
-        width: req.body.width,
-        height: req.body.height
+        width: req.body.width || 300,
+        height: req.body.height || 300
       });
-      next();
     }
 
     next();
