@@ -4,6 +4,7 @@
 
 const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const Imageutil = require('../utils/ImageUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 
 class Users {
@@ -48,6 +49,13 @@ class Users {
           user[prop] = body[prop];
         }
       });
+
+      if (body.image) {
+        if (user.profileImage) {
+          await Imageutil.deleteFile(user.profileImage.publicId);
+        }
+        user.profileImage = body.image;
+      }
 
       await user.save();
 
