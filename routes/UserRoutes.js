@@ -1,11 +1,21 @@
 /**
  * Created by bolorundurowb on 14/11/2019
  */
-
+const multer = require('multer');
 const AuthMiddleware = require('./../middleware/AuthenticationMiddleware');
+const ImageMiddleware = require('./../middleware/ImageMiddleware');
 const UsersCtrl = require('./../controllers/Users');
 
+const Upload = multer({dest: 'uploads/'});
+
 module.exports = (router) => {
+  router.route('/users')
+    .get(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      UsersCtrl.getUsers
+    );
+
   router.route('/users/:userId/block')
     .put(
       AuthMiddleware.authenticate,
@@ -22,9 +32,17 @@ module.exports = (router) => {
       UsersCtrl.unblockUser
     );
 
+  router.route('/users/:userId/votes')
+    .get(
+      AuthMiddleware.authenticate,
+      UsersCtrl.getVotes
+    );
+
   router.route('/users/:userId')
     .put(
       AuthMiddleware.authenticate,
+      Upload.single('file'),
+      ImageMiddleware.uploadImage,
       UsersCtrl.updateUser
     )
     .delete(
@@ -32,18 +50,5 @@ module.exports = (router) => {
       AuthMiddleware.isAdmin,
       AuthMiddleware.hasPermission({property: 'users', action: 'delete'}),
       UsersCtrl.deleteAccount
-    );
-
-  router.route('/users')
-    .get(
-      AuthMiddleware.authenticate,
-      AuthMiddleware.isAdmin,
-      UsersCtrl.getUsers
-    );
-
-  router.route('/users/:userId/votes')
-    .get(
-      AuthMiddleware.authenticate,
-      UsersCtrl.getVotes
     );
 };

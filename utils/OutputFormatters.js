@@ -24,6 +24,7 @@ class OutputFormatters {
       ageRange: user.ageRange,
       isEmailVerified: user.isEmailVerified,
       isPhoneVerified: user.isPhoneVerified,
+      profileImage: user.profileImage ? user.profileImage.url : null,
       role: user.role,
       joinedAt: user.createdAt,
       joinedBy,
