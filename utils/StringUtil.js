@@ -24,6 +24,14 @@ class StringUtil {
 
     return response;
   }
+
+  static btoa(data) {
+    return Buffer.from(data).toString('base64');
+  }
+
+  static atob(data) {
+    return Buffer.from(data, 'base64').toString('ascii');
+  }
 }
 
 module.exports = StringUtil;
