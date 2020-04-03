@@ -16,6 +16,7 @@ const Sms = require('./../communications/Sms');
 const Mail = require('./../communications/Email');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const MailChimpUtil = require('./../utils/MailChimpUtil');
+const StringUtil = require('./../utils/StringUtil');
 
 class Auth {
   static async signUp(req, res, next) {
@@ -285,7 +286,8 @@ class Auth {
         return next(new ErrorHandler(404, 'A user with the provided email does not exist.'));
       }
 
-      const resetToken = btoa(user._id);
+      const encodedUserId = StringUtil.btoa(user._id);
+      const resetToken = jwt.sign({ userId: encodedUserId }, Config.secret, { expiresIn: '24h' });
       const payload = EmailUtil.getPasswordResetRequestEmail(user.email, resetToken);
       await Mail.send(payload);
 
@@ -301,22 +303,27 @@ class Auth {
     const {token, password} = req.body;
 
     try {
-      const userId = atob(token);
-      const user = await db.User
-        .findById(userId);
+      const payload = await jwt.verify(token, Config.secret);
+      if (payload) {
+        const userId = StringUtil.atob(payload.userId);
+        const user = await db.User
+          .findById(userId);
 
-      if (!user) {
-        return next(new ErrorHandler(404, 'User was not found.'));
+        if (!user) {
+          return next(new ErrorHandler(404, 'User was not found.'));
+        }
+
+        user.password = password;
+        await user.save();
+
+        res.status(200).send({
+          message: 'Password reset successfully.'
+        });
+      } else {
+        next(new ErrorHandler(410, 'The password reset link is no longer valid. Please request another reset.'));
       }
-
-      user.password = password;
-      await user.save();
-
-      res.status(200).send({
-        message: 'Password reset successfully.'
-      });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(410, 'The password reset link is no longer valid. Please request another reset.'));
     }
   }
 
