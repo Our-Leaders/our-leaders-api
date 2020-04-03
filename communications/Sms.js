@@ -1,22 +1,21 @@
-const axios = require('axios');
-
+const af = require('africastalking');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
+const AfricasTalking = af({
+  apiKey: Config.africasTalking.apiKey,
+  username: Config.africasTalking.username
+});
 
 class Sms {
   static async sendMessage(recipient, message) {
     try {
-      const response = await axios.get(`${Config.sms.baseUrl}/api/v1/http.php`, {
-        params: {
-          api_key: Config.sms.bsApiKey,
-          recipient: recipient,
-          message: message,
-          sender: Config.sms.bsSenderId,
-          route: 1
-        }
+      const sms = AfricasTalking.SMS;
+      await sms.send({
+        to: [recipient],
+        message
       });
 
-      Logger.log(response);
+      Logger.log('SMS sent successfully.');
     } catch (err) {
       Logger.error(err);
     }
