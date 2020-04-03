@@ -47,5 +47,9 @@ module.exports = {
   mailChimp: {
     apiKey: process.env.MAILCHIMP_API_KEY,
     listId: process.env.MAILCHIMP_LIST_ID
+  },
+  africasTalking: {
+    apiKey: process.env.AF_API_KEY,
+    username: process.env.AF_USERNAME
   }
 };
