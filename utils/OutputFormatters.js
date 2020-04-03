@@ -58,7 +58,7 @@ class OutputFormatters {
       return '';
     }
 
-    return phoneNumber.charAt(0) === '0' ? phoneNumber.replace('0', '234') : `234${phoneNumber}`
+    return phoneNumber.charAt(0) === '0' ? phoneNumber.replace('0', '+234') : `+234${phoneNumber}`
   }
 
   static formatPolitician(politician) {
