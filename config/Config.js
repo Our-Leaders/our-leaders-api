@@ -28,11 +28,6 @@ module.exports = {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME,
     secret: process.env.CLOUDINARY_API_SECRET
   },
-  sms: {
-    baseUrl: process.env.SMS_BASE_URL,
-    bsApiKey: process.env.BS_API_KEY,
-    bsSenderId: process.env.BS_SENDER_ID
-  },
   feedUrl: 'https://www.tostvnetwork.com/category/news/',
   superAdmin: {
     email: process.env.SUPER_EMAIL,
@@ -47,5 +42,9 @@ module.exports = {
   mailChimp: {
     apiKey: process.env.MAILCHIMP_API_KEY,
     listId: process.env.MAILCHIMP_LIST_ID
+  },
+  africasTalking: {
+    apiKey: process.env.AF_API_KEY,
+    username: process.env.AF_USERNAME
   }
 };
