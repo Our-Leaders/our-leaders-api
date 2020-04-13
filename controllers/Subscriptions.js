@@ -72,7 +72,7 @@ class Subscriptions {
           let user;
 
           // if caller is authenticated then
-          if (req.user.id) {
+          if (req.user) {
             user = await db.User
               .findById(req.user.id);
           } else {
