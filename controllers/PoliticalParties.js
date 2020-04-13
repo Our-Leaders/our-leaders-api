@@ -54,6 +54,21 @@ class PoliticalParties {
     }
   }
 
+  static async get(req, res) {
+    const {params} = req;
+    const {id} = params;
+
+    try {
+      const politicalParty = await db.PoliticalParty.findById(id);
+
+      res.status(200).send({
+        politicalParty: OutputFormatters.formatPoliticalParty(politicalParty)
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async find(req, res, next) {
     const skip = +req.query.skip || 0;
     const limit = +req.query.limit || 18; // determined by the mockups

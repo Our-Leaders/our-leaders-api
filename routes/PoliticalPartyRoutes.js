@@ -22,6 +22,7 @@ module.exports = (router) => {
     );
 
   router.route('/political-party/:id')
+    .get(PoliticalPartyCtrl.get)
     .put(
       AuthMiddleware.authenticate,
       Upload.single('file'),
