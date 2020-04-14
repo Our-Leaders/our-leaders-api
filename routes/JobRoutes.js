@@ -57,6 +57,11 @@ module.exports = (router) => {
       JobsCtrl.unarchiveJobListing
     );
 
+  router.route('/jobs/categories')
+    .get(
+      JobsCtrl.getJobCategories,
+    );
+
   router.route('/jobs/categories/:categoryName')
     .delete(
       AuthMiddleware.authenticate,
