@@ -390,7 +390,7 @@ class Politician {
         return next(new ErrorHandler(404, 'Politician doesn\'t exist'));
       }
 
-      for (const property of ['name', 'dob', 'religion', 'manifesto', 'stateOfOrigin']) {
+      for (const property of ['name', 'dob', 'manifesto', 'stateOfOrigin']) {
         if (body[property]) {
           politician[property] = body[property];
         }

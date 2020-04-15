@@ -17,10 +17,6 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
     type: Date,
     required: true
   },
-  religion: {
-    type: String,
-    required: true
-  },
   country: {
     type: String,
     required: true,

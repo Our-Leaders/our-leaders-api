@@ -39,6 +39,18 @@ class Jobs {
     }
   }
 
+  static async getJobCategories(req, res, next) {
+    try {
+      const categories = await db.Job.distinct('category');
+
+      res.status(200).send({
+        categories,
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async addJobListing(req, res, next) {
     const {title, description, applicationLink, location, category, type, image} = req.body;
 

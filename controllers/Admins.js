@@ -110,7 +110,7 @@ class Admins {
         .findById(adminId);
 
       if (!admin) {
-        return next(new ErrorHandler(409, 'An admin with the provided id does not exist.'));
+        return next(new ErrorHandler(404, 'An admin with the provided id does not exist.'));
       }
 
       admin.isBlocked = body.block;

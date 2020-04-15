@@ -4,15 +4,13 @@ const {PoliticalParty} = require('./../models');
 
 class PoliticianValidators {
   static async validateCreation(req, res, next) {
-    const {name, dob, religion, country, stateOfOrigin, status, politicalParty} = req.body;
+    const {name, dob, country, stateOfOrigin, status, politicalParty} = req.body;
     let message = '';
 
     if (!name) {
       message = 'The politican\'s name is required.';
     } else if (!dob) {
       message = 'The politician\'s date of birth is required.';
-    } else if (!religion) {
-      message = 'The politician\'s religion is required.';
     } else if (!stateOfOrigin) {
       message = 'The politician\'s state of origin is required.';
     } else if (!status || status.trim().length < 1) {
@@ -161,8 +159,6 @@ class PoliticianValidators {
       message = 'Please enter a valid name for the politician';
     } else if (body.dob !== undefined && isNaN(new Date(body.dob).getTime())) {
       message = 'Please enter a valid date of birth for the politician';
-    } else if (body.religion !== undefined && body.religion.trim().length < 1) {
-      message = 'Please enter a valid religion for the politician';
     } else if (body.manifesto !== undefined && typeof (body.manifesto) !== 'object' && body.manifesto.summary.trim().length < 1) {
       message = 'Please enter a valid summary for politician manifesto';
     } else if (body.stateOfOrigin !== undefined && body.stateOfOrigin.trim().length < 1) {
