@@ -63,7 +63,7 @@ class PoliticianValidators {
   }
 
   static validateVotes(req, res, next) {
-    const { isUpvote } = req.body;
+    const {isUpvote} = req.body;
     let message = '';
 
     if (!TypeUtil.isBoolean(isUpvote)) {
@@ -114,9 +114,10 @@ class PoliticianValidators {
         message = 'The degree for the educational background is required.';
       } else if (!background.institution) {
         message = 'The institution for the educational background is required.';
-      } else if (!background.startDate) {
-        message = 'The start date for the educational background is required.';
+      } else if (background.graduationYear && background.graduationYear < 1) {
+        message = 'The graduation year for the education background is invalid.';
       }
+
       if (message) break;
     }
 
@@ -134,13 +135,14 @@ class PoliticianValidators {
     for (let background of body.professionalBackground) {
       if (!background.title) {
         message = 'The title for the professional background is required.'
-      } else if (!background.startDate) {
-        message = 'The start date for the professional background is required.';
-      } else if (!background.endDate) {
-        message = 'The end date for the professional background is required.';
-      } else if (new Date(background.startDate) >= new Date(background.endDate)) {
-        message = 'The start date must come before the end date.';
+      } else if (background.startYear && background.startYear < 1) {
+        message = 'The start year for the professional background is invalid.';
+      } else if (background.endYear && background.endYear < 1) {
+        message = 'The end year for the professional background is invalid.';
+      } else if (background.startYear >= background.endYear) {
+        message = 'The start year must come before the end year.';
       }
+
       if (message) break;
     }
 
