@@ -8,7 +8,7 @@ class Politician {
     const {body, params, user} = req;
     const {id} = params;
     let image = {publicId: null, url: null};
-    
+
     try {
       const politician = await db.Politician.findById(id);
 
@@ -49,27 +49,27 @@ class Politician {
   static async updateAccomplishment(req, res, next) {
     const {body, params, user} = req;
     let image = {publicId: null, url: null};
-    
+
     try {
       if (body.image) {
         image = body.image;
       }
 
       const politician = await db.Politician.findOneAndUpdate({'accomplishments._id': params.accomplishmentId}, {
-        'accomplishments.$.title': body.title,
-        'accomplishments.$.description': body.description,
-        'accomplishments.$.date': body.date,
-        'accomplishments.$.quarter': body.quarter,
-        'accomplishments.$.image': image,
-        'accomplishments.$.tags': body.tags,
-        'accomplishments.$.url': body.url,
-      },
-      { new: true, useFindAndModify: false });
+          'accomplishments.$.title': body.title,
+          'accomplishments.$.description': body.description,
+          'accomplishments.$.date': body.date,
+          'accomplishments.$.quarter': body.quarter,
+          'accomplishments.$.image': image,
+          'accomplishments.$.tags': body.tags,
+          'accomplishments.$.url': body.url,
+        },
+        {new: true, useFindAndModify: false});
 
       if (!politician) {
         return next(new ErrorHandler(404, 'Accomplishment doesn\'t exist'));
       }
-      
+
       res.status(200).send({
         politician: OutputFormatters.formatPolitician(politician)
       });
@@ -84,7 +84,7 @@ class Politician {
   static async deleteAccomplishment(req, res, next) {
     const {params, user} = req;
     const {id, accomplishmentId} = params;
-    
+
     try {
       const politician = await db.Politician.findById(id);
 
@@ -98,7 +98,7 @@ class Politician {
 
       politician.accomplishments = accomplishments;
       politician.save();
-      
+
       res.status(200).send({
         politician: OutputFormatters.formatPolitician(politician)
       });
@@ -193,14 +193,14 @@ class Politician {
             '$set': {
               'educationalBackground.$.degree': background.degree,
               'educationalBackground.$.institution': background.institution,
-              'educationalBackground.$.startDate': background.startDate,
+              'educationalBackground.$.graduationYear': +background.graduationYear,
             },
           });
       } else {
         politician.educationalBackground.push({
           degree: background.degree,
           institution: background.institution,
-          startDate: background.startDate,
+          graduationYear: background.graduationYear,
         });
       }
     }
@@ -214,16 +214,16 @@ class Politician {
             '$set': {
               'professionalBackground.$.title': background.title,
               'professionalBackground.$.description': background.description,
-              'professionalBackground.$.startDate': background.startDate,
-              'professionalBackground.$.endDate': background.endDate,
+              'professionalBackground.$.startYear': background.startYear,
+              'professionalBackground.$.endYear': background.endYear,
             },
           });
       } else {
         politician.professionalBackground.push({
           title: background.title,
           description: background.description,
-          startDate: background.startDate,
-          endDate: background.endDate,
+          startYear: background.startYear,
+          endYear: background.endYear,
         });
       }
     }
