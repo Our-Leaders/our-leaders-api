@@ -204,6 +204,46 @@ class Auth {
     }
   }
 
+  static async adminLogin(req, res, next) {
+    const {email, password} = req.body;
+
+    try {
+      // check for an existing user
+      const admin = await db.User.findOne({
+        $and: [
+          {email: email},
+          {isDeleted: false},
+          {$or: [{role: 'admin'}, {role: 'superadmin'}]}
+        ]
+      });
+
+      if (!admin) {
+        return res.status(400).send({
+          message: 'Wrong email address.',
+        });
+      }
+
+      if (!bcryptJs.compareSync(password, admin.password)) {
+        return res.status(400).send({
+          message: 'Wrong password.',
+        });
+      }
+
+      if (admin.isBlocked) {
+        return res.status(400).send({
+          message: 'Your account has been blocked.'
+        });
+      }
+
+      res.status(200).send({
+        user: OutputFormatters.formatUser(admin),
+        token: Auth.tokenify(admin)
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
+  }
+
   static async sendVerificationCode(req, res, next) {
     const {phoneNumber} = req.query;
     const userId = req.user.id;
