@@ -73,7 +73,8 @@ class Auth {
 
       // check for an existing user
       const existingUser = await db.User.findOne({
-        email: user.email
+        email: user.email,
+        role: 'user'
       });
 
       // if a user exists and is not deleted then reflect conflict
@@ -137,7 +138,8 @@ class Auth {
         // check for an existing user
         user = await db.User.findOne({
           email,
-          isDeleted: false
+          isDeleted: false,
+          role: 'user'
         });
 
         if (!user) {
@@ -197,6 +199,46 @@ class Auth {
       res.status(200).send({
         user: OutputFormatters.formatUser(user),
         token: Auth.tokenify(user)
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.'));
+    }
+  }
+
+  static async adminLogin(req, res, next) {
+    const {email, password} = req.body;
+
+    try {
+      // check for an existing user
+      const admin = await db.User.findOne({
+        $and: [
+          {email: email},
+          {isDeleted: false},
+          {$or: [{role: 'admin'}, {role: 'superadmin'}]}
+        ]
+      });
+
+      if (!admin) {
+        return res.status(400).send({
+          message: 'Wrong email address.',
+        });
+      }
+
+      if (!bcryptJs.compareSync(password, admin.password)) {
+        return res.status(400).send({
+          message: 'Wrong password.',
+        });
+      }
+
+      if (admin.isBlocked) {
+        return res.status(400).send({
+          message: 'Your account has been blocked.'
+        });
+      }
+
+      res.status(200).send({
+        user: OutputFormatters.formatUser(admin),
+        token: Auth.tokenify(admin)
       });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.'));
@@ -287,7 +329,7 @@ class Auth {
       }
 
       const encodedUserId = StringUtil.btoa(user._id);
-      const resetToken = jwt.sign({ userId: encodedUserId }, Config.secret, { expiresIn: '24h' });
+      const resetToken = jwt.sign({userId: encodedUserId}, Config.secret, {expiresIn: '24h'});
       const payload = EmailUtil.getPasswordResetRequestEmail(user.email, resetToken);
       await Mail.send(payload);
 
@@ -299,7 +341,7 @@ class Auth {
     }
   }
 
-  static async resetPassword(req, res,next) {
+  static async resetPassword(req, res, next) {
     const {token, password} = req.body;
 
     try {

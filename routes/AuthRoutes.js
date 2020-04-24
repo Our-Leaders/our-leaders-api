@@ -13,6 +13,9 @@ module.exports = (router) => {
   router.route('/auth/login')
     .post(AuthValidators.validateSignUp, AuthCtrl.login);
 
+  router.route('/auth/login/admin')
+    .post(AuthValidators.validateAdminLogin, AuthCtrl.adminLogin);
+
   router.route('/auth/verify')
     .get(
       AuthMiddleware.authenticate,

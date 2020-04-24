@@ -34,6 +34,23 @@ class AuthValidators {
     }
   }
 
+  static validateAdminLogin(req, res, next) {
+    const body = req.body;
+    let message = '';
+
+    if (!StringUtil.isValidEmail(body.email)) {
+      message = 'A valid email is required.';
+    } else if (!body.password) {
+      message = 'A password is required for email sign up.';
+    }
+
+    if (message) {
+      next(new ErrorHandler(400, message));
+    } else {
+      next();
+    }
+  }
+
   static validateVerificationRequest(req, res, next) {
     const query = req.query;
     let message = '';

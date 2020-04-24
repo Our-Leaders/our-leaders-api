@@ -39,7 +39,12 @@ class Admins {
 
     try {
       let admin = await db.User
-        .findOne({email});
+        .findOne({
+          $and: [
+            {email: email},
+            {$or: [{role: 'admin'}, {role: 'superadmin'}]}
+          ]
+        });
 
       if (!admin) {
         admin = new db.User({
