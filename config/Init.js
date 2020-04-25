@@ -19,6 +19,8 @@ const Logger = require('./Logger');
     } else {
       superAdmin = new db.User(Config.superAdmin);
       superAdmin.role = 'superadmin';
+      superAdmin.isEmailVerified = true;
+      superAdmin.isPhoneVerified = true;
       superAdmin.permissions = {
         politician: {
           create: true,
