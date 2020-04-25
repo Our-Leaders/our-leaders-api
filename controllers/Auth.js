@@ -136,8 +136,7 @@ class Auth {
         // check for an existing user
         user = await db.User.findOne({
           email,
-          isDeleted: false,
-          role: 'user'
+          isDeleted: false
         });
 
         if (!user) {
