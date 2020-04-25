@@ -104,8 +104,6 @@ class Auth {
 
           // if a subscription does not exist, create one
           if (!subscription) {
-            const user = await db.User
-              .findById(req.user.id);
             await MailChimpUtil.addUserToList(user);
 
             subscription = new db.Subscription({
