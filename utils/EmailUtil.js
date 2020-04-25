@@ -52,7 +52,7 @@ class EmailUtil {
     };
   }
 
-  static getPasswordResetRequestEmail(email, firstName, resetToken) {
+  static getPasswordResetRequestEmail(email, resetToken) {
     const templateName = 'resetRequest';
 
     return {
@@ -60,7 +60,6 @@ class EmailUtil {
       to: [email],
       subject: `Here is your password reset link`,
       html: EmailUtil.generateHtml(templateName, {
-        firstName,
         resetLink: `${Config.frontEndUrl}/auth/reset-password?token=${resetToken}`
       })
     }
