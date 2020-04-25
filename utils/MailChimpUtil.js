@@ -13,8 +13,13 @@ class MailChimpUtil {
       email_address: user.email,
       email_type: 'html',
       status: 'subscribed',
-      timestamp_signup: (new Date()).toISOString()
+      timestamp_signup: MailChimpUtil.getMailChimpDateTimeStamp()
     });
+  }
+
+  static getMailChimpDateTimeStamp() {
+    const date = new Date();
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   }
 }
 
