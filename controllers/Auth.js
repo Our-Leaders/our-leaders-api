@@ -122,7 +122,7 @@ class Auth {
         });
       }
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -199,7 +199,7 @@ class Auth {
         token: Auth.tokenify(user)
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -239,7 +239,7 @@ class Auth {
         token: Auth.tokenify(admin)
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -276,7 +276,7 @@ class Auth {
         user: OutputFormatters.formatUser(user)
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -309,7 +309,7 @@ class Auth {
         user: OutputFormatters.formatUser(user)
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -335,7 +335,7 @@ class Auth {
         message: 'Reset mail sent successfully.'
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
