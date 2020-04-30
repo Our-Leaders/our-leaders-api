@@ -115,7 +115,7 @@ class Users {
     try {
       const politicians = await db.Politician
         .find({
-          rooms: {
+          voters: {
             $elemMatch: {
               id: id
             }
