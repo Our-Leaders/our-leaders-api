@@ -1,19 +1,22 @@
 const Logger = require('../config/Logger');
 
 class ErrorHandler extends Error {
-  constructor(statusCode, message) {
+  constructor(statusCode, message, error) {
     super();
     this.statusCode = statusCode;
     this.message = message;
+    this.error = error;
   }
 }
 
 const handleError = (err, res) => {
-  const { statusCode, message } = err;
-  Logger.log(`Error:${message}`);
-  res.status(statusCode||500).json({
+  const {statusCode, message, error} = err;
+  Logger.log(`Error: ${message}`);
+  Logger.error(error);
+
+  res.status(statusCode || 500).json({
     status: "error",
-    statusCode: statusCode||500,
+    statusCode: statusCode || 500,
     message
   });
 };

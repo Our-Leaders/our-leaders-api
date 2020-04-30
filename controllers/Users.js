@@ -22,7 +22,7 @@ class Users {
         users: users.map(x => OutputFormatters.formatUser(x))
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -84,7 +84,7 @@ class Users {
         user: OutputFormatters.formatUser(user)
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -105,7 +105,7 @@ class Users {
         user: OutputFormatters.formatUser(user)
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -115,7 +115,7 @@ class Users {
     try {
       const politicians = await db.Politician
         .find({
-          rooms: {
+          voters: {
             $elemMatch: {
               id: id
             }
@@ -140,7 +140,7 @@ class Users {
         })
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 
@@ -161,7 +161,7 @@ class Users {
         message: 'User account successfully deleted.'
       });
     } catch (err) {
-      next(new ErrorHandler(500, 'An error occurred.'));
+      next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
 }

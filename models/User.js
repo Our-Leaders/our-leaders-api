@@ -20,8 +20,7 @@ const UserModel = mongoose.model('User', new Schema({
     type: String
   },
   email: {
-    type: String,
-    unique: true
+    type: String
   },
   phoneNumber: {
     type: String
