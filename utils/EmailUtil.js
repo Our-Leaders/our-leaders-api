@@ -30,6 +30,17 @@ class EmailUtil {
     };
   }
 
+  static getContactUsEmail(message, emails) {
+    const templateName = 'contactUs';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: emails,
+      subject: `Received A Message from a Customer`,
+      html: EmailUtil.generateHtml(templateName, { message })
+    };
+  }
+
   static getSubscriptionEmail(email, firstName, feeds) {
     const templateName = 'subscriptionFeed';
 

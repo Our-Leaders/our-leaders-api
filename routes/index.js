@@ -12,6 +12,7 @@ const PoliticalPartyRoutes = require('./PoliticalPartyRoutes');
 const PoliticianRoutes = require('./PoliticianRoutes');
 const StatisticRoutes = require('./StatisticRoutes');
 const SubscriptionRoutes = require('./SubscriptionRoutes');
+const SupportRoutes = require('./SupportRoutes');
 const TransactionRoutes = require('./TransactionRoutes');
 const UserRoutes = require('./UserRoutes');
 const TrendRoutes = require('./TrendRoutes');
@@ -28,6 +29,7 @@ module.exports = (router) => {
   PoliticianRoutes(router);
   StatisticRoutes(router);
   SubscriptionRoutes(router);
+  SupportRoutes(router);
   TransactionRoutes(router);
   UserRoutes(router);
   TrendRoutes(router);

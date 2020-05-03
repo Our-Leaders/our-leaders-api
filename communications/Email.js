@@ -22,9 +22,12 @@ class Email {
    */
   static async send(payload) {
     try {
+      console.log('Config.mailGun.apiKey');
+      console.log(Config.mailGun.apiKey);
       await mg.messages.create(Config.mailGun.domain, payload);
       Logger.log('The email(s) was/were sent successfully.');
     } catch (err) {
+      console.log(err);
       Logger.error(err);
     }
   }
