@@ -32,7 +32,13 @@ module.exports = (router) => {
       ImageMiddleware.uploadImage,
       PoliticianValidators.validatePoliticianUpdate,
       PoliticianCtrl.edit
-    );
+    )
+    .delete(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      AuthMiddleware.hasPermission({property: 'politician', action: 'delete'}),
+      PoliticianCtrl.delete
+    )
 
   router.route('/politicians/:id/accomplishments')
     .post(

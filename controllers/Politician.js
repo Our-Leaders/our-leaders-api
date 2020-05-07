@@ -443,6 +443,27 @@ class Politician {
     }
   }
 
+  static async delete(req, res, next) {
+    const {params} = req;
+    const {id} = params;
+
+    try {
+      const politician = await db.Politician.findById(id);
+
+      if (!politician) {
+        return next(new ErrorHandler(404, 'Politician doesn\'t exist'));
+      }
+
+      await politician.remove();
+
+      res.status(200).send({
+        message: 'politician deleted succcesfully',
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
   static async getHighestVotedPoliticians(req, res, next) {
     try {
       const response = {};
