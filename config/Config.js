@@ -13,6 +13,7 @@ if (!isProduction) {
 module.exports = {
   isProduction,
   database: process.env.MONGO_URL,
+  adminFrontEndUrl: process.env.ADMIN_FRONTEND_URL,
   frontEndUrl: process.env.FRONTEND_URL,
   port: process.env.PORT || 3505,
   secret: process.env.SECRET,

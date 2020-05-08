@@ -314,7 +314,7 @@ class Auth {
   }
 
   static async requestPasswordReset(req, res, next) {
-    const {email} = req.body;
+    const {email, isAdmin} = req.body;
 
     try {
       const user = await db.User
@@ -328,7 +328,7 @@ class Auth {
 
       const encodedUserId = StringUtil.btoa(user._id);
       const resetToken = jwt.sign({userId: encodedUserId}, Config.secret, {expiresIn: '24h'});
-      const payload = EmailUtil.getPasswordResetRequestEmail(user.email, resetToken);
+      const payload = EmailUtil.getPasswordResetRequestEmail(user.email, resetToken, isAdmin);
       await Mail.send(payload);
 
       res.status(200).send({

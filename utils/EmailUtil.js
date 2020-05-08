@@ -63,15 +63,16 @@ class EmailUtil {
     };
   }
 
-  static getPasswordResetRequestEmail(email, resetToken) {
+  static getPasswordResetRequestEmail(email, resetToken, isAdmin) {
     const templateName = 'resetRequest';
+    const link = isAdmin ? `${Config.adminFrontEndUrl}/auth/sign-in?token=${resetToken}` : `${Config.frontEndUrl}/auth/reset-password?token=${resetToken}`
 
     return {
       from: 'Our Leaders <no-reply@our-leaders.org>',
       to: [email],
       subject: `Here is your password reset link`,
       html: EmailUtil.generateHtml(templateName, {
-        resetLink: `${Config.frontEndUrl}/auth/reset-password?token=${resetToken}`
+        resetLink: link
       })
     }
   }
