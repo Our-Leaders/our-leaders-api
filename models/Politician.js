@@ -86,7 +86,8 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
       type: String
     },
     graduationYear: {
-      type: Number
+      type: Number,
+      required: false
     }
   }],
   politicalBackground: [{
@@ -126,10 +127,12 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
       type: String
     },
     startYear: {
-      type: Number
+      type: Number,
+      required: false
     },
     endYear: {
-      type: Number
+      type: Number,
+      required: false
     }
   }],
   socials: {
