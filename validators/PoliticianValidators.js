@@ -114,7 +114,7 @@ class PoliticianValidators {
         message = 'The degree for the educational background is required.';
       } else if (!background.institution) {
         message = 'The institution for the educational background is required.';
-      } else if (background.graduationYear && +background.graduationYear < 1) {
+      } else if (background.graduationYear && background.graduationYear < 0) {
         message = 'The graduation year for the education background is invalid.';
       }
 
@@ -135,11 +135,11 @@ class PoliticianValidators {
     for (let background of body.professionalBackground) {
       if (!background.title) {
         message = 'The title for the professional background is required.'
-      } else if (background.startYear && +background.startYear < 1) {
+      } else if (background.startYear && background.startYear < 0) {
         message = 'The start year for the professional background is invalid.';
-      } else if (background.endYear && +background.endYear < 1) {
+      } else if (background.endYear && background.endYear < 0) {
         message = 'The end year for the professional background is invalid.';
-      } else if (+background.startYear >= +background.endYear) {
+      } else if (background.startYear && background.endYear && background.startYear >= background.endYear) {
         message = 'The start year must come before the end year.';
       }
 
