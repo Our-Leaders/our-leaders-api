@@ -189,6 +189,7 @@ class Politician {
     for (let background of educationalBackground) {
       // only set the graduation year when a valid positive value is sent
       const graduationYear = background.graduationYear > 0 ? +background.graduationYear : null;
+
       if (background._id) {
         await db.Politician.updateOne({'educationalBackground._id': background._id},
           {
@@ -210,22 +211,26 @@ class Politician {
 
   static async addOrUpdateProfessionalBackground(politician, professionalBackground) {
     for (let background of professionalBackground) {
+      // only set the graduation year when a valid positive value is sent
+      const startYear = background.startYear > 0 ? +background.startYear : null;
+      const endYear = background.endYear > 0 ? +background.endYear : null;
+
       if (background._id) {
         await db.Politician.updateOne({'professionalBackground._id': background._id},
           {
             '$set': {
               'professionalBackground.$.title': background.title,
               'professionalBackground.$.description': background.description,
-              'professionalBackground.$.startYear': background.startYear,
-              'professionalBackground.$.endYear': background.endYear,
+              'professionalBackground.$.startYear': startYear,
+              'professionalBackground.$.endYear': endYear,
             },
           });
       } else {
         politician.professionalBackground.push({
           title: background.title,
           description: background.description,
-          startYear: background.startYear,
-          endYear: background.endYear,
+          startYear: startYear,
+          endYear: endYear,
         });
       }
     }
