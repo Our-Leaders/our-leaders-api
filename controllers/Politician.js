@@ -187,20 +187,22 @@ class Politician {
 
   static async addOrUpdateEducationalBackground(politician, educationalBackground) {
     for (let background of educationalBackground) {
+      // only set the graduation year when a valid positive value is sent
+      const graduationYear = background.graduationYear > 0 ? +background.graduationYear : null;
       if (background._id) {
         await db.Politician.updateOne({'educationalBackground._id': background._id},
           {
             '$set': {
               'educationalBackground.$.degree': background.degree,
               'educationalBackground.$.institution': background.institution,
-              'educationalBackground.$.graduationYear': +background.graduationYear,
+              'educationalBackground.$.graduationYear': graduationYear,
             },
           });
       } else {
         politician.educationalBackground.push({
           degree: background.degree,
           institution: background.institution,
-          graduationYear: background.graduationYear,
+          graduationYear: graduationYear,
         });
       }
     }
