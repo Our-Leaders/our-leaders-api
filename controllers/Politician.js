@@ -211,7 +211,7 @@ class Politician {
 
   static async addOrUpdateProfessionalBackground(politician, professionalBackground) {
     for (let background of professionalBackground) {
-      // only set the graduation year when a valid positive value is sent
+      // only set the start and end year when a valid positive value is sent
       const startYear = background.startYear > 0 ? +background.startYear : null;
       const endYear = background.endYear > 0 ? +background.endYear : null;
 
