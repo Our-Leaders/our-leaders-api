@@ -51,4 +51,10 @@ module.exports = (router) => {
       AuthMiddleware.hasPermission({property: 'users', action: 'delete'}),
       UsersCtrl.deleteAccount
     );
+
+  router.route('/users/:userId/delete-my-account')
+    .post(
+      AuthMiddleware.authenticate,
+      UsersCtrl.deleteAccount
+    );
 };
