@@ -2,6 +2,8 @@
  * Created by bolorundurowb on 11/12/2019
  */
 
+const bcryptJs = require('bcryptjs');
+
 const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const ImageUtil = require('../utils/ImageUtil');
@@ -145,13 +147,21 @@ class Users {
   }
 
   static async deleteAccount(req, res, next) {
-    const {userId} = req.params;
+    const {params, user: currentUser, body} = req;
+    const {userId} = params;
+    const {password} = body;
 
     try {
       const user = await db.User.findById(userId);
 
       if (!user) {
         return next(new ErrorHandler(404, 'A user with the provided id does not exist.'));
+      }
+
+      if (currentUser.role === 'user' && !bcryptJs.compareSync(password, user.password)) {
+        return res.status(400).send({
+          message: 'Password is incorrect',
+        });
       }
 
       user.isDeleted = true;
