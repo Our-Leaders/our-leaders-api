@@ -53,7 +53,7 @@ module.exports = (router) => {
     );
 
   router.route('/users/:userId/delete-my-account')
-    .post(
+    .put(
       AuthMiddleware.authenticate,
       UsersCtrl.deleteAccount
     );
