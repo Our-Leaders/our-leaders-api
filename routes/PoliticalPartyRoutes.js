@@ -19,7 +19,12 @@ module.exports = (router) => {
       ImageMiddleware.uploadLogo,
       PoliticalPartyValidators.validateCreation,
       PoliticalPartyCtrl.create
-    );
+    )
+    .delete(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      PoliticalPartyCtrl.delete
+    )
 
   router.route('/political-party/:id')
     .get(PoliticalPartyCtrl.get)
