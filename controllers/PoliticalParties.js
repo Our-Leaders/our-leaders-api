@@ -226,6 +226,27 @@ class PoliticalParties {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async delete(req, res, next) {
+    const {params} = req;
+    const {id} = params;
+
+    try {
+      const politicalParty = await db.PoliticalParty.findById(id);
+
+      if (!politicalParty) {
+        return next(new ErrorHandler(404, 'Political Party doesn\'t exist'));
+      }
+
+      await politicalParty.remove();
+
+      res.status(200).send({
+        message: 'political party deleted succcesfully',
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = PoliticalParties;
