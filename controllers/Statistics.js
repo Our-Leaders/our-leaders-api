@@ -68,24 +68,68 @@ class Statistics {
         };
       }
 
-      const visitsByDate = await db.Statistics.aggregate([
-        {
-          $match: matchQuery
-        },
-        {
-          $group: {
-            _id: {
-              'year': {'$year': '$createdAt'},
-              'month': {'$month': '$createdAt'},
-              'day': {'$dayOfMonth': '$createdAt'}
-            },
-            visits: {$sum: 1}
+      const visitsByDate = await db.Statistics
+        .aggregate([
+          {
+            $match: matchQuery
+          },
+          {
+            $group: {
+              _id: {
+                'year': {'$year': '$createdAt'},
+                'month': {'$month': '$createdAt'},
+                'day': {'$dayOfMonth': '$createdAt'}
+              },
+              visits: {$sum: 1}
+            }
           }
-        }
-      ]);
+        ]);
 
       res.status(200).send({
-        stats: visitsByDate.map(x => OutputFormatters.formatVisitStats(x))
+        visits: visitsByDate.map(x => OutputFormatters.formatVisitStats(x))
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async getSignupStats(req, res, next) {
+    const {startDate, endDate} = req.query;
+
+    try {
+      const matchQuery = {};
+
+      if (startDate) {
+        matchQuery.createdAt = {
+          $gte: new Date(startDate)
+        };
+      }
+
+      if (endDate) {
+        matchQuery.createdAt = {
+          $lte: new Date(endDate)
+        };
+      }
+
+      const signUpsByDate = await db.User
+        .aggregate([
+          {
+            $match: matchQuery
+          },
+          {
+            $group: {
+              _id: {
+                'year': {'$year': '$createdAt'},
+                'month': {'$month': '$createdAt'},
+                'day': {'$dayOfMonth': '$createdAt'}
+              },
+              signUps: {$sum: 1}
+            }
+          }
+        ]);
+
+      res.status(200).send({
+        signUps: signUpsByDate.map(x => OutputFormatters.formatSignupStats(x))
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
