@@ -48,6 +48,28 @@ class Statistics {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async recordVisitStat(req, res, next) {
+    const {referrer, url} = req.body;
+
+    try {
+      // if a url is not in the body then ignore
+      if (!url) {
+        return res.status(200).send({});
+      }
+
+      const statistic = new db.Statistics({
+        referrer,
+        pageUrl: url,
+        userIp: req.clientIp
+      });
+      await statistic.save();
+
+      res.status(201).send({});
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Statistics;
