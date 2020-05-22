@@ -30,7 +30,7 @@ class OutputFormatters {
       joinedBy,
       isBlocked: user.isBlocked,
       isUsingDefaultPassword: user.isUsingDefaultPassword,
-      lastLogin: user.lastLogin
+      lastLoginAt: user.lastLoginAt
     };
   }
 

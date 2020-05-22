@@ -369,7 +369,7 @@ class Auth {
 
   static async tokenify(user) {
     // track login time
-    user.lastLogin = new Date();
+    user.lastLoginAt = new Date();
     await user.save();
 
     return jwt.sign({
