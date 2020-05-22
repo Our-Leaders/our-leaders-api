@@ -34,13 +34,7 @@ class Statistics {
         .select('email createdAt');
 
       // format the response
-      response.signUps = newSignUps.map(user => {
-        return {
-          id: user._id,
-          email: user.email,
-          createdAt: user.createdAt
-        };
-      });
+      response.signUps = newSignUps.map(x => OutputFormatters.formatSignup(x));
 
       res.status(200).send({
         statistics: response

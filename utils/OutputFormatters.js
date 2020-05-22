@@ -29,7 +29,8 @@ class OutputFormatters {
       joinedAt: user.createdAt,
       joinedBy,
       isBlocked: user.isBlocked,
-      isUsingDefaultPassword: user.isUsingDefaultPassword
+      isUsingDefaultPassword: user.isUsingDefaultPassword,
+      lastLoginAt: user.lastLoginAt
     };
   }
 
@@ -211,12 +212,25 @@ class OutputFormatters {
     return response;
   }
 
+  static formatSignup(signUp) {
+    if (!signUp) {
+      return {};
+    }
+
+    return {
+      id: signUp._id,
+      email: signUp.email,
+      createdAt: signUp.createdAt,
+      lastActiveAt: signUp.lastActiveAt
+    };
+  }
+
   static formatVisitStats(stats) {
     if (!stats) {
       return {};
     }
 
-    return  {
+    return {
       date: new Date(stats._id.year, stats._id.month, stats._id.day),
       visits: stats.visits
     };
@@ -227,7 +241,7 @@ class OutputFormatters {
       return {};
     }
 
-    return  {
+    return {
       date: new Date(stats._id.year, stats._id.month, stats._id.day),
       signUps: stats.signUps
     };
