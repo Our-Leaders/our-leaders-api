@@ -87,6 +87,9 @@ const UserModel = mongoose.model('User', new Schema({
   notificationsLastRetrievedAt: {
     type: Date
   },
+  lastLogin: {
+    type: Date
+  }
   permissions: {
     politician: {
       create: {
