@@ -4,6 +4,7 @@
 
 const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
+const OutputFormatters = require('../utils/OutputFormatters');
 
 class Statistics {
   static async getStats(req, res, next) {
@@ -33,13 +34,7 @@ class Statistics {
         .select('email createdAt');
 
       // format the response
-      response.signUps = newSignUps.map(user => {
-        return {
-          id: user._id,
-          email: user.email,
-          createdAt: user.createdAt
-        };
-      });
+      response.signUps = newSignUps.map(x => OutputFormatters.formatSignup(x));
 
       res.status(200).send({
         statistics: response

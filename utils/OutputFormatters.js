@@ -211,6 +211,18 @@ class OutputFormatters {
 
     return response;
   }
+
+  static formatSignup(signUp) {
+    if (!signUp) {
+      return {};
+    }
+
+    return {
+      id: signUp._id,
+      email: signUp.email,
+      createdAt: signUp.createdAt
+    };
+  }
 }
 
 module.exports = OutputFormatters;
