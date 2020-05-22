@@ -89,7 +89,7 @@ const UserModel = mongoose.model('User', new Schema({
   },
   lastLogin: {
     type: Date
-  }
+  },
   permissions: {
     politician: {
       create: {

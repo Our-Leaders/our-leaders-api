@@ -118,7 +118,7 @@ class Auth {
 
         res.status(200).send({
           user: OutputFormatters.formatUser(user),
-          token: Auth.tokenify(user)
+          token: await Auth.tokenify(user)
         });
       }
     } catch (err) {
@@ -196,7 +196,7 @@ class Auth {
 
       res.status(200).send({
         user: OutputFormatters.formatUser(user),
-        token: Auth.tokenify(user)
+        token: await Auth.tokenify(user)
       });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.', err));
@@ -236,7 +236,7 @@ class Auth {
 
       res.status(200).send({
         user: OutputFormatters.formatUser(admin),
-        token: Auth.tokenify(admin)
+        token: await Auth.tokenify(admin)
       });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.', err));
@@ -367,7 +367,11 @@ class Auth {
     }
   }
 
-  static tokenify(user) {
+  static async tokenify(user) {
+    // track login time
+    user.lastLogin = new Date();
+    await user.save();
+
     return jwt.sign({
       id: user._id,
       email: user.email,
