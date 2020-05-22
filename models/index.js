@@ -17,6 +17,7 @@ const Page = require('./Page');
 const Donation = require('./Donation');
 const Trend = require('./Trend');
 const Notification = require('./Notification');
+const Statistic = require('./Statistic');
 
 const db = {};
 mongoose.connect(Config.database, {
@@ -35,5 +36,6 @@ db.Page = Page;
 db.Donation = Donation;
 db.Trend = Trend;
 db.Notification = Notification;
+db.Statistics = Statistic;
 
 module.exports = db;

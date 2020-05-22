@@ -5,6 +5,7 @@
 const express = require("express");
 const cors = require('cors');
 const morgan = require('morgan');
+const requestIp = require('request-ip');
 const bodyParser = require("body-parser");
 
 const Config = require('./config/Config');
@@ -18,6 +19,7 @@ const router = express.Router();
 
 app.use(morgan('dev'));
 app.use(cors());
+app.use(requestIp.mw());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
