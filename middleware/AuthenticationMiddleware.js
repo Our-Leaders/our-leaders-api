@@ -3,6 +3,7 @@
  */
 
 const jwt = require('jsonwebtoken');
+const db = require('./../models');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
 const {ErrorHandler} = require('../utils/ErrorUtil');
@@ -19,6 +20,9 @@ class AuthenticationMiddleware {
       if (!decoded) {
         return next(ErrorHandler(401, 'The token provided was invalid or expired. Please login again.'));
       } else {
+        // update the users last access time
+        await db.User.findByIdAndUpdate(decoded.id, {lastActiveAt: new Date()});
+
         req.user = decoded;
         next();
       }
@@ -27,7 +31,7 @@ class AuthenticationMiddleware {
       if (err.name === 'TokenExpiredError') {
         return next(new ErrorHandler(401, 'The token provided was invalid or expired. Please login again.'));
       }
-      
+
       return next(new ErrorHandler(500, err.message || JSON.stringify(err)));
     }
   }
