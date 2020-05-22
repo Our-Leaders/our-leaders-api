@@ -210,6 +210,17 @@ class OutputFormatters {
 
     return response;
   }
+
+  static formatVisitStats(stats) {
+    if (!stats) {
+      return {};
+    }
+
+    return  {
+      date: new Date(stats._id.year, stats._id.month, stats._id.day),
+      visits: stats.visits
+    };
+  }
 }
 
 module.exports = OutputFormatters;
