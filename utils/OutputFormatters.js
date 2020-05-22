@@ -220,7 +220,8 @@ class OutputFormatters {
     return {
       id: signUp._id,
       email: signUp.email,
-      createdAt: signUp.createdAt
+      createdAt: signUp.createdAt,
+      lastActiveAt: signUp.lastActiveAt
     };
   }
 }
