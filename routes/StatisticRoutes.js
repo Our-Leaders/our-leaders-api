@@ -11,4 +11,9 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       StatisticsCtrl.getStats
     );
+
+  router.route('/statistics/visit')
+    .post(
+      StatisticsCtrl.recordVisitStat
+    );
 };
