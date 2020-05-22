@@ -9,11 +9,26 @@ module.exports = (router) => {
   router.route('/statistics')
     .get(
       AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
       StatisticsCtrl.getStats
     );
 
   router.route('/statistics/visit')
     .post(
       StatisticsCtrl.recordVisitStat
+    );
+
+  router.route('/statistics/visit')
+    .get(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      StatisticsCtrl.getVisitStats
+    );
+
+  router.route('/statistics/signup')
+    .get(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      StatisticsCtrl.getSignupStats
     );
 };
