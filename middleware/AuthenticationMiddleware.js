@@ -18,7 +18,7 @@ class AuthenticationMiddleware {
     try {
       const decoded = await jwt.verify(token, Config.secret);
       if (!decoded) {
-        return next(ErrorHandler(401, 'The token provided was invalid or expired. Please login again.'));
+        return next(new ErrorHandler(401, 'The token provided was invalid or expired. Please login again.'));
       } else {
         // update the users last access time
         await db.User.findByIdAndUpdate(decoded.id, {lastActiveAt: new Date()});

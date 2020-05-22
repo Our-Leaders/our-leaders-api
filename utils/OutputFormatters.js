@@ -224,6 +224,28 @@ class OutputFormatters {
       lastActiveAt: signUp.lastActiveAt
     };
   }
+
+  static formatVisitStats(stats) {
+    if (!stats) {
+      return {};
+    }
+
+    return {
+      date: new Date(stats._id.year, stats._id.month, stats._id.day),
+      visits: stats.visits
+    };
+  }
+
+  static formatSignupStats(stats) {
+    if (!stats) {
+      return {};
+    }
+
+    return {
+      date: new Date(stats._id.year, stats._id.month, stats._id.day),
+      signUps: stats.signUps
+    };
+  }
 }
 
 module.exports = OutputFormatters;

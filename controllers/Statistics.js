@@ -4,7 +4,7 @@
 
 const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
-const OutputFormatters = require('../utils/OutputFormatters');
+const OutputFormatters = require('./../utils/OutputFormatters');
 
 class Statistics {
   static async getStats(req, res, next) {
@@ -39,6 +39,114 @@ class Statistics {
       res.status(200).send({
         statistics: response
       });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async getVisitStats(req, res, next) {
+    const {startDate, endDate} = req.query;
+
+    try {
+      const matchQuery = {};
+
+      if (startDate) {
+        matchQuery.createdAt = {
+          $gte: new Date(startDate)
+        };
+      }
+
+      if (endDate) {
+        matchQuery.createdAt = {
+          $lte: new Date(endDate)
+        };
+      }
+
+      const visitsByDate = await db.Statistics
+        .aggregate([
+          {
+            $match: matchQuery
+          },
+          {
+            $group: {
+              _id: {
+                'year': {'$year': '$createdAt'},
+                'month': {'$month': '$createdAt'},
+                'day': {'$dayOfMonth': '$createdAt'}
+              },
+              visits: {$sum: 1}
+            }
+          }
+        ]);
+
+      res.status(200).send({
+        visits: visitsByDate.map(x => OutputFormatters.formatVisitStats(x))
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async getSignupStats(req, res, next) {
+    const {startDate, endDate} = req.query;
+
+    try {
+      const matchQuery = {};
+
+      if (startDate) {
+        matchQuery.createdAt = {
+          $gte: new Date(startDate)
+        };
+      }
+
+      if (endDate) {
+        matchQuery.createdAt = {
+          $lte: new Date(endDate)
+        };
+      }
+
+      const signUpsByDate = await db.User
+        .aggregate([
+          {
+            $match: matchQuery
+          },
+          {
+            $group: {
+              _id: {
+                'year': {'$year': '$createdAt'},
+                'month': {'$month': '$createdAt'},
+                'day': {'$dayOfMonth': '$createdAt'}
+              },
+              signUps: {$sum: 1}
+            }
+          }
+        ]);
+
+      res.status(200).send({
+        signUps: signUpsByDate.map(x => OutputFormatters.formatSignupStats(x))
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async recordVisitStat(req, res, next) {
+    const {referrer, url} = req.body;
+
+    try {
+      // if a url is not in the body then ignore
+      if (!url) {
+        return res.status(200).send({});
+      }
+
+      const statistic = new db.Statistics({
+        referrer,
+        pageUrl: url,
+        userIp: req.clientIp
+      });
+      await statistic.save();
+
+      res.status(201).send({});
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
