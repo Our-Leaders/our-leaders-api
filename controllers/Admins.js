@@ -11,14 +11,21 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
   static async findAdmin(req, res, next) {
+    const { isDeleted } = req.query;
     try {
+      let query = {
+        $or: [
+          {role: 'superadmin'},
+          {role: 'admin'},
+        ],
+      };
+
+      if (isDeleted) {
+        query['isDeleted'] = isDeleted;
+      }
+
       const admins = await db.User
-        .find({
-          $or: [
-            {role: 'superadmin'},
-            {role: 'admin'},
-          ],
-        })
+        .find(query)
         .sort({
           firstName: 'asc',
           lastName: 'asc'
