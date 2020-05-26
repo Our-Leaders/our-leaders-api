@@ -157,6 +157,27 @@ class Admins {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async reactivateAdmin(req, res, next) {
+    const {adminId} = req.params;
+
+    try {
+      const admin = await db.User.findById(adminId);
+
+      if (!admin) {
+        return next(new ErrorHandler(409, 'An admin with the provided id does not exist.'));
+      }
+
+      admin.isDeleted = false;
+      await admin.save();
+
+      res.status(200).send({
+        message: 'Admin successfully reactivated.'
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Admins;
