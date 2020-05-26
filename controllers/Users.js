@@ -12,8 +12,8 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 class Users {
   static async getUsers(req, res, next) {
     try {
+      const {isDeleted} = req.query;
       let {sort, limit, skip} = req.params;
-      let {isDeleted} = req.query;
       let query = {};
 
       if (isDeleted) {

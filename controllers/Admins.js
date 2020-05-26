@@ -11,8 +11,8 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 
 class Admins {
   static async findAdmin(req, res, next) {
-    const { isDeleted } = req.query;
     try {
+      const { isDeleted } = req.query;
       let query = {
         $or: [
           {role: 'superadmin'},
