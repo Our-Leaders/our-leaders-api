@@ -3,6 +3,7 @@
  */
 
 const nodeCron = require('node-cron');
+const UserJobs = require('./UserJobs');
 const FeedsJob = require('./FeedJobs');
 const Logger = require('./../config/Logger');
 
@@ -16,6 +17,9 @@ class CronScheduler {
 
     // check feeds every two hours
     nodeCron.schedule('0 */2 * * *', FeedsJob.run, cronOptions);
+
+    // check for stale accounts everyday
+    nodeCron.schedule('0 0 0 * * ?', UserJobs.run, cronOptions);
 
     Logger.log('Cron jobs started successfully.');
   }
