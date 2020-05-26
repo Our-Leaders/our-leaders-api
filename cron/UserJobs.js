@@ -13,7 +13,7 @@ class UserJobs {
       .find({
         isDeleted: true,
         lastActiveAt: {
-          $lte: thirtyDaysAgo
+          $gte: thirtyDaysAgo
         }
       })
       .select('_id email');
