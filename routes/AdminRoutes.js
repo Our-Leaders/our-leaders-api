@@ -21,6 +21,11 @@ module.exports = (router) => {
     );
 
   router.route('/admins/:adminId')
+    .post(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isSuperAdmin,
+      AdminsCtrl.reactivateAdmin
+    )
     .put(
       AuthMiddleware.authenticate,
       AuthMiddleware.isSuperAdmin,
