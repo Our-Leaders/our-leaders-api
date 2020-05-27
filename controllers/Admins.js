@@ -12,13 +12,20 @@ const {ErrorHandler} = require('../utils/ErrorUtil');
 class Admins {
   static async findAdmin(req, res, next) {
     try {
+      const { isDeleted } = req.query;
+      let query = {
+        $or: [
+          {role: 'superadmin'},
+          {role: 'admin'},
+        ],
+      };
+
+      if (isDeleted) {
+        query['isDeleted'] = isDeleted;
+      }
+
       const admins = await db.User
-        .find({
-          $or: [
-            {role: 'superadmin'},
-            {role: 'admin'},
-          ],
-        })
+        .find(query)
         .sort({
           firstName: 'asc',
           lastName: 'asc'
@@ -145,6 +152,27 @@ class Admins {
 
       res.status(200).send({
         message: 'Admin successfully deleted.'
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async reactivateAdmin(req, res, next) {
+    const {adminId} = req.params;
+
+    try {
+      const admin = await db.User.findById(adminId);
+
+      if (!admin) {
+        return next(new ErrorHandler(409, 'An admin with the provided id does not exist.'));
+      }
+
+      admin.isDeleted = false;
+      await admin.save();
+
+      res.status(200).send({
+        message: 'Admin successfully reactivated.'
       });
     } catch (err) {
       next(new ErrorHandler(500, error.message));

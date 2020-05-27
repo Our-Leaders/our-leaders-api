@@ -12,10 +12,16 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 class Users {
   static async getUsers(req, res, next) {
     try {
+      const {isDeleted} = req.query;
       let {sort, limit, skip} = req.params;
+      let query = {};
+
+      if (isDeleted) {
+        query['isDeleted'] = isDeleted;
+      }
 
       const users = await db.User
-        .find({})
+        .find(query)
         .skip(skip)
         .limit(limit)
         .sort(sort || 'firstName'); // default to ordering by first name
