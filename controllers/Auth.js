@@ -44,14 +44,16 @@ class Auth {
           isUsingDefaultPassword: false
         });
 
-        // split the name provided by Google into first and last name
-        const nameParts = response.name.split(' ', 2);
-        if (nameParts.length > 0) {
-          user.firstName = nameParts[0];
-        }
+        if (response.name) {
+          // split the name provided by Google into first and last name
+          const nameParts = response.name.split(' ', 2);
+          if (nameParts.length > 0) {
+            user.firstName = nameParts[0];
+          }
 
-        if (nameParts.length > 1) {
-          user.lastName = nameParts[1];
+          if (nameParts.length > 1) {
+            user.lastName = nameParts[1];
+          }
         }
       } else if (body.facebookId) {
         const response = await FacebookUtil.verifyToken(body.facebookId);
