@@ -85,7 +85,9 @@ class Auth {
         return res.status(409).send({
           message: 'A user with the provided user profile already exists.'
         });
-      } else if (existingUser && existingUser.isDeleted) {
+      }
+
+      if (existingUser && existingUser.isDeleted) {
         // re-enable the user account and authenticate them
         existingUser.isDeleted = false;
         await existingUser.save();
@@ -94,36 +96,36 @@ class Auth {
           user: OutputFormatters.formatUser(existingUser),
           token: Auth.tokenify(existingUser)
         });
-      } else {
-        // persist new user
-        await user.save();
-
-        if (body.subscribe) {
-          let subscription = await db.Subscription
-            .findOne({
-              email: user.email,
-              type: 'newsletter'
-            });
-
-          // if a subscription does not exist, create one
-          if (!subscription) {
-            await MailChimpUtil.addUserToList(user);
-
-            subscription = new db.Subscription({
-              email: user.email,
-              type: 'newsletter'
-            });
-            await subscription.save();
-          }
-        }
-
-        // TODO: if user is signing up with email and password, send verification email
-
-        res.status(200).send({
-          user: OutputFormatters.formatUser(user),
-          token: await Auth.tokenify(user)
-        });
       }
+
+      // persist new user
+      await user.save();
+
+      if (body.subscribe) {
+        let subscription = await db.Subscription
+          .findOne({
+            email: user.email,
+            type: 'newsletter'
+          });
+
+        // if a subscription does not exist, create one
+        if (!subscription) {
+          await MailChimpUtil.addUserToList(user);
+
+          subscription = new db.Subscription({
+            email: user.email,
+            type: 'newsletter'
+          });
+          await subscription.save();
+        }
+      }
+
+      // TODO: if user is signing up with email and password, send verification email
+
+      res.status(200).send({
+        user: OutputFormatters.formatUser(user),
+        token: await Auth.tokenify(user)
+      });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.', err));
     }
