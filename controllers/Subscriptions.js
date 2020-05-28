@@ -124,6 +124,21 @@ class Subscriptions {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async removePoliticianSubscriptions(req, res, next) {
+    const {politicianId} = req.params;
+    const {email} = req.user;
+
+    try {
+      await db.Subscription.deleteMany({politician: politicianId, email });
+
+      res.status(200).send({
+        message: 'Unsubscription from politician successful.'
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Subscriptions;

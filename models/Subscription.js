@@ -22,7 +22,7 @@ const SubscriptionModel = mongoose.model('Subscription', new Schema({
   },
   type: {
     type: String,
-    enum: ['newsletter', 'feeds'],
+    enum: ['newsletter', 'feeds', 'email'],
     default: 'feeds'
   }
 }));
