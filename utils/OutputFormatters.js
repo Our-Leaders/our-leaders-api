@@ -234,7 +234,7 @@ class OutputFormatters {
       // Doing this because months are zero indexed on the date constructor
       // so new Date(2020, 5, 26) will send back 26th of June 2020 instead
       // of 26 of May 2020. See this link for more https://mzl.la/2XATweS
-      date: new Date(stats._id.year, stats._id.month - 1, stats._id.day),
+      date: new Date(Date.UTC(stats._id.year, stats._id.month - 1, stats._id.day)),
       visits: stats.visits
     };
   }
@@ -245,7 +245,7 @@ class OutputFormatters {
     }
 
     return {
-      date: new Date(stats._id.year, stats._id.month - 1, stats._id.day),
+      date: new Date(Date.UTC(stats._id.year, stats._id.month - 1, stats._id.day)),
       signUps: stats.signUps
     };
   }
