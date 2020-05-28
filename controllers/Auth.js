@@ -44,14 +44,16 @@ class Auth {
           isUsingDefaultPassword: false
         });
 
-        // split the name provided by Google into first and last name
-        const nameParts = response.name.split(' ', 2);
-        if (nameParts.length > 0) {
-          user.firstName = nameParts[0];
-        }
+        if (response.name) {
+          // split the name provided by Google into first and last name
+          const nameParts = response.name.split(' ', 2);
+          if (nameParts.length > 0) {
+            user.firstName = nameParts[0];
+          }
 
-        if (nameParts.length > 1) {
-          user.lastName = nameParts[1];
+          if (nameParts.length > 1) {
+            user.lastName = nameParts[1];
+          }
         }
       } else if (body.facebookId) {
         const response = await FacebookUtil.verifyToken(body.facebookId);
@@ -72,17 +74,20 @@ class Auth {
       }
 
       // check for an existing user
-      const existingUser = await db.User.findOne({
-        email: user.email,
-        role: 'user'
-      });
+      const existingUser = await db.User
+        .findOne({
+          email: user.email,
+          role: 'user'
+        });
 
       // if a user exists and is not deleted then reflect conflict
       if (existingUser && !existingUser.isDeleted) {
         return res.status(409).send({
           message: 'A user with the provided user profile already exists.'
         });
-      } else if (existingUser && existingUser.isDeleted) {
+      }
+
+      if (existingUser && existingUser.isDeleted) {
         // re-enable the user account and authenticate them
         existingUser.isDeleted = false;
         await existingUser.save();
@@ -91,36 +96,36 @@ class Auth {
           user: OutputFormatters.formatUser(existingUser),
           token: Auth.tokenify(existingUser)
         });
-      } else {
-        // persist new user
-        await user.save();
-
-        if (body.subscribe) {
-          let subscription = await db.Subscription
-            .findOne({
-              email: user.email,
-              type: 'newsletter'
-            });
-
-          // if a subscription does not exist, create one
-          if (!subscription) {
-            await MailChimpUtil.addUserToList(user);
-
-            subscription = new db.Subscription({
-              email: user.email,
-              type: 'newsletter'
-            });
-            await subscription.save();
-          }
-        }
-
-        // TODO: if user is signing up with email and password, send verification email
-
-        res.status(200).send({
-          user: OutputFormatters.formatUser(user),
-          token: await Auth.tokenify(user)
-        });
       }
+
+      // persist new user
+      await user.save();
+
+      if (body.subscribe) {
+        let subscription = await db.Subscription
+          .findOne({
+            email: user.email,
+            type: 'newsletter'
+          });
+
+        // if a subscription does not exist, create one
+        if (!subscription) {
+          await MailChimpUtil.addUserToList(user);
+
+          subscription = new db.Subscription({
+            email: user.email,
+            type: 'newsletter'
+          });
+          await subscription.save();
+        }
+      }
+
+      // TODO: if user is signing up with email and password, send verification email
+
+      res.status(200).send({
+        user: OutputFormatters.formatUser(user),
+        token: await Auth.tokenify(user)
+      });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.', err));
     }
