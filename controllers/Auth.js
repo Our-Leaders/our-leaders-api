@@ -74,10 +74,11 @@ class Auth {
       }
 
       // check for an existing user
-      const existingUser = await db.User.findOne({
-        email: user.email,
-        role: 'user'
-      });
+      const existingUser = await db.User
+        .findOne({
+          email: user.email,
+          role: 'user'
+        });
 
       // if a user exists and is not deleted then reflect conflict
       if (existingUser && !existingUser.isDeleted) {
