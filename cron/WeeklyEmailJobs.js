@@ -12,6 +12,7 @@ class WeeklyEmailJobs {
       const endDate = new Date();
       const startDate = new Date(endDate.getDate() - 7);
 
+      // pull a list of politicians that have been subscribed to
       const subscriptions = await db.Subscription
         .find({
           type: 'email'
@@ -20,6 +21,7 @@ class WeeklyEmailJobs {
       const politicianIds = _.uniq(subscriptions
         .map(x => x.politician));
 
+      // create a map of the latest notifications for each politician
       const politicianNotificationMap = {};
       for (let politicianId of politicianIds) {
         politicianNotificationMap[politicianId] = await db.Notification
@@ -31,6 +33,23 @@ class WeeklyEmailJobs {
               $lte: endDate
             }
           });
+      }
+
+      // group each users subscriptions
+      const results = await db.Subscription
+        .aggregate([
+          {$match: {type: 'email'}},
+          {
+            $group: {
+              _id: '$email',
+              $push: '$politician'
+            }
+          }
+        ]);
+
+      // for each subscription, send an email
+      for (let result of results) {
+
       }
     } catch (err) {
       Logger.error(err);
