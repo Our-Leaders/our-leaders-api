@@ -42,14 +42,17 @@ class WeeklyEmailJobs {
           {
             $group: {
               _id: '$email',
-              $push: '$politician'
+              politicians: {$push: '$politician'}
             }
           }
         ]);
 
       // for each subscription, send an email
       for (let result of results) {
-
+        const emailPayload = {
+          email: result._id,
+          notifications: result.politicians.map(x => politicianNotificationMap[x])
+        };
       }
     } catch (err) {
       Logger.error(err);
