@@ -19,7 +19,7 @@ class CronScheduler {
     nodeCron.schedule('0 */2 * * *', FeedsJob.run, cronOptions);
 
     // check for stale accounts everyday
-    nodeCron.schedule('0 0 0 * * ?', UserJobs.run, cronOptions);
+    nodeCron.schedule('0 0 0 * * *', UserJobs.run, cronOptions);
 
     Logger.log('Cron jobs started successfully.');
   }
