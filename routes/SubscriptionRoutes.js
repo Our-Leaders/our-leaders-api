@@ -29,4 +29,10 @@ module.exports = (router) => {
       AuthMiddleware.authenticate,
       SubscriptionCtrl.removeSubscription
     );
+
+  router.route('/subscriptions/politicians/:politicianId')
+    .delete(
+      AuthMiddleware.authenticate,
+      SubscriptionCtrl.removePoliticianSubscriptions
+    );
 };
