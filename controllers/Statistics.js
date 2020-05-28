@@ -58,6 +58,7 @@ class Statistics {
 
       if (endDate) {
         matchQuery.createdAt = {
+          ...matchQuery.createdAt,
           $lte: new Date(endDate)
         };
       }
@@ -101,6 +102,7 @@ class Statistics {
 
       if (endDate) {
         matchQuery.createdAt = {
+          ...matchQuery.createdAt,
           $lte: new Date(endDate)
         };
       }
