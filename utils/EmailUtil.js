@@ -90,6 +90,19 @@ class EmailUtil {
     }
   }
 
+  static getWeeklySubscriberEmail(payload) {
+    const templateName = 'weeklyDigest';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [payload.email],
+      subject: `Here is your weekly digest`,
+      html: EmailUtil.generateHtml(templateName, {
+        updates: payload.updates
+      })
+    }
+  }
+
   static generateHtml(templateName, payload) {
     const baseEmailTemplateString = fs.readFileSync(path.join(path.dirname(__dirname), 'communications', 'templates', 'baseEmailTemplate.hbs'), 'utf8');
     const baseEmailTemplate = handlebars.compile(baseEmailTemplateString);
