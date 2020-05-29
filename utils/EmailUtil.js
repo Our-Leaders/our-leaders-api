@@ -41,17 +41,6 @@ class EmailUtil {
     };
   }
 
-  static getSubscriptionEmail(email, firstName, feeds) {
-    const templateName = 'subscriptionFeed';
-
-    return {
-      from: 'Our Leaders <no-reply@our-leaders.org>',
-      to: [email],
-      subject: `Feeds from your subscriptions`,
-      html: EmailUtil.generateHtml(templateName, {firstName, feeds})
-    };
-  }
-
   static getNewAdminEmail(email, firstName, defaultPassword) {
     const templateName = 'adminInvite';
 
