@@ -5,6 +5,7 @@
 const nodeCron = require('node-cron');
 const UserJobs = require('./UserJobs');
 const FeedsJob = require('./FeedJobs');
+const WeeklyEmailJobs = require('./WeeklyEmailJobs');
 const Logger = require('./../config/Logger');
 
 class CronScheduler {
@@ -20,6 +21,9 @@ class CronScheduler {
 
     // check for stale accounts everyday
     nodeCron.schedule('0 0 0 * * *', UserJobs.run, cronOptions);
+
+    // dispatch weekly notifications every sunday by 12 midnight
+    nodeCron.schedule('0 0 0 ? * SUN *', WeeklyEmailJobs.run, cronOptions);
 
     Logger.log('Cron jobs started successfully.');
   }

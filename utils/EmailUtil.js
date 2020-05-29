@@ -41,17 +41,6 @@ class EmailUtil {
     };
   }
 
-  static getSubscriptionEmail(email, firstName, feeds) {
-    const templateName = 'subscriptionFeed';
-
-    return {
-      from: 'Our Leaders <no-reply@our-leaders.org>',
-      to: [email],
-      subject: `Feeds from your subscriptions`,
-      html: EmailUtil.generateHtml(templateName, {firstName, feeds})
-    };
-  }
-
   static getNewAdminEmail(email, firstName, defaultPassword) {
     const templateName = 'adminInvite';
 
@@ -86,6 +75,19 @@ class EmailUtil {
       subject: `Your password has been reset successfully`,
       html: EmailUtil.generateHtml(templateName, {
         firstName
+      })
+    }
+  }
+
+  static getWeeklySubscriberEmail(payload) {
+    const templateName = 'weeklyDigest';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [payload.email],
+      subject: `Here is your weekly digest`,
+      html: EmailUtil.generateHtml(templateName, {
+        updates: payload.updates
       })
     }
   }
