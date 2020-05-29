@@ -5,6 +5,8 @@
 const _ = require('lodash');
 const db = require('./../models');
 const Logger = require('./../config/Logger');
+const Email = require('./../communications/Email');
+const EmailUtils = require('./../utils/EmailUtil');
 
 class WeeklyEmailJobs {
   static async run() {
@@ -51,8 +53,11 @@ class WeeklyEmailJobs {
         }
 
         // send the update email
-
+        const email = EmailUtils.getWeeklySubscriberEmail(payload);
+        await Email.send(email);
       }
+
+      Logger.log('Weekly digest email dispatch completed at ' + new Date());
     } catch (err) {
       Logger.error(err);
       Logger.error('An error occurred when refreshing feeds.')

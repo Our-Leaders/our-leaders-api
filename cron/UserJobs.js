@@ -31,6 +31,8 @@ class UserJobs {
           _id: eligibleUser._id
         });
     }
+
+    Logger.log('Stale user account cleanup completed at ' + new Date());
   }
 }
 
