@@ -20,10 +20,10 @@ class CronScheduler {
     nodeCron.schedule('0 */2 * * *', FeedsJob.run, cronOptions);
 
     // check for stale accounts everyday
-    nodeCron.schedule('0 0 0 * * *', UserJobs.run, cronOptions);
+    nodeCron.schedule('0 0 * * *', UserJobs.run, cronOptions);
 
-    // dispatch weekly notifications every sunday by 12 midnight
-    nodeCron.schedule('0 0 0 ? * SUN *', WeeklyEmailJobs.run, cronOptions);
+    // dispatch weekly notifications every sunday by 1AM midnight
+    nodeCron.schedule('0 1 * * 0', WeeklyEmailJobs.run, cronOptions);
 
     Logger.log('Cron jobs started successfully.');
   }
