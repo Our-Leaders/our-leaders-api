@@ -36,6 +36,10 @@ const DonationModel = mongoose.model('Donation', new Schema({
     enum: ['void', 'verified'],
     default: 'void'
   },
+  date: {
+    type: Date,
+    default: Date.now
+  },
   card: {
     cardType: {
       type: String

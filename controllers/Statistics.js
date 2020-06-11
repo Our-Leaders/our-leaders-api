@@ -2,6 +2,7 @@
  * Created by bolorundurowb on 14/11/2019
  */
 
+const _ = require('lodash');
 const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
@@ -46,6 +47,12 @@ class Statistics {
 
   static async getVisitStats(req, res, next) {
     const {startDate, endDate} = req.query;
+    let dayDiff = 30;
+    const result = {};
+
+    if (startDate && endDate) {
+      dayDiff = ((new Date(endDate).getTime() - new Date(startDate).getTime())/(1000 * 60 * 60 * 24)) + 1;
+    }
 
     try {
       const matchQuery = {};
@@ -61,6 +68,11 @@ class Statistics {
           ...matchQuery.createdAt,
           $lte: new Date(endDate)
         };
+      }
+
+      for (let i = 0; i < dayDiff; i++) {
+        const day = new Date(new Date(startDate).getTime() + (i * 24 * 60 * 60 * 1000));
+        result[day] = 0;
       }
 
       const visitsByDate = await db.Statistics
@@ -80,8 +92,12 @@ class Statistics {
           }
         ]);
 
+      const formattedVisits = visitsByDate.map(x => OutputFormatters.formatVisitStats(x));
+      formattedVisits.forEach(x => result[x.date] = x.visits);
+      const payload = Object.keys(result).map(x => ({ date: new Date(x), visits: result[x] }))
+
       res.status(200).send({
-        visits: visitsByDate.map(x => OutputFormatters.formatVisitStats(x))
+        visits: payload
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
@@ -90,6 +106,12 @@ class Statistics {
 
   static async getSignupStats(req, res, next) {
     const {startDate, endDate} = req.query;
+    let dayDiff = 30;
+    const result = {};
+
+    if (startDate && endDate) {
+      dayDiff = ((new Date(endDate).getTime() - new Date(startDate).getTime())/(1000 * 60 * 60 * 24)) + 1;
+    }
 
     try {
       const matchQuery = {};
@@ -105,6 +127,11 @@ class Statistics {
           ...matchQuery.createdAt,
           $lte: new Date(endDate)
         };
+      }
+      
+      for (let i = 0; i < dayDiff; i++) {
+        const day = new Date(new Date(startDate).getTime() + (i * 24 * 60 * 60 * 1000));
+        result[day] = 0;
       }
 
       const signUpsByDate = await db.User
@@ -124,8 +151,12 @@ class Statistics {
           }
         ]);
 
+      const formattedSignups = signUpsByDate.map(x => OutputFormatters.formatSignupStats(x))
+      formattedSignups.forEach(x => result[x.date] = x.signUps);
+      const payload = Object.keys(result).map(x => ({ date: new Date(x), signUps: result[x] }));
+
       res.status(200).send({
-        signUps: signUpsByDate.map(x => OutputFormatters.formatSignupStats(x))
+        signUps: payload
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));

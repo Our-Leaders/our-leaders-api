@@ -61,6 +61,7 @@ class Transactions {
             donation.currency = data.currency;
             donation.status = 'verified';
             donation.amount = data.data.amount;
+            donation.date = new Date();
             donation.card = {
               cardType: data.authorization.card_type,
               expMonth: data.authorization.exp_month,
