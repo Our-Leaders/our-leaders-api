@@ -186,11 +186,41 @@ class Statistics {
     }
   }
 
-  static async getDonationStats(req, res, next) {
-    const {
-      startDate = moment.utc().startOf('day').subtract(30, 'days'),
-      endDate = moment.utc().startOf('day')
-    } = req.query;
+  static async getDonations(req, res, next) {
+    const {startDate, endDate} = req.query;
+
+    const matchQuery = {};
+
+    if (startDate) {
+      matchQuery.date = {
+        $gte: new Date(startDate)
+      };
+    }
+
+    if (endDate) {
+      matchQuery.date = {
+        ...matchQuery.date,
+        $lte: new Date(endDate)
+      };
+    }
+
+    try {
+      const donations = await db.Donation
+        .find(matchQuery)
+        .sort({
+          date: 'asc'
+        });
+
+      res.status(200).send({
+        donations: donations.map(x => OutputFormatters.formatDonations(x)),
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async getDonationPlotStats(req, res, next) {
+    const {startDate, endDate} = req.query;
     let dayDiff = 30;
     const result = [];
 
