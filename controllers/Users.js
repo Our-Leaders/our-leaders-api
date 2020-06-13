@@ -13,7 +13,9 @@ class Users {
   static async getUsers(req, res, next) {
     try {
       let {sort, limit, skip, isDeleted, isBlocked} = req.query;
-      let query = {};
+      let query = {
+        role: 'user'
+      };
 
       if (isDeleted) {
         query['isDeleted'] = isDeleted;
