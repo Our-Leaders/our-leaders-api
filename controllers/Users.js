@@ -11,28 +11,57 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 
 class Users {
   static async getUsers(req, res, next) {
+    const skip = +req.query.skip || 0;
+    const limit = +req.query.limit || 18;
+
+    let {sort, isDeleted, isBlocked} = req.query;
+
+    let query = {
+      role: 'user'
+    };
+
+    if (isDeleted) {
+      query['isDeleted'] = isDeleted;
+    }
+
+    if (isBlocked) {
+      query.isBlocked = isBlocked;
+    }
+
     try {
-      let {sort, limit, skip, isDeleted, isBlocked} = req.query;
-      let query = {
-        role: 'user'
-      };
-
-      if (isDeleted) {
-        query['isDeleted'] = isDeleted;
-      }
-
-      if (isBlocked) {
-        query.isBlocked = isBlocked;
-      }
-
       const users = await db.User
         .find(query)
         .skip(skip)
         .limit(limit)
         .sort(sort || 'firstName'); // default to ordering by first name
 
+      const total = await db.User.count(query);
+
       res.status(200).send({
-        users: users.map(x => OutputFormatters.formatUser(x))
+        users: users.map(x => OutputFormatters.formatUser(x)),
+        total
+      });
+    } catch (err) {
+      next(new ErrorHandler(500, 'An error occurred.', err));
+    }
+  }
+
+  static async getUserStats(req, res, next) {
+    let query = {
+      role: 'user'
+    };
+
+    try {
+      const [total, active, inactive] = await Promise.all([
+        db.User.count(query),
+        db.User.count({...query, isDeleted: false, isBlocked: false}),
+        db.User.count({...query, isDeleted: true})
+      ]);
+
+      res.status(200).send({
+        total,
+        active,
+        inactive
       });
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.', err));
