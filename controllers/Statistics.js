@@ -3,6 +3,7 @@
  */
 
 const _ = require('lodash');
+const moment = require('moment');
 const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
@@ -180,6 +181,151 @@ class Statistics {
       await statistic.save();
 
       res.status(201).send({});
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async getDonations(req, res, next) {
+    const {startDate, endDate} = req.query;
+
+    const matchQuery = {};
+
+    if (startDate) {
+      matchQuery.date = {
+        $gte: new Date(startDate)
+      };
+    }
+
+    if (endDate) {
+      matchQuery.date = {
+        ...matchQuery.date,
+        $lte: new Date(endDate)
+      };
+    }
+
+    try {
+      const donations = await db.Donation
+        .find(matchQuery)
+        .sort({
+          date: 'asc'
+        });
+
+      res.status(200).send({
+        donations: donations.map(x => OutputFormatters.formatDonations(x)),
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async getDonationPlotStats(req, res, next) {
+    const {startDate, endDate} = req.query;
+    let dayDiff = 30;
+    const result = [];
+
+    if (startDate && endDate) {
+      dayDiff = moment(endDate).diff(moment(startDate), 'day');
+    }
+
+    try {
+      const matchQuery = {};
+
+      if (startDate) {
+        matchQuery.date = {
+          $gte: new Date(startDate)
+        };
+      }
+
+      if (endDate) {
+        matchQuery.date = {
+          ...matchQuery.date,
+          $lte: new Date(endDate)
+        };
+      }
+      
+      for (let i = 0; i < dayDiff; i++) {
+        const day = moment(startDate).add(i, 'day').toDate();
+        result[day] = 0;
+      }
+
+      const aggregateResult = await db.Donation.aggregate(
+        [
+          {
+            $match: matchQuery,
+          },
+          {
+            $group: {
+              _id: {
+                'year': {'$year': '$date'},
+                'month': {'$month': '$date'},
+                'day': {'$dayOfMonth': '$date'},
+                'currency': '$currency'
+              },
+              donations: {$sum: '$amount'}
+            }
+          },
+          {
+            $group: {
+                _id: {
+                    'currency': '$_id.currency'
+                },
+                data: {
+                    $push: {
+                        donations: '$donations',
+                        'year': '$_id.year',
+                        'month': '$_id.month',
+                        'day': '$_id.day',
+                    }
+                }
+            }
+          },
+          {
+            $project: {
+              _id: 0,
+              currency: '$_id.currency',
+              data: {
+                $map: {
+                  input: '$data',
+                  as: "result",
+                  in: {
+                    $mergeObjects: [
+                      { donations: '$$result.donations' },
+                      {
+                        date: {
+                          $dateFromParts: {
+                            year: "$$result.year",
+                            day: "$$result.day",
+                            month: "$$result.month",
+                          }
+                        },
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ]
+      );
+
+      // fill in the empty dates with zeros
+      const payload = aggregateResult.map(datum => {
+        const resultToModify = { ...result };
+        datum.data.forEach(p => {
+          resultToModify[p.date] = p.donations
+        });
+
+        const dataToReturn = Object.keys(resultToModify).map(a => ({ date: new Date(a), donations: resultToModify[a] }))
+        return {
+          currency: datum.currency,
+          data: dataToReturn,
+        };
+      });
+
+      res.status(200).send({
+        donations: payload,
+      });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }

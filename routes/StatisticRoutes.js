@@ -31,4 +31,18 @@ module.exports = (router) => {
       AuthMiddleware.isAdmin,
       StatisticsCtrl.getSignupStats
     );
+
+  router.route('/statistics/donations')
+    .get(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      StatisticsCtrl.getDonations
+    );
+
+  router.route('/statistics/donations/plot')
+    .get(
+      AuthMiddleware.authenticate,
+      AuthMiddleware.isAdmin,
+      StatisticsCtrl.getDonationPlotStats
+    );
 };

@@ -30,7 +30,8 @@ class OutputFormatters {
       joinedBy,
       isBlocked: user.isBlocked,
       isUsingDefaultPassword: user.isUsingDefaultPassword,
-      lastLoginAt: user.lastLoginAt
+      lastLoginAt: user.lastLoginAt,
+      lastActiveAt: user.lastActiveAt
     };
   }
 
@@ -223,6 +224,23 @@ class OutputFormatters {
       createdAt: signUp.createdAt,
       lastActiveAt: signUp.lastActiveAt
     };
+  }
+
+  static formatDonations(donation) {
+    if (!donation) {
+      return {};
+    }
+
+    return {
+      id: donation._id,
+      date: donation.date,
+      name: donation.name || '',
+      isAnonymous: donation.isAnonymous,
+      currency: donation.currency,
+      email: donation.email,
+      amount: donation.amount,
+      transactionReference: donation.transactionReference,
+    }
   }
 
   static formatVisitStats(stats) {
