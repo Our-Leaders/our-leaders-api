@@ -16,6 +16,13 @@ module.exports = (router) => {
       UsersCtrl.getUsers
     );
 
+    router.route('/users/stats')
+      .get(
+        AuthMiddleware.authenticate,
+        AuthMiddleware.isAdmin,
+        UsersCtrl.getUserStats
+      )
+
   router.route('/users/:userId/block')
     .put(
       AuthMiddleware.authenticate,
