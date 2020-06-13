@@ -12,12 +12,15 @@ const OutputFormatters = require('./../utils/OutputFormatters');
 class Users {
   static async getUsers(req, res, next) {
     try {
-      const {isDeleted} = req.query;
-      let {sort, limit, skip} = req.params;
+      let {sort, limit, skip, isDeleted, isBlocked} = req.query;
       let query = {};
 
       if (isDeleted) {
         query['isDeleted'] = isDeleted;
+      }
+
+      if (isBlocked) {
+        query.isBlocked = isBlocked;
       }
 
       const users = await db.User
