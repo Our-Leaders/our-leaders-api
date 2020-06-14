@@ -27,7 +27,6 @@ const UserModel = mongoose.model('User', new Schema({
   },
   password: {
     type: String,
-    required: true,
     set: function (val) {
       const salt = bcryptJs.genSaltSync(10);
       return bcryptJs.hashSync(val, salt);
