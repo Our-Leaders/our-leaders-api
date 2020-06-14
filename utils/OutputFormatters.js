@@ -29,6 +29,7 @@ class OutputFormatters {
       joinedAt: user.createdAt,
       joinedBy,
       isBlocked: user.isBlocked,
+      isDeleted: user.isDeleted,
       isUsingDefaultPassword: user.isUsingDefaultPassword,
       lastLoginAt: user.lastLoginAt,
       lastActiveAt: user.lastActiveAt
