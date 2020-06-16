@@ -262,7 +262,10 @@ class Statistics {
                 'day': {'$dayOfMonth': '$date'},
                 'currency': '$currency'
               },
-              donations: {$sum: '$amount'}
+              // donations: {$sum: '$amount' }
+              // doing this because paystack always charges using the kobo/cent value
+              // rather than naira/dollar
+              donations: {$sum: { $divide: ['$amount', 100] } }
             }
           },
           {

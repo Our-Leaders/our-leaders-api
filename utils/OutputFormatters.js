@@ -239,7 +239,9 @@ class OutputFormatters {
       isAnonymous: donation.isAnonymous,
       currency: donation.currency,
       email: donation.email,
-      amount: donation.amount,
+      // doing this because paystack always charges using the kobo/cent value
+      // rather than naira/dollar
+      amount: donation.amount / 100,
       transactionReference: donation.transactionReference,
     }
   }
