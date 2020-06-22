@@ -320,7 +320,7 @@ class Auth {
 
   static async requestPasswordReset(req, res, next) {
     const {email, isAdmin} = req.body;
-    const roles = isAdmin ? ['user'] : ['admin', 'superadmin'];
+    const roles = isAdmin ? ['admin', 'superadmin'] : ['user'];
 
     try {
       const user = await db.User
