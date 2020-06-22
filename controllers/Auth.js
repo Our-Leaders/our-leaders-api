@@ -320,11 +320,15 @@ class Auth {
 
   static async requestPasswordReset(req, res, next) {
     const {email, isAdmin} = req.body;
+    const roles = isAdmin ? ['user'] : ['admin', 'superadmin'];
 
     try {
       const user = await db.User
         .findOne({
-          email
+          email,
+          role: {
+            $in: roles
+          }
         });
 
       if (!user) {
