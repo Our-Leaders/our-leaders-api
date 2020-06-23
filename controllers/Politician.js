@@ -347,11 +347,10 @@ class Politician {
         .populate('politicalParty')
         .skip(skip)
         .limit(limit)
-        .sort({
-          name: 'asc'
-        });
+        .sort({name: 'asc'});
 
-      const total = await db.Politician.count(findByQuery);
+      const total = await db.Politician
+        .count(findByQuery);
 
       res.status(200).send({
         politicians: politicians.map(x => {
