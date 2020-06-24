@@ -74,34 +74,34 @@ class PoliticalParties {
     const limit = +req.query.limit || 18; // determined by the mockups
     const {name, country, acronym, partyBackground, partyDescription} = req.query;
     let findByQuery = {};
-    let orQuery = [];
+    let andQuery = [];
 
     if (country) {
       findByQuery.country = country.toUpperCase();
     }
 
     if (name) {
-      orQuery.push({name: {$regex: name, $options: 'i'}});
+      andQuery.push({name: {$regex: name, $options: 'i'}});
     }
 
     if (acronym) {
-      orQuery.push({acronym: {$regex: acronym, $options: 'i'}});
+      andQuery.push({acronym: {$regex: acronym, $options: 'i'}});
     }
 
     if (partyBackground) {
-      orQuery.push({partyBackground: {$regex: partyBackground, $options: 'i'}});
+      andQuery.push({partyBackground: {$regex: partyBackground, $options: 'i'}});
     }
 
     if (partyDescription) {
-      orQuery.push({partyDescription: {$regex: partyDescription, $options: 'i'}});
+      andQuery.push({partyDescription: {$regex: partyDescription, $options: 'i'}});
     }
 
-    if (orQuery.length > 0) {
+    if (andQuery.length > 0) {
       // if there is only one optional query, mongo errors out
-      if (orQuery.length === 1) {
-        Object.assign(findByQuery, orQuery[0]);
+      if (andQuery.length === 1) {
+        Object.assign(findByQuery, andQuery[0]);
       } else {
-        findByQuery = {$or: orQuery};
+        Object.assign(findByQuery, {$and: andQuery});
       }
     }
 
@@ -110,11 +110,10 @@ class PoliticalParties {
         .find(findByQuery)
         .skip(skip)
         .limit(limit)
-        .sort({
-          name: 'asc'
-        });
+        .sort({name: 'asc'});
 
-      const total = await db.PoliticalParty.count(findByQuery);
+      const total = await db.PoliticalParty
+        .count(findByQuery);
 
       res.status(200).send({
         politicalParties: politicalParties.map(x => {

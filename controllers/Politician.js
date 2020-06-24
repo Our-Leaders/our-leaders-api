@@ -298,30 +298,30 @@ class Politician {
     const limit = +req.query.limit || 18; // determined by the mockups
     const {name, status, country, region, politicalPartyId, politicalPosition} = req.query;
     let findByQuery = {};
-    let orQuery = [];
+    let andQuery = [];
 
     if (country) {
       findByQuery.country = country.toUpperCase();
     }
 
     if (name) {
-      orQuery.push({name: {$regex: name, $options: 'i'}});
+      andQuery.push({name: {$regex: name, $options: 'i'}});
     }
 
     if (status) {
-      orQuery.push({status: {$regex: status, $options: 'i'}});
+      andQuery.push({status: {$regex: status, $options: 'i'}});
     }
 
     if (region) {
-      orQuery.push({region: {$regex: region, $options: 'i'}});
+      andQuery.push({region: {$regex: region, $options: 'i'}});
     }
 
     if (politicalPartyId) {
-      orQuery.push({politicalParty: {$regex: politicalPartyId, $options: 'i'}});
+      andQuery.push({politicalParty: {$regex: politicalPartyId, $options: 'i'}});
     }
 
     if (politicalPosition) {
-      orQuery.push({
+      andQuery.push({
         politicalBackground: {
           $elemMatch: {
             inOffice: true,
@@ -332,12 +332,12 @@ class Politician {
     }
 
     // if the search parameters are more than one then use 'or', otherwise use 'where'
-    if (orQuery.length > 0) {
+    if (andQuery.length > 0) {
       // if there is only one optional query, mongo errors out
-      if (orQuery.length === 1) {
-        Object.assign(findByQuery, orQuery[0]);
+      if (andQuery.length === 1) {
+        Object.assign(findByQuery, andQuery[0]);
       } else {
-        findByQuery = {$or: orQuery};
+        Object.assign(findByQuery, {$and: andQuery});
       }
     }
 
@@ -347,11 +347,10 @@ class Politician {
         .populate('politicalParty')
         .skip(skip)
         .limit(limit)
-        .sort({
-          name: 'asc'
-        });
+        .sort({name: 'asc'});
 
-      const total = await db.Politician.count(findByQuery);
+      const total = await db.Politician
+        .count(findByQuery);
 
       res.status(200).send({
         politicians: politicians.map(x => {
