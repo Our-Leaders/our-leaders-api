@@ -110,11 +110,10 @@ class PoliticalParties {
         .find(findByQuery)
         .skip(skip)
         .limit(limit)
-        .sort({
-          name: 'asc'
-        });
+        .sort({name: 'asc'});
 
-      const total = await db.PoliticalParty.count(findByQuery);
+      const total = await db.PoliticalParty
+        .count(findByQuery);
 
       res.status(200).send({
         politicalParties: politicalParties.map(x => {
