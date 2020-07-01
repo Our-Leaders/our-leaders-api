@@ -14,6 +14,7 @@ class Feeds {
     try {
       const feeds = await db.Feed
         .populate('politicians')
+        .sort({createdAt: 'desc'})
         .skip(skip)
         .limit(limit);
 
