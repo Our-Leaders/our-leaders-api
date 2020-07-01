@@ -9,23 +9,13 @@ const FeedUtil = require('./../utils/FeedUtil');
 
 class Feeds {
   static async getFeeds(req, res, next) {
-    const {email} = req.user;
+    const {skip, limit} = req.query;
 
     try {
-      // get politician ids for all user feed subscriptions
-      const subscriptions = await db.Subscription
-        .find({
-          email,
-          type: 'feeds'
-        })
-        .select('politician');
-
-      const politicianIds = subscriptions.map(x => {
-        return x.politician;
-      });
-
-      // check for feeds with the politician ids
-      const feeds = await FeedUtil.queryFeeds(politicianIds);
+      const feeds = await db.Feed
+        .populate('politicians')
+        .skip(skip)
+        .limit(limit);
 
       res.status(200).send({
         feeds: feeds.map(x => {
@@ -72,7 +62,8 @@ class Feeds {
     try {
       const politicianIds = [politicianId];
       // check for feeds with the politician ids
-      const feeds = await FeedUtil.queryFeeds(politicianIds);
+      const feeds = await FeedUtil
+        .queryFeeds(politicianIds);
 
       res.status(200).send({
         feeds: feeds.map(x => {
