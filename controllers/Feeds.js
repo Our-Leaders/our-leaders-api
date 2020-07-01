@@ -9,7 +9,8 @@ const FeedUtil = require('./../utils/FeedUtil');
 
 class Feeds {
   static async getFeeds(req, res, next) {
-    const {skip, limit} = req.query;
+    const skip = req.query.skip || 0;
+    const limit = req.query.limit || 10;
 
     try {
       const feeds = await db.Feed
