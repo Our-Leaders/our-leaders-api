@@ -3,31 +3,21 @@
  */
 
 const moment = require('moment');
+const db = require('./../models');
 
 class AnalyticsUtils {
-  static async getLocationAnalytics(limit = null, date = null) {
+  static async getLocationAnalytics(limit = null) {
+    const start = moment().startOf('day').toDate();
+    const end = moment().endOf('day').toDate();
+
     const pipeline = [
+      {$match: {timestamp: {$gte: start, $lte: end}}},
       {$group: {_id: '$origin', visitors: {$sum: 1}}},
       {$sort: {visitors: -1}}
     ];
 
     if (limit) {
       pipeline.push({$limit: limit});
-    }
-
-    if (date) {
-      const day = moment(date);
-      const start = day.startOf('day').toDate();
-      const end = day.endOf('day').toDate();
-
-      pipeline.unshift({
-        $match: {
-          timestamp: {
-            $gte: start,
-            $lte: end
-          }
-        }
-      });
     }
 
     const results = await db.Statistics
@@ -42,29 +32,18 @@ class AnalyticsUtils {
     });
   }
 
-  static async getPageViewAnalytics(limit = null, date = null) {
+  static async getPageViewAnalytics(limit = null) {
+    const start = moment().startOf('day').toDate();
+    const end = moment().endOf('day').toDate();
+
     const pipeline = [
+      {$match: {timestamp: {$gte: start, $lte: end}}},
       {$group: {_id: '$pageUrl', viewCount: {$sum: 1}, pageTitle: {$first: '$pageTitle'}}},
       {$sort: {viewCount: -1}}
     ];
 
     if (limit) {
       pipeline.push({$limit: limit});
-    }
-
-    if (date) {
-      const day = moment(date);
-      const start = day.startOf('day').toDate();
-      const end = day.endOf('day').toDate();
-
-      pipeline.unshift({
-        $match: {
-          timestamp: {
-            $gte: start,
-            $lte: end
-          }
-        }
-      });
     }
 
     const results = await db.Statistics

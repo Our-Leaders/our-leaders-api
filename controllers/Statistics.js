@@ -12,8 +12,6 @@ const AnalyticsUtil = require('./../utils/AnalyticsUtils');
 
 class Statistics {
   static async getStats(req, res, next) {
-    const {date} = req.query;
-
     try {
       const response = {
         parties: await db.PoliticalParty.count({}),
@@ -40,10 +38,10 @@ class Statistics {
       response.signUps = newSignUps.map(x => OutputFormatters.formatSignup(x));
 
       // get top locations
-      response.topLocations = await AnalyticsUtil.getLocationAnalytics(5, date);
+      response.topLocations = await AnalyticsUtil.getLocationAnalytics(5);
 
       // get top page views
-      response.topPages = await AnalyticsUtil.getPageViewAnalytics(5, date);
+      response.topPages = await AnalyticsUtil.getPageViewAnalytics(5);
 
       res.status(200).send({
         statistics: response
@@ -173,7 +171,7 @@ class Statistics {
   }
 
   static async recordVisitStat(req, res, next) {
-    const {referrer, url} = req.body;
+    const {referrer, url, title} = req.body;
 
     try {
       // if a url is not in the body then ignore
@@ -184,6 +182,7 @@ class Statistics {
       const location = await GeoCodingUtil.getLocationFromIp(req.clientIp);
       const statistic = new db.Statistics({
         referrer,
+        pageTitle: title,
         pageUrl: url,
         userIp: req.clientIp,
         origin: location || 'Unknown'
