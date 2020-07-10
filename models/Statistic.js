@@ -15,6 +15,9 @@ const StatisticModel = mongoose.model('Statistic', new Schema({
   referrer: {
     type: String
   },
+  pageTitle: {
+    type: String
+  },
   pageUrl: {
     type: String
   },
