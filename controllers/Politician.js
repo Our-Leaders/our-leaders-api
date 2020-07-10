@@ -433,7 +433,7 @@ class Politician {
       }
 
       ['facebook', 'twitter', 'instagram'].forEach((socialUrl) => {
-        if (body[socialUrl]) {
+        if (body[socialUrl] & !!body[socialUrl]) {
           politician.socials[socialUrl] = body[socialUrl];
         }
       });
