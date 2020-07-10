@@ -20,6 +20,9 @@ const StatisticModel = mongoose.model('Statistic', new Schema({
   },
   userIp: {
     type: String
+  },
+  origin: {
+    type: String
   }
 }, {
   timestamps: true
