@@ -8,9 +8,13 @@ const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const GeoCodingUtil = require('./../utils/GeoCodingUtils');
+const AnalyticsUtil = require('./../utils/AnalyticsUtils');
 
 class Statistics {
   static async getStats(req, res, next) {
+    let {limit} = req.query;
+    limit = limit || 5;
+
     try {
       const response = {
         parties: await db.PoliticalParty.count({}),
@@ -21,11 +25,8 @@ class Statistics {
       };
 
       // get the list of sign ups for the day
-      const dayStart = new Date();
-      dayStart.setHours(0, 0, 0, 0);
-
-      const dayEnd = new Date();
-      dayEnd.setHours(23, 59, 59, 999);
+      const dayStart = moment().startOf('day').toDate();
+      const dayEnd = moment().endOf('day').toDate();
 
       const newSignUps = await db.User
         .find({
@@ -38,6 +39,12 @@ class Statistics {
 
       // format the response
       response.signUps = newSignUps.map(x => OutputFormatters.formatSignup(x));
+
+      // get top locations
+      response.topLocations = await AnalyticsUtil.getLocationAnalytics(limit);
+
+      // get top page views
+      response.topPages = await AnalyticsUtil.getPageViewAnalytics(limit);
 
       res.status(200).send({
         statistics: response
@@ -167,7 +174,7 @@ class Statistics {
   }
 
   static async recordVisitStat(req, res, next) {
-    const {referrer, url} = req.body;
+    const {referrer, url, title} = req.body;
 
     try {
       // if a url is not in the body then ignore
@@ -178,6 +185,7 @@ class Statistics {
       const location = await GeoCodingUtil.getLocationFromIp(req.clientIp);
       const statistic = new db.Statistics({
         referrer,
+        pageTitle: title,
         pageUrl: url,
         userIp: req.clientIp,
         origin: location || 'Unknown'
@@ -332,6 +340,18 @@ class Statistics {
 
       res.status(200).send({
         donations: payload,
+      });
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
+
+  static async getLocationAnalytics(req, res, next) {
+    try {
+      const response = await AnalyticsUtil.getLocationAnalytics();
+
+      res.status(200).send({
+        data: response
       });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
