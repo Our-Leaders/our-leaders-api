@@ -12,6 +12,8 @@ const AnalyticsUtil = require('./../utils/AnalyticsUtils');
 
 class Statistics {
   static async getStats(req, res, next) {
+    const {date} = req.query;
+
     try {
       const response = {
         parties: await db.PoliticalParty.count({}),
@@ -22,11 +24,8 @@ class Statistics {
       };
 
       // get the list of sign ups for the day
-      const dayStart = new Date();
-      dayStart.setHours(0, 0, 0, 0);
-
-      const dayEnd = new Date();
-      dayEnd.setHours(23, 59, 59, 999);
+      const dayStart = moment().startOf('day').toDate();
+      const dayEnd = moment().endOf('day').toDate();
 
       const newSignUps = await db.User
         .find({
@@ -41,7 +40,7 @@ class Statistics {
       response.signUps = newSignUps.map(x => OutputFormatters.formatSignup(x));
 
       // get location status
-      response.topLocations = await AnalyticsUtil.getLocationAnalytics({$limit: 5});
+      response.topLocations = await AnalyticsUtil.getLocationAnalytics(5, date);
 
       res.status(200).send({
         statistics: response
