@@ -19,10 +19,13 @@ class AnalyticsUtils {
       const day = moment(date);
       const start = day.startOf('day').toDate();
       const end = day.endOf('day').toDate();
+
       pipeline.unshift({
-        timestamp: {
-          $gte: start,
-          $lte: end
+        $match: {
+          timestamp: {
+            $gte: start,
+            $lte: end
+          }
         }
       });
     }
@@ -39,14 +42,29 @@ class AnalyticsUtils {
     });
   }
 
-  static async getPageViewAnalytics(optionalQuery = null) {
+  static async getPageViewAnalytics(limit = null, date = null) {
     const pipeline = [
-      {$group: {_id: '$pageUrl', viewCount: {$sum: 1}}},
+      {$group: {_id: '$pageUrl', viewCount: {$sum: 1}, pageTitle: {$first: '$pageTitle'}}},
       {$sort: {viewCount: -1}}
     ];
 
-    if (optionalQuery) {
-      pipeline.push(optionalQuery);
+    if (limit) {
+      pipeline.push({$limit: limit});
+    }
+
+    if (date) {
+      const day = moment(date);
+      const start = day.startOf('day').toDate();
+      const end = day.endOf('day').toDate();
+
+      pipeline.unshift({
+        $match: {
+          timestamp: {
+            $gte: start,
+            $lte: end
+          }
+        }
+      });
     }
 
     const results = await db.Statistics
