@@ -40,6 +40,9 @@ class Statistics {
       // format the response
       response.signUps = newSignUps.map(x => OutputFormatters.formatSignup(x));
 
+      // get location status
+      response.topLocations = await AnalyticsUtil.getLocationAnalytics({$limit: 5});
+
       res.status(200).send({
         statistics: response
       });
