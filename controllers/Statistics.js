@@ -180,7 +180,7 @@ class Statistics {
         referrer,
         pageUrl: url,
         userIp: req.clientIp,
-        origin: location
+        origin: location || 'Unknown'
       });
       await statistic.save();
 
