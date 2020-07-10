@@ -337,6 +337,14 @@ class Statistics {
       next(new ErrorHandler(500, error.message));
     }
   }
+
+  static async getLocationAnalytics(req, res, next) {
+    try {
+
+    } catch (error) {
+      next(new ErrorHandler(500, error.message));
+    }
+  }
 }
 
 module.exports = Statistics;
