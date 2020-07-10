@@ -14,15 +14,13 @@ module.exports = (router) => {
     );
 
   router.route('/statistics/visit')
-    .post(
-      StatisticsCtrl.recordVisitStat
-    );
-
-  router.route('/statistics/visit')
     .get(
       AuthMiddleware.authenticate,
       AuthMiddleware.isAdmin,
       StatisticsCtrl.getVisitStats
+    )
+    .post(
+      StatisticsCtrl.recordVisitStat
     );
 
   router.route('/statistics/signup')
