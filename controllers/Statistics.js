@@ -340,7 +340,23 @@ class Statistics {
 
   static async getLocationAnalytics(req, res, next) {
     try {
+      const results = await db.Statistics
+        .aggregate([
+          {$group: {_id: '$origin', visitors: {$sum: 1}}},
+          {$sort: {visitors: -1}}
+        ]);
 
+      const response = results.map((x, index) => {
+        return {
+          name: x._id,
+          rank: index + 1,
+          visits: x.visits
+        }
+      });
+
+      res.status(200).send({
+        data: response
+      });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
