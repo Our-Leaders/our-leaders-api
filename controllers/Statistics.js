@@ -8,6 +8,7 @@ const db = require('./../models');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
 const GeoCodingUtil = require('./../utils/GeoCodingUtils');
+const AnalyticsUtil = require('./../utils/AnalyticsUtils');
 
 class Statistics {
   static async getStats(req, res, next) {
@@ -340,19 +341,7 @@ class Statistics {
 
   static async getLocationAnalytics(req, res, next) {
     try {
-      const results = await db.Statistics
-        .aggregate([
-          {$group: {_id: '$origin', visitors: {$sum: 1}}},
-          {$sort: {visitors: -1}}
-        ]);
-
-      const response = results.map((x, index) => {
-        return {
-          name: x._id,
-          rank: index + 1,
-          visits: x.visits
-        }
-      });
+      const response = await AnalyticsUtil.getLocationAnalytics();
 
       res.status(200).send({
         data: response

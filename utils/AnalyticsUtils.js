@@ -3,7 +3,7 @@
  */
 
 class AnalyticsUtils {
-  static async getLocationAnalytics(optionalQuery) {
+  static async getLocationAnalytics(optionalQuery = null) {
     const pipeline = [
       {$group: {_id: '$origin', visitors: {$sum: 1}}},
       {$sort: {visitors: -1}}
