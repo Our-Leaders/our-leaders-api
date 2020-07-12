@@ -3,6 +3,7 @@
  */
 
 const db = require('./../models');
+const Logger = require('./../config/Logger');
 
 class UserJobs {
   static async run() {
