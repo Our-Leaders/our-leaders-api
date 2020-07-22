@@ -14,7 +14,12 @@ class GeoCodingUtils {
       const data = response.data;
 
       if (data.status === 'success') {
-        return `${data.city}, ${data.country}`;
+        return {
+          city: data.city,
+          country: data.country,
+          latitude: data.lat,
+          longitude: data.long,
+        };
       } else {
         return null;
       }

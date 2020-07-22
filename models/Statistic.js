@@ -25,7 +25,20 @@ const StatisticModel = mongoose.model('Statistic', new Schema({
     type: String
   },
   origin: {
-    type: String
+    city: {
+      type: String,
+      default: 'unknown'
+    },
+    country: {
+      type: Number,
+      default: 'unknown'
+    },
+    latitude: {
+      type: Number,
+    },
+    longitude: {
+      type: String,
+    },
   }
 }, {
   timestamps: true
