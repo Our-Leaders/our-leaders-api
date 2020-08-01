@@ -4,15 +4,17 @@
 
 const moment = require('moment');
 const db = require('./../models');
+const StringUtil = require('./../utils/StringUtil');
 
 class AnalyticsUtils {
-  static async getLocationAnalytics(limit = null) {
-    const start = moment().startOf('day').toDate();
-    const end = moment().endOf('day').toDate();
+  static async getLocationAnalytics({limit = null, startDate, endDate}) {
+    const start = new Date(startDate) || moment().startOf('day').toDate();
+    const end = new Date(endDate) || moment().endOf('day').toDate();
 
     const pipeline = [
-      {$match: {timestamp: {$gte: start, $lte: end}}},
-      {$group: {_id: '$origin', visitors: {$sum: 1}}},
+      {$match: {createdAt: {$gte: start, $lte: end}}},
+      {$group: {_id: {city: '$origin.city', country:'$origin.country'}, visitors: {$sum: 1}, longitude: {$first: '$origin.longitude'}, latitude: {$first: '$origin.latitude'}}},
+      // {$group: {_id: '$origin', visitors: {$sum: 1}}},
       {$sort: {visitors: -1}}
     ];
 
@@ -24,10 +26,16 @@ class AnalyticsUtils {
       .aggregate(pipeline);
 
     return results.map((x, index) => {
+      const v = x._id ? `${x._id.city}_${x._id.country}_${x._id.longitude}_${x._id.latitude}` : 'not_available';
+      const id = StringUtil.btoa(v);
       return {
-        name: x._id,
+        city: x._id ? x._id.city : 'not available',
+        country: x._id ? x._id.country : 'not available',
+        longitude: x._id ? x.longitude : 'not available',
+        latitude: x._id ? x.latitude : 'not available',
         rank: index + 1,
-        visits: x.visits
+        visitors: x.visitors,
+        id
       }
     });
   }
@@ -37,7 +45,7 @@ class AnalyticsUtils {
     const end = moment().endOf('day').toDate();
 
     const pipeline = [
-      {$match: {timestamp: {$gte: start, $lte: end}}},
+      {$match: {createdAt: {$gte: start, $lte: end}}},
       {$group: {_id: '$pageUrl', viewCount: {$sum: 1}, pageTitle: {$first: '$pageTitle'}}},
       {$sort: {viewCount: -1}}
     ];
