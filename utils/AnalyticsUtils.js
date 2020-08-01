@@ -7,12 +7,12 @@ const db = require('./../models');
 const StringUtil = require('./../utils/StringUtil');
 
 class AnalyticsUtils {
-  static async getLocationAnalytics(limit = null) {
-    const start = moment().startOf('day').toDate();
-    const end = moment().endOf('day').toDate();
+  static async getLocationAnalytics({limit = null, startDate, endDate}) {
+    const start = new Date(startDate) || moment().startOf('day').toDate();
+    const end = new Date(endDate) || moment().endOf('day').toDate();
 
     const pipeline = [
-      {$match: {timestamp: {$gte: start, $lte: end}}},
+      {$match: {createdAt: {$gte: start, $lte: end}}},
       {$group: {_id: {city: '$origin.city', country:'$origin.country'}, visitors: {$sum: 1}, longitude: {$first: '$origin.longitude'}, latitude: {$first: '$origin.latitude'}}},
       // {$group: {_id: '$origin', visitors: {$sum: 1}}},
       {$sort: {visitors: -1}}
@@ -45,7 +45,7 @@ class AnalyticsUtils {
     const end = moment().endOf('day').toDate();
 
     const pipeline = [
-      {$match: {timestamp: {$gte: start, $lte: end}}},
+      {$match: {createdAt: {$gte: start, $lte: end}}},
       {$group: {_id: '$pageUrl', viewCount: {$sum: 1}, pageTitle: {$first: '$pageTitle'}}},
       {$sort: {viewCount: -1}}
     ];

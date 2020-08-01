@@ -26,12 +26,10 @@ const StatisticModel = mongoose.model('Statistic', new Schema({
   },
   origin: {
     city: {
-      type: String,
-      default: 'unknown'
+      type: String
     },
     country: {
-      type: Number,
-      default: 'unknown'
+      type: String
     },
     latitude: {
       type: Number,

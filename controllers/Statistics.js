@@ -175,6 +175,7 @@ class Statistics {
 
   static async recordVisitStat(req, res, next) {
     const {referrer, url, title} = req.body;
+    let location = {}
 
     try {
       // if a url is not in the body then ignore
@@ -182,13 +183,17 @@ class Statistics {
         return res.status(200).send({});
       }
 
-      const location = await GeoCodingUtil.getLocationFromIp(req.clientIp);
+      // ignore if it is a local ip address
+      if (req.clientIp !== '::1') {
+        location = await GeoCodingUtil.getLocationFromIp(req.clientIp);
+      }
+
       const statistic = new db.Statistics({
         referrer,
         pageTitle: title,
         pageUrl: url,
         userIp: req.clientIp,
-        origin: location || 'Unknown'
+        origin: location
       });
       await statistic.save();
 
@@ -347,8 +352,10 @@ class Statistics {
   }
 
   static async getLocationAnalytics(req, res, next) {
+    const {startDate, endDate} = req.query;
+
     try {
-      const response = await AnalyticsUtil.getLocationAnalytics();
+      const response = await AnalyticsUtil.getLocationAnalytics({startDate, endDate});
 
       res.status(200).send({
         data: response
