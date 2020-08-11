@@ -109,10 +109,12 @@ const PoliticianModel = mongoose.model('Politician', new Schema({
       type: String
     },
     startDate: {
-      type: Date
+      type: Date,
+      required: false
     },
     endDate: {
-      type: Date
+      type: Date,
+      required: false
     }
   }],
   professionalBackground: [{
