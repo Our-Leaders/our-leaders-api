@@ -74,34 +74,34 @@ class PoliticalParties {
     const limit = +req.query.limit || 18; // determined by the mockups
     const {name, country, acronym, partyBackground, partyDescription} = req.query;
     let findByQuery = {};
-    let andQuery = [];
+    let orQuery = [];
 
     if (country) {
       findByQuery.country = country.toUpperCase();
     }
 
     if (name) {
-      andQuery.push({name: {$regex: name, $options: 'i'}});
+      orQuery.push({name: {$regex: name, $options: 'i'}});
     }
 
     if (acronym) {
-      andQuery.push({acronym: {$regex: acronym, $options: 'i'}});
+      orQuery.push({acronym: {$regex: acronym, $options: 'i'}});
     }
 
     if (partyBackground) {
-      andQuery.push({partyBackground: {$regex: partyBackground, $options: 'i'}});
+      orQuery.push({partyBackground: {$regex: partyBackground, $options: 'i'}});
     }
 
     if (partyDescription) {
-      andQuery.push({partyDescription: {$regex: partyDescription, $options: 'i'}});
+      orQuery.push({partyDescription: {$regex: partyDescription, $options: 'i'}});
     }
 
-    if (andQuery.length > 0) {
+    if (orQuery.length > 0) {
       // if there is only one optional query, mongo errors out
-      if (andQuery.length === 1) {
-        Object.assign(findByQuery, andQuery[0]);
+      if (orQuery.length === 1) {
+        Object.assign(findByQuery, orQuery[0]);
       } else {
-        Object.assign(findByQuery, {$and: andQuery});
+        Object.assign(findByQuery, {$or: orQuery});
       }
     }
 
