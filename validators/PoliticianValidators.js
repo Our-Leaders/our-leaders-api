@@ -88,11 +88,11 @@ class PoliticianValidators {
         message = 'A description or region is required for the political background.';
       } else if (!(background.inOffice === true || background.inOffice === false)) {
         message = 'The office current status for the political background is required.';
-      } else if (!background.startDate) {
-        message = 'The start date for the political background is required.';
-      } else if (!background.endDate) {
-        message = 'The end date for the political background is required.';
-      } else if (new Date(background.startDate) >= new Date(background.endDate)) {
+      } else if (background.startDate !== null && isNaN(new Date(background.startDate).getTime())) {
+        message = 'The start date for the political background is invalid.';
+      } else if (background.endDate !== null && isNaN(new Date(background.endDate).getTime())) {
+        message = 'The end date for the political background is invalid.';
+      } else if (background.startDate !== null && background.endDate !== null && new Date(background.startDate) >= new Date(background.endDate)) {
         message = 'Start date must be less than end date.';
       }
       if (message) break;
