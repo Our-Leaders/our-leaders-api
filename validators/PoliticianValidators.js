@@ -1,6 +1,7 @@
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const TypeUtil = require('./../utils/TypeUtil');
 const {PoliticalParty} = require('./../models');
+const StringUtil = require('../utils/StringUtil');
 
 class PoliticianValidators {
   static async validateCreation(req, res, next) {
@@ -88,11 +89,11 @@ class PoliticianValidators {
         message = 'A description or region is required for the political background.';
       } else if (!(background.inOffice === true || background.inOffice === false)) {
         message = 'The office current status for the political background is required.';
-      } else if (background.startDate !== null && isNaN(new Date(background.startDate).getTime())) {
+      } else if (StringUtil.isDefinedString(background.startDate) && isNaN(new Date(background.startDate).getTime())) {
         message = 'The start date for the political background is invalid.';
-      } else if (background.endDate !== null && isNaN(new Date(background.endDate).getTime())) {
+      } else if (StringUtil.isDefinedString(background.endDate) && isNaN(new Date(background.endDate).getTime())) {
         message = 'The end date for the political background is invalid.';
-      } else if (background.startDate !== null && background.endDate !== null && new Date(background.startDate) >= new Date(background.endDate)) {
+      } else if (StringUtil.isDefinedString(background.startDate) && StringUtil.isDefinedString(background.endDate) && new Date(background.startDate) >= new Date(background.endDate)) {
         message = 'Start date must be less than end date.';
       }
       if (message) break;
