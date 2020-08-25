@@ -1,4 +1,8 @@
 class StringUtil {
+  static isDefinedString(value) {
+    return typeof value === 'string' && value.length > 0;
+  }
+
   static isOnlyDigits(value) {
     return /^\d+$/.test(value);
   }
