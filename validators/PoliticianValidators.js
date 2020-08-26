@@ -83,11 +83,7 @@ class PoliticianValidators {
     let message = '';
 
     for (let background of body.politicalBackground) {
-      if (!background.position) {
-        message = 'The position for the political background is required.'
-      } else if (!background.description && !background.region) {
-        message = 'A description or region is required for the political background.';
-      } else if (!(background.inOffice === true || background.inOffice === false)) {
+      if (!(background.inOffice === true || background.inOffice === false)) {
         message = 'The office current status for the political background is required.';
       } else if (StringUtil.isDefinedString(background.startDate) && isNaN(new Date(background.startDate).getTime())) {
         message = 'The start date for the political background is invalid.';
@@ -111,11 +107,7 @@ class PoliticianValidators {
     let message = '';
 
     for (let background of body.educationalBackground) {
-      if (!background.degree) {
-        message = 'The degree for the educational background is required.';
-      } else if (!background.institution) {
-        message = 'The institution for the educational background is required.';
-      } else if (background.graduationYear && background.graduationYear < 0) {
+      if (background.graduationYear && background.graduationYear < 0) {
         message = 'The graduation year for the education background is invalid.';
       }
 
@@ -134,9 +126,7 @@ class PoliticianValidators {
     let message = '';
 
     for (let background of body.professionalBackground) {
-      if (!background.title) {
-        message = 'The title for the professional background is required.'
-      } else if (background.startYear && background.startYear < 0) {
+      if (background.startYear && background.startYear < 0) {
         message = 'The start year for the professional background is invalid.';
       } else if (background.endYear && background.endYear < 0) {
         message = 'The end year for the professional background is invalid.';
