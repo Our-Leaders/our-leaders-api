@@ -108,7 +108,7 @@ class PoliticalParties {
     try {
       const politicalParties = await db.PoliticalParty
         .find(findByQuery)
-        .skip(skip)
+        .skip(skip * limit)
         .limit(limit)
         .sort({name: 'asc'});
 
