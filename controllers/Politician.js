@@ -345,7 +345,7 @@ class Politician {
       const politicians = await db.Politician
         .find(findByQuery)
         .populate('politicalParty')
-        .skip(skip)
+        .skip(skip * limit)
         .limit(limit)
         .sort({name: 'asc'});
 
