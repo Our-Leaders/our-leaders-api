@@ -50,7 +50,7 @@ class ImageUtil {
       const uploadResult = await cloudinary.v2.uploader.upload(file.path, options);
       return {
         publicId: uploadResult.public_id,
-        url: uploadResult.url
+        url: uploadResult.url.replace('http:', 'https:')
       };
     } catch (err) {
       Logger.error(err);
