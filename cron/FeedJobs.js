@@ -48,9 +48,13 @@ class FeedJobs {
         // check to see if any politician is mentioned in the title or summary
         for (const politician of politicians) {
           const politicianLowerCaseName = politician.name.toLocaleLowerCase();
-          if (feed.title.toLocaleLowerCase().includes(politicianLowerCaseName) ||
-            feed.summary.toLocaleLowerCase().includes(politicianLowerCaseName)) {
-            feed.politicians.push(politician._id);
+          const nameArray = politicianLowerCaseName.split(' ');
+          for(const name of nameArray) {
+            if (feed.title.toLocaleLowerCase().includes(name) ||
+              feed.summary.toLocaleLowerCase().includes(name)) {
+              feed.politicians.push(politician._id);
+              break;
+            }
           }
         }
 
