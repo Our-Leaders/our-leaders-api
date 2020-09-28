@@ -24,7 +24,7 @@ class Subscriptions {
             return subscription;
           }
 
-          const index = subscription.politician.politicalBackground.findIndex(bg => bg.position === position);
+          const index = subscription.politician.politicalBackground.findIndex(bg => bg.position.toLowerCase() === position);
           if (index > -1) {
             return subscription;
           }
