@@ -9,13 +9,26 @@ const MailChimpUtil = require('./../utils/MailChimpUtil');
 
 class Subscriptions {
   static async getSubscriptions(req, res, next) {
-    const {email} = req.user;
+    const {email, position} = req.user;
 
     try {
-      const subscriptions = await db.Subscription
+      let subscriptions = await db.Subscription
         .find({email})
         .populate('politician')
         .sort({createdAt: 'desc'});
+
+      if (position) {
+        subscriptions = subscriptions.map((subscription) => {
+          if (!subscription.politician) {
+            return subscription;
+          }
+
+          const index = subscription.politician.politicalBackground.findIndex(bg => bg.position === position);
+          if (index > -1) {
+            return subscription;
+          }
+        });
+      }
 
       res.status(200).send({
         subscriptions: subscriptions.map(x => OutputFormatter.formatSubscription(x))
