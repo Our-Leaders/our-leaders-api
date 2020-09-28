@@ -276,10 +276,13 @@ class Auth {
       await user.save();
 
       await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
-
+      
       res.status(200).send({
         user: OutputFormatters.formatUser(user)
       });
+
+      const payload = EmailUtil.getVerificationCodeEmail(user.email, verificationCode);
+      await Mail.send(payload);
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.', err));
     }
