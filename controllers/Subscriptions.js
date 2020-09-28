@@ -9,7 +9,8 @@ const MailChimpUtil = require('./../utils/MailChimpUtil');
 
 class Subscriptions {
   static async getSubscriptions(req, res, next) {
-    const {email, position} = req.user;
+    const {email} = req.user;
+    const {position} = req.query;
 
     try {
       let subscriptions = await db.Subscription
