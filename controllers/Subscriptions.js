@@ -19,7 +19,7 @@ class Subscriptions {
         .sort({createdAt: 'desc'});
 
       if (position) {
-        subscriptions = subscriptions.map((subscription) => {
+        subscriptions = subscriptions.filter((subscription) => {
           if (!subscription.politician) {
             return subscription;
           }
