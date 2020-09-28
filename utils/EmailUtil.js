@@ -92,6 +92,19 @@ class EmailUtil {
     }
   }
 
+  static getVerificationCodeEmail(email, verificationCode) {
+    const templateName = 'verificationCode';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [email],
+      subject: `Phone Number Verification Code`,
+      html: EmailUtil.generateHtml(templateName, {
+        verificationCode: verificationCode
+      })
+    }
+  }
+
   static generateHtml(templateName, payload) {
     const baseEmailTemplateString = fs.readFileSync(path.join(path.dirname(__dirname), 'communications', 'templates', 'baseEmailTemplate.hbs'), 'utf8');
     const baseEmailTemplate = handlebars.compile(baseEmailTemplateString);
