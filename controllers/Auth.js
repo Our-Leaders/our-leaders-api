@@ -4,6 +4,7 @@
 
 const jwt = require('jsonwebtoken');
 const bcryptJs = require('bcryptjs');
+const phone = require('phone');
 
 const db = require('./../models');
 const Config = require('./../config/Config');
@@ -268,7 +269,14 @@ class Auth {
       }
 
       const verificationCode = CodeUtil.generatePhoneVerificationCode();
-      const formattedNumber = OutputFormatters.formatPhoneNumber(phoneNumber);
+      const formattedNumber = `+${phoneNumber.replace(' ', '')}`;
+      const validation = phone(formattedNumber);
+
+      if (validation.length === 0) {
+        return res.status(400).send({
+          message: 'Invalid phone number format.',
+        });
+      }
 
       user.phoneNumber = formattedNumber;
       user.verificationCode = verificationCode;
