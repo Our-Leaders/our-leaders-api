@@ -34,7 +34,8 @@ class Auth {
           email: body.email,
           password: body.password,
           isEmailVerified: false,
-          isUsingDefaultPassword: false
+          isUsingDefaultPassword: false,
+          verificationCode: CodeUtil.generateEmailVerificationCode()
         });
       } else if (body.googleId) {
         const response = await GoogleUtil.verifyToken(body.googleId);
@@ -102,6 +103,12 @@ class Auth {
       // persist new user
       await user.save();
 
+      // if user is signing up with email and password, send verification email
+      if (!user.googleId && !user.facebookId) {
+        const payload = EmailUtil.getUserVerificationEmail(user.email, user.firstName, user.verificationCode);
+        await Mail.send(payload);
+      }
+
       if (body.subscribe) {
         let subscription = await db.Subscription
           .findOne({
@@ -120,8 +127,6 @@ class Auth {
           await subscription.save();
         }
       }
-
-      // TODO: if user is signing up with email and password, send verification email
 
       res.status(200).send({
         user: OutputFormatters.formatUser(user),
