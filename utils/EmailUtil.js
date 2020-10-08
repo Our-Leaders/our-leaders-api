@@ -37,7 +37,7 @@ class EmailUtil {
       from: 'Our Leaders <no-reply@our-leaders.org>',
       to: emails,
       subject: `Received A Message from a Customer`,
-      html: EmailUtil.generateHtml(templateName, { message })
+      html: EmailUtil.generateHtml(templateName, {message})
     };
   }
 
@@ -58,7 +58,7 @@ class EmailUtil {
     return {
       from: 'Our Leaders <no-reply@our-leaders.org>',
       to: [email],
-      subject: `You have been added as an admin`,
+      subject: `Here is your Our Leaders verification code`,
       html: EmailUtil.generateHtml(templateName, {firstName, code})
     };
   }
