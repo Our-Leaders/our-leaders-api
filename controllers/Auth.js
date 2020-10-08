@@ -254,8 +254,7 @@ class Auth {
     }
   }
 
-  static async sendVerificationCode(req, res, next) {
-    const {phoneNumber} = req.query;
+  static async resendVerificationCode(req, res, next) {
     const userId = req.user.id;
 
     try {
@@ -268,35 +267,20 @@ class Auth {
         });
       }
 
-      if (user.isPhoneVerified) {
+      if (user.isEmailVerified) {
         return res.status(200).send({
-          message: 'Your phone number has already been verified.',
+          message: 'Your email has already been verified.'
         });
       }
-
-      const verificationCode = CodeUtil.generatePhoneVerificationCode();
-      const formattedNumber = `+${phoneNumber.replace(' ', '')}`;
-      const validation = phone(formattedNumber);
-
-      if (validation.length === 0) {
-        return res.status(400).send({
-          message: 'Invalid phone number format.',
-        });
-      }
-
-      user.phoneNumber = formattedNumber;
-      user.verificationCode = verificationCode;
 
       await user.save();
 
-      await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
+      const payload = EmailUtil.getUserVerificationEmail(user.email, user.firstName, user.verificationCode);
+      await Mail.send(payload);
 
       res.status(200).send({
         user: OutputFormatters.formatUser(user)
       });
-
-      const payload = EmailUtil.getVerificationCodeEmail(user.email, verificationCode);
-      await Mail.send(payload);
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.', err));
     }

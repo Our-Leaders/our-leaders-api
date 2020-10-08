@@ -20,7 +20,7 @@ module.exports = (router) => {
     .get(
       AuthMiddleware.authenticate,
       AuthValidators.validateVerificationRequest,
-      AuthCtrl.sendVerificationCode
+      AuthCtrl.resendVerificationCode
     )
     .post(
       AuthMiddleware.authenticate,
