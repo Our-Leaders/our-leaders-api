@@ -52,6 +52,17 @@ class EmailUtil {
     };
   }
 
+  static getUserVerificationEmail(email, firstName, code) {
+    const templateName = 'userVerification';
+
+    return {
+      from: 'Our Leaders <no-reply@our-leaders.org>',
+      to: [email],
+      subject: `You have been added as an admin`,
+      html: EmailUtil.generateHtml(templateName, {firstName, code})
+    };
+  }
+
   static getPasswordResetRequestEmail(email, resetToken, isAdmin) {
     const templateName = 'resetRequest';
     const link = isAdmin ? `${Config.adminFrontEndUrl}/auth/sign-in?token=${resetToken}` : `${Config.frontEndUrl}/auth/reset-password?token=${resetToken}`
