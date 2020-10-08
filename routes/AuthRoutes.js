@@ -28,6 +28,12 @@ module.exports = (router) => {
       AuthCtrl.verifyCode
     );
 
+  router.route('/auth/resend-verification')
+    .post(
+      AuthMiddleware.authenticate,
+      AuthCtrl.resendVerificationCode
+    );
+
   router.route('/auth/request-reset')
     .post(AuthValidators.validateResetRequest, AuthCtrl.requestPasswordReset);
 
