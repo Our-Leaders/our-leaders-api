@@ -254,7 +254,8 @@ class Auth {
     const userId = req.user.id;
 
     try {
-      const user = await db.User.findById(userId);
+      const user = await db.User
+        .findById(userId);
 
       if (!user) {
         return res.status(404).send({
@@ -284,7 +285,7 @@ class Auth {
       await user.save();
 
       await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
-      
+
       res.status(200).send({
         user: OutputFormatters.formatUser(user)
       });
