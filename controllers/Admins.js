@@ -82,7 +82,7 @@ class Admins {
       const payload = EmailUtil.getNewAdminEmail(admin.email, admin.firstName, defaultPassword);
       await Email.send(payload);
     } catch (err) {
-      next(new ErrorHandler(500, error.message));
+      next(new ErrorHandler(500, err.message));
     }
   }
 

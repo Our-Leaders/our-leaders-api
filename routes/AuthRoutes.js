@@ -20,12 +20,18 @@ module.exports = (router) => {
     .get(
       AuthMiddleware.authenticate,
       AuthValidators.validateVerificationRequest,
-      AuthCtrl.sendVerificationCode
+      AuthCtrl.resendVerificationCode
     )
     .post(
       AuthMiddleware.authenticate,
       AuthValidators.validateVerificationCode,
       AuthCtrl.verifyCode
+    );
+
+  router.route('/auth/resend-verification')
+    .post(
+      AuthMiddleware.authenticate,
+      AuthCtrl.resendVerificationCode
     );
 
   router.route('/auth/request-reset')
