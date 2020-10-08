@@ -3,6 +3,10 @@ class CodeUtil {
     return CodeUtil.generateCode(4);
   }
 
+  static generateEmailVerificationCode() {
+    return CodeUtil.generateCode(4);
+  }
+
   static generateCode(length) {
     let code = '';
 
