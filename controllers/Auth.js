@@ -307,8 +307,7 @@ class Auth {
       }
 
       user.verificationCode = null;
-      user.isPhoneVerified = true;
-
+      user.isEmailVerified = true;
       await user.save();
 
       res.status(200).send({
