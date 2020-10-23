@@ -105,7 +105,7 @@ class Auth {
 
       // if user is signing up with email and password, send verification email
       if (!user.googleId && !user.facebookId) {
-        const payload = EmailUtil.getUserVerificationEmail(user.email, user.firstName, user.verificationCode);
+        const payload = EmailUtil.getUserVerificationEmail(user.email, user.verificationCode);
         await Mail.send(payload);
       }
 
@@ -275,7 +275,7 @@ class Auth {
 
       await user.save();
 
-      const payload = EmailUtil.getUserVerificationEmail(user.email, user.firstName, user.verificationCode);
+      const payload = EmailUtil.getUserVerificationEmail(user.email, user.verificationCode);
       await Mail.send(payload);
 
       res.status(200).send({
