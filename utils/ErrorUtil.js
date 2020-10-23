@@ -17,6 +17,7 @@ const handleError = (err, res) => {
   res.status(statusCode || 500).json({
     status: "error",
     statusCode: statusCode || 500,
+    error,
     message
   });
 };
