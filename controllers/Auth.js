@@ -34,7 +34,8 @@ class Auth {
           email: body.email,
           password: body.password,
           isEmailVerified: false,
-          isUsingDefaultPassword: false
+          isUsingDefaultPassword: false,
+          verificationCode: CodeUtil.generateEmailVerificationCode()
         });
       } else if (body.googleId) {
         const response = await GoogleUtil.verifyToken(body.googleId);
@@ -102,6 +103,12 @@ class Auth {
       // persist new user
       await user.save();
 
+      // if user is signing up with email and password, send verification email
+      if (!user.googleId && !user.facebookId) {
+        const payload = EmailUtil.getUserVerificationEmail(user.email, user.firstName, user.verificationCode);
+        await Mail.send(payload);
+      }
+
       if (body.subscribe) {
         let subscription = await db.Subscription
           .findOne({
@@ -120,8 +127,6 @@ class Auth {
           await subscription.save();
         }
       }
-
-      // TODO: if user is signing up with email and password, send verification email
 
       res.status(200).send({
         user: OutputFormatters.formatUser(user),
@@ -249,12 +254,12 @@ class Auth {
     }
   }
 
-  static async sendVerificationCode(req, res, next) {
-    const {phoneNumber} = req.query;
+  static async resendVerificationCode(req, res, next) {
     const userId = req.user.id;
 
     try {
-      const user = await db.User.findById(userId);
+      const user = await db.User
+        .findById(userId);
 
       if (!user) {
         return res.status(404).send({
@@ -262,35 +267,20 @@ class Auth {
         });
       }
 
-      if (user.isPhoneVerified) {
+      if (user.isEmailVerified) {
         return res.status(200).send({
-          message: 'Your phone number has already been verified.',
+          message: 'Your email has already been verified.'
         });
       }
-
-      const verificationCode = CodeUtil.generatePhoneVerificationCode();
-      const formattedNumber = `+${phoneNumber.replace(' ', '')}`;
-      const validation = phone(formattedNumber);
-
-      if (validation.length === 0) {
-        return res.status(400).send({
-          message: 'Invalid phone number format.',
-        });
-      }
-
-      user.phoneNumber = formattedNumber;
-      user.verificationCode = verificationCode;
 
       await user.save();
 
-      await Sms.sendMessage(formattedNumber, `Welcome! Your OTP is ${verificationCode}`);
-      
+      const payload = EmailUtil.getUserVerificationEmail(user.email, user.firstName, user.verificationCode);
+      await Mail.send(payload);
+
       res.status(200).send({
         user: OutputFormatters.formatUser(user)
       });
-
-      const payload = EmailUtil.getVerificationCodeEmail(user.email, verificationCode);
-      await Mail.send(payload);
     } catch (err) {
       next(new ErrorHandler(500, 'An error occurred.', err));
     }
@@ -317,8 +307,7 @@ class Auth {
       }
 
       user.verificationCode = null;
-      user.isPhoneVerified = true;
-
+      user.isEmailVerified = true;
       await user.save();
 
       res.status(200).send({
