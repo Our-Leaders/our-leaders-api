@@ -52,14 +52,14 @@ class EmailUtil {
     };
   }
 
-  static getUserVerificationEmail(email, firstName, code) {
+  static getUserVerificationEmail(email, code) {
     const templateName = 'userVerification';
 
     return {
       from: 'Our Leaders <no-reply@our-leaders.org>',
       to: [email],
       subject: `Here is your Our Leaders verification code`,
-      html: EmailUtil.generateHtml(templateName, {firstName, code})
+      html: EmailUtil.generateHtml(templateName, {code})
     };
   }
 
