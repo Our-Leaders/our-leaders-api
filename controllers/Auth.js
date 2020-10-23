@@ -276,9 +276,10 @@ class Auth {
       await user.save();
 
       const payload = EmailUtil.getUserVerificationEmail(user.email, user.verificationCode);
-      await Mail.send(payload);
+      const response = await Mail.send(payload);
 
       res.status(200).send({
+        response,
         user: OutputFormatters.formatUser(user)
       });
     } catch (err) {
