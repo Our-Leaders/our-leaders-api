@@ -273,6 +273,8 @@ class Auth {
         });
       }
 
+      user.verificationCode = CodeUtil.generateEmailVerificationCode();
+
       await user.save();
 
       const payload = EmailUtil.getUserVerificationEmail(user.email, user.verificationCode);
