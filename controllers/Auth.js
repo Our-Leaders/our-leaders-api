@@ -205,6 +205,14 @@ class Auth {
         });
       }
 
+      if (email && !user.isEmailVerified) {
+        user.verificationCode = CodeUtil.generateEmailVerificationCode();
+        await user.save();
+
+        const payload = EmailUtil.getUserVerificationEmail(user.email, user.verificationCode);
+        await Mail.send(payload);
+      }
+
       res.status(200).send({
         user: OutputFormatters.formatUser(user),
         token: await Auth.tokenify(user)
