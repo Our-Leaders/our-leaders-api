@@ -477,17 +477,20 @@ class Politician {
       const current = await db.Politician
         .find({status: 'current'})
         .populate('politicalParty')
-        .sort('-vote.up');
+        .sort('-vote.up')
+        .limit(9);
 
       const upcoming = await db.Politician
         .find({status: 'upcoming'})
         .populate('politicalParty')
-        .sort('-vote.up');
+        .sort('-vote.up')
+        .limit(9);
 
       const past = await db.Politician
         .find({status: 'past'})
         .populate('politicalParty')
-        .sort('-vote.up');
+        .sort('-vote.up')
+        .limit(9);
 
       response.current = current.map(politician => OutputFormatters.formatPolitician(politician));
       response.upcoming = upcoming.map(politician => OutputFormatters.formatPolitician(politician));
