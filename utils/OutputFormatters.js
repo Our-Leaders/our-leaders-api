@@ -78,6 +78,7 @@ class OutputFormatters {
       stateOfOrigin: politician.stateOfOrigin,
       politicalParty: politician.politicalParty,
       profileImage: politician.profileImage ? politician.profileImage.url : null,
+      profileImageId: politician.profileImage ? politician.profileImage.publicId : null,
       status: politician.status,
       vote: politician.vote,
       voters: politician.voters,
