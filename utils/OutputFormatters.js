@@ -12,6 +12,8 @@ class OutputFormatters {
       joinedBy = 'facebook';
     } else if (user.googleId) {
       joinedBy = 'google';
+    } else {
+      joinedBy = 'email';
     }
 
     return {
