@@ -472,31 +472,15 @@ class Politician {
 
   static async getHighestVotedPoliticians(req, res, next) {
     try {
-      const response = {};
+      const status = req.query.status || 'current';
 
-      const current = await db.Politician
-        .find({status: 'current'})
+      const response = await db.Politician
+        .find({status})
         .populate('politicalParty')
         .sort('-vote.up')
         .limit(9);
 
-      const upcoming = await db.Politician
-        .find({status: 'upcoming'})
-        .populate('politicalParty')
-        .sort('-vote.up')
-        .limit(9);
-
-      const past = await db.Politician
-        .find({status: 'past'})
-        .populate('politicalParty')
-        .sort('-vote.up')
-        .limit(9);
-
-      response.current = current.map(politician => OutputFormatters.formatPolitician(politician));
-      response.upcoming = upcoming.map(politician => OutputFormatters.formatPolitician(politician));
-      response.past = past.map(politician => OutputFormatters.formatPolitician(politician));
-
-      res.status(200).send(response);
+      res.status(200).send({ politicians: response.map(politician => OutputFormatters.formatPolitician(politician)) });
     } catch (error) {
       next(new ErrorHandler(500, error.message));
     }
