@@ -189,7 +189,7 @@ class Users {
   static async deleteAccount(req, res, next) {
     const {params, user: currentUser, body} = req;
     const {userId} = params;
-    const {password} = body;
+    const {password, isSocialLogin} = body;
 
     try {
       const user = await db.User.findById(userId);
@@ -198,7 +198,7 @@ class Users {
         return next(new ErrorHandler(404, 'A user with the provided id does not exist.'));
       }
 
-      if (currentUser.role === 'user' && !bcryptJs.compareSync(password, user.password)) {
+      if (currentUser.role === 'user' && !isSocialLogin && !bcryptJs.compareSync(password, user.password)) {
         return res.status(400).send({
           message: 'Password is incorrect',
         });
