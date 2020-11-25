@@ -133,6 +133,11 @@ class Auth {
         token: await Auth.tokenify(user)
       });
     } catch (err) {
+      Config.sentry.captureException(err, {
+        tags: {
+          section: 'Sign Up',
+        },
+      });
       next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
@@ -218,6 +223,11 @@ class Auth {
         token: await Auth.tokenify(user)
       });
     } catch (err) {
+      Config.sentry.captureException(err, {
+        tags: {
+          section: 'Log In',
+        },
+      });
       next(new ErrorHandler(500, 'An error occurred.', err));
     }
   }
