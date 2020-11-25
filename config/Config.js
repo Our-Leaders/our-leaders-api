@@ -3,12 +3,20 @@
  */
 
 const dotenv = require('dotenv');
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
 
 const env = process.env.NODE_ENV || 'development';
 const isProduction = env === 'production';
 if (!isProduction) {
   dotenv.config({silent: true});
 }
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: env,
+  tracesSamplerRate: 1.0
+});
 
 module.exports = {
   isProduction,
@@ -47,5 +55,6 @@ module.exports = {
   africasTalking: {
     apiKey: process.env.AF_API_KEY,
     username: process.env.AF_USERNAME
-  }
+  },
+  sentry: Sentry
 };
