@@ -1,6 +1,7 @@
 const af = require('africastalking');
 const Config = require('./../config/Config');
 const Logger = require('./../config/Logger');
+
 const AfricasTalking = af({
   apiKey: Config.africasTalking.apiKey,
   username: Config.africasTalking.username
