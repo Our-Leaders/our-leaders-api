@@ -37,7 +37,6 @@ module.exports = {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME,
     secret: process.env.CLOUDINARY_API_SECRET
   },
-  // feedUrl: 'https://www.tostvnetwork.com/category/news/',
   feedUrl: 'https://www.premiumtimesng.com/category/news/',
   superAdmin: {
     email: process.env.SUPER_EMAIL,

@@ -13,7 +13,6 @@ const Logger = require('./config/Logger');
 const Routes = require('./routes');
 const {handleError} = require('./utils/ErrorUtil');
 const CronScheduler = require('./cron/CronScheduler');
-const FeedJob = require('./cron/FeedJobs');
 
 const app = express();
 const router = express.Router();
@@ -27,10 +26,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 // set up cron cron
-// CronScheduler.startJobs();
-
-FeedJob.run()
-    .then(() => {});
+CronScheduler.startJobs();
 
 app.use('/api/', Routes(router));
 app.use((err, req, res, next) => {
