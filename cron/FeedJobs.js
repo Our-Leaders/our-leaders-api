@@ -13,7 +13,7 @@ class FeedJobs {
   static async run() {
     try {
       const response = await axios.get(Config.feedUrl);
-      const newsItems = $('.td-ss-main-content > div > div.item-details', response.data);
+      const newsItems = $('article', response.data);
 
       // cache a list of the politicians and their ids
       const politicians = await db.Politician
@@ -22,13 +22,15 @@ class FeedJobs {
 
       for (let x = 0; x < newsItems.length; x++) {
         const newsItemHtml = $(newsItems[x]).html();
-        const itemLink = $('h3 > a', newsItemHtml)[0];
-        const itemSummary = $('.td-excerpt', newsItemHtml).text();
-        const itemDate = $('.td-post-date > time', newsItemHtml).text();
+        const itemHeader = $('.jeg_postblock_content > h3 > a', newsItemHtml);
+        const itemTitle = itemHeader.text();
+        const itemUrl = itemHeader.attr('href');
+        const itemSummary = $('.jeg_post_excerpt > p', newsItemHtml).text();
+        const itemDate = $('.jeg_meta_date > a', newsItemHtml).text();
 
         // check to see if entry exists
         let feed = await db.Feed.findOne({
-          feedUrl: itemLink.attribs.href
+          feedUrl: itemUrl
         });
 
         // if feed exists, then skip
@@ -37,8 +39,8 @@ class FeedJobs {
         }
 
         feed = new db.Feed({
-          title: $(itemLink).text(),
-          feedUrl: itemLink.attribs.href,
+          title: itemTitle,
+          feedUrl: itemUrl,
           publishedAt: new Date(itemDate),
           summary: itemSummary,
           politicians: []
@@ -49,7 +51,7 @@ class FeedJobs {
         for (const politician of politicians) {
           const politicianLowerCaseName = politician.name.toLocaleLowerCase();
           const nameArray = politicianLowerCaseName.split(' ');
-          for(const name of nameArray) {
+          for (const name of nameArray) {
             if (feed.title.toLocaleLowerCase().includes(name) ||
               feed.summary.toLocaleLowerCase().includes(name)) {
               feed.politicians.push(politician._id);
