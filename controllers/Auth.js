@@ -4,7 +4,6 @@
 
 const jwt = require('jsonwebtoken');
 const bcryptJs = require('bcryptjs');
-const phone = require('phone');
 
 const db = require('./../models');
 const Config = require('./../config/Config');
@@ -13,7 +12,6 @@ const EmailUtil = require('./../utils/EmailUtil');
 const FacebookUtil = require('./../utils/FacebookUtil');
 const GoogleUtil = require('./../utils/GoogleUtil');
 const OutputFormatters = require('./../utils/OutputFormatters');
-const Sms = require('./../communications/Sms');
 const Mail = require('./../communications/Email');
 const {ErrorHandler} = require('../utils/ErrorUtil');
 const MailChimpUtil = require('./../utils/MailChimpUtil');
